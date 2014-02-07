@@ -35,5 +35,15 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+    console.log('          / \\');
+    console.log('         / 3 \\');
+    console.log('        /     \\');
+    console.log('       /       \\');
+    console.log('      /   d 3   \\');
+    console.log('     /   ideas   \\');
+    console.log('    /             \\');
+    console.log('   /               \\');
+    console.log('  / 1             2 \\');
+    console.log(' /___________________\\');
+    console.log('Express server listening on port ' + app.get('port'));
 });
