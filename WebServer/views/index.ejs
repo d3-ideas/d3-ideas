@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title><%= title %></title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+		<script src="http://openlayers.org/api/OpenLayers.js"></script>
+		<script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+		<script>
+			onSuccess=function(data){
+				console.log(data);
+				var map = new mxn.Mapstraction('map', 'openlayers'); 
+				var latlon = new mxn.LatLonPoint(data.coords.latitude,
+					data.coords.longitude);
+				map.setCenterAndZoom(latlon, 10);
+			};
+			onError=function(data){
+				console.log(data);
+			};
+			window.onload = function(){
+			if(navigator.geolocation)
+				navigator.geolocation.getCurrentPosition(onSuccess, onError);
+			}
+</script>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+		<p>Welcome to <%= title %></p>
+		<div id="map"></div>
+	</body>
+</html>
