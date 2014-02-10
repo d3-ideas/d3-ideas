@@ -46,4 +46,5 @@ http.createServer(app).listen(app.get('port'), function(){
     console.log('  / 1             2 \\');
     console.log(' /___________________\\');
     console.log('Express server listening on port ' + app.get('port'));
+    console.log('Press ctrl+c to exit');    
 });
