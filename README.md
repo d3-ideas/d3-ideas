@@ -1,4 +1,11 @@
-d3-ideas
-========
-Here's Anthony's first post!
-Here's Kai's first post!
+           ^
+          / \
+         / 3 \
+        /     \
+       /       \
+      /   d 3   \
+     /   ideas   \
+    /             \
+   /               \
+  / 1             2 \
+ /___________________\
