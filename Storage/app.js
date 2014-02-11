@@ -7,7 +7,7 @@ var path = require('path');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 8888);
+app.set('port', process.env.PORT || 3001);
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -24,10 +24,10 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/pins', pins.findAllPins);
-/*app.get('/pins/:id', pins.findById);
+//app.get('/pins/:id', pins.findById);
 app.post('/pins', pins.addPin);
-app.put('/pins/:id', pins.updatePin);
-app.delete('/pins/:id', pins.deletePin);*/
+//app.put('/pins/:id', pins.updatePin);
+//app.delete('/pins/:id', pins.deletePin);
 
 
 http.createServer(app).listen(app.get('port'), function(){

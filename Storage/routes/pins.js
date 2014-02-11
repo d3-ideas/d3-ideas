@@ -15,3 +15,18 @@ exports.findAllPins = function(req, res){
         });
     });
 };
+
+exports.addPin = function(req, res){
+    var pin = req.body;
+    console.log('Adding pin: ' + JSON.stringify(pin));
+    db.collection('pins', function(err, collection) {
+        collection.insert(pin, {safe:true}, function(err, result) {
+            if (err) {
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('Success: ' + JSON.stringify(result[0]));
+                res.send(result[0]);
+            }
+        });
+    });
+}
