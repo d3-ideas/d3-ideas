@@ -9,6 +9,7 @@ exports.index = function(req, res){
 };
 
 exports.pin = function (req, res){
+	console.log(req.body);
 	var options = {
 		hostname: 'localhost',
 		port: 3001,
@@ -30,7 +31,6 @@ exports.pin = function (req, res){
 	});
 
 	// write data to request body
-	ourPost.write(JSON.stringify({'location':[req.lat,req.long],'username':'sheetzam','pintime':new Date()}));
+	ourPost.write(JSON.stringify({'location':[req.body.lat,req.body.long],'username':'sheetzam','pintime':new Date()}));
 	ourPost.end();
-	res.render('pin', { foo: 'bar' });
 };
