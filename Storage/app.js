@@ -28,7 +28,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/pins', pins.findAllPins);
+//app.get('/pins', pins.findAllPins(db));
 //app.get('/pins/:id', pins.findById);
 app.post('/pins', pins.addPin(db));
 //app.put('/pins/:id', pins.updatePin);
