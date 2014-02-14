@@ -33,6 +33,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.post('/pin', routes.pin);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('          / \\');
