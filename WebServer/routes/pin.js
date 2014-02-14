@@ -1,14 +1,5 @@
-
-/*
- * GET home page.
- */
-var http = require('http');
-
-exports.index = function(req, res){
-  res.render('index', { title: 'd3-ideas' });
-};
-
 exports.pin = function (req, res){
+	var http = require('http');
 	var options = {
 		hostname: 'localhost',
 		port: 3001,
@@ -32,5 +23,4 @@ exports.pin = function (req, res){
 	// write data to request body
 	ourPost.write(JSON.stringify({'location':[req.lat,req.long],'username':'sheetzam','pintime':new Date()}));
 	ourPost.end();
-	res.render('pin', { foo: 'bar' });
 };
