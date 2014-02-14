@@ -29,7 +29,7 @@
 			}
             
             addPin=function(){
-                $.post('\pin', { pos:latlon }, function(data){
+                $.post('/pin', { 'pos':latlon }, function(data){
                     alert(data);
                 });
             };
@@ -44,7 +44,7 @@
 		<table>
             <tr>
                 <td></table><div id="accuracy"></div></td>
-                <td><a onclick="addPin();">Pin this location</a></td>
+                <td><a href='#' onclick="addPin();">Pin this location</a></td>
             </tr>
         </table>
 		<div id="map"></div>
