@@ -3,7 +3,7 @@
  * GET home page.
  */
 var http = require('http');
-var querystring = require('querystring');
+
 exports.index = function(req, res){
   res.render('index', { title: 'd3-ideas' });
 };
@@ -11,7 +11,7 @@ exports.index = function(req, res){
 exports.pin = function (req, res){
 	console.log(req.body);
 
-	var ourContent=JSON.stringify({'location':[req.body.lat,req.body.long],'username':'sheetzam','pintime':new Date()});
+	var ourContent=JSON.stringify({'location':[req.body.lat,req.body.lon],'username':'sheetzam','pintime':new Date()});
 
 	var options = {
 		hostname: 'localhost',
