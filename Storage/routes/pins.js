@@ -34,7 +34,7 @@ exports.addPin = function(db){
                 res.send({'error':'An error has occurred adding your pin'});
             } else {
                 //console.log('Success: ' + JSON.stringify(result[0]));
-                res.send(result[0]);
+                res.send('You have pinned your location');
             }
         });
     }
