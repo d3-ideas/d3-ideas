@@ -7,27 +7,46 @@
 		<script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
 		<link rel='stylesheet' href='/stylesheets/style.css' />
 		<script>
+            var latlon;
 			onSuccess=function(data){
 				console.log(data);
 				var map = new mxn.Mapstraction('map', 'openlayers'); 
-				var latlon = new mxn.LatLonPoint(data.coords.latitude,
+				latlon = new mxn.LatLonPoint(data.coords.latitude,
 					data.coords.longitude);
 				map.setCenterAndZoom(latlon, 10);
+                $('#Latitude').text(data.coords.latitude);
+                $('#Longitude').text(data.coords.longitude);
 				$('#accuracy').text("Accuracy: "+data.coords.accuracy+" meter circle");
 			};
+            
 			onError=function(data){
 				console.log(data);
 			};
+            
 			window.onload = function(){
 			if(navigator.geolocation)
 				navigator.geolocation.getCurrentPosition(onSuccess, onError);
 			}
+            
+            addPin=function(){
+                $.post('\pin', { pos:latlon },function(data){
+                    alert(data);
+                };)
+            };
 </script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
 		<p>Welcome to <%= title %></p>
-		<div id="accuracy"></div>
+        <h3>Current Location</h3>
+        Latitude: <div id='Latitude'></div>
+        Longitude: <div id='Longitude'></div>
+		<table>
+            <tr>
+                <td></table><div id="accuracy"></div></td>
+                <td><a onclick="addPin();">Pin this location</a></td>
+            </tr>
+        </table>
 		<div id="map"></div>
 	</body>
 </html>
