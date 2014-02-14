@@ -29,6 +29,7 @@
 			}
             
             addPin=function(){
+		console.log(latlon);
                 $.post('/pin', { 'pos':latlon }, function(data){
                     alert(data);
                 });
