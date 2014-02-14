@@ -6,6 +6,11 @@ var path = require('path');
 
 var app = express();
 
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/Tagit');
+
+
 // all environments
 app.set('port', process.env.PORT || 3001);
 app.use(express.favicon());
@@ -25,10 +30,9 @@ if ('development' == app.get('env')) {
 
 app.get('/pins', pins.findAllPins);
 //app.get('/pins/:id', pins.findById);
-app.post('/pins', pins.addPin);
+app.post('/pins', pins.addPin(db));
 //app.put('/pins/:id', pins.updatePin);
 //app.delete('/pins/:id', pins.deletePin);
-
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('          / \\');

@@ -16,17 +16,26 @@ exports.findAllPins = function(req, res){
     });
 };
 
-exports.addPin = function(req, res){
-    var pin = req.body;
-    console.log('Adding pin: ' + JSON.stringify(pin));
-    db.collection('pins', function(err, collection) {
-        collection.insert(pin, {safe:true}, function(err, result) {
+exports.addPin = function(db){
+    return function(req, res)
+    
+    var location = req.body.location;
+    var username = req.body.username;
+    var pintime = req.body.pintime;
+    
+    var collection = db.get('pins');
+    
+    collection.insert({
+            "location" : location,
+            "username" : username,
+            "pintime" : pintime
+    }, function (err,doc){
             if (err) {
-                res.send({'error':'An error has occurred'});
+                res.send({'error':'An error has occurred adding your pin'});
             } else {
-                console.log('Success: ' + JSON.stringify(result[0]));
+                //console.log('Success: ' + JSON.stringify(result[0]));
                 res.send(result[0]);
             }
-        });
-    });
+    }
+    
 }
