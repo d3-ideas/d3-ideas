@@ -18,7 +18,9 @@
 
 exports.addPin = function(db){
     return function(req, res){
-    
+        
+        console.log(req.body);
+        
         var location = req.body.location;
         var username = req.body.username;
         var pintime = req.body.pintime;
@@ -33,7 +35,7 @@ exports.addPin = function(db){
             if (err) {
                 res.send({'error':'An error has occurred adding your pin'});
             } else {
-                //console.log('Success: ' + JSON.stringify(result[0]));
+                console.log('Successfully added pin');
                 res.send('You have pinned your location');
             }
         });
