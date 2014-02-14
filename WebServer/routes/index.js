@@ -15,7 +15,7 @@ exports.pin = function (req, res){
 		method: 'POST'
 	};
 
-	var req = http.request(options, function(res) {
+	var ourPost = http.request(options, function(res) {
 		console.log('STATUS: ' + res.statusCode);
 		console.log('HEADERS: ' + JSON.stringify(res.headers));
 		res.setEncoding('utf8');
@@ -24,13 +24,12 @@ exports.pin = function (req, res){
 		});
 	});
 
-	req.on('error', function(e) {
+	ourPost.on('error', function(e) {
 		console.log('problem with request: ' + e.message);
 	});
 
-// write data to request body
-req.write('data\n');
-req.write('data\n');
-req.end();
+	// write data to request body
+	ourPost.write(JSON.stringify({'location':[req.lat,req.long],'username':'sheetzam','pintime':new Date()}));
+	ourPost.end();
 	res.render('pin', { foo: 'bar' });
 };
