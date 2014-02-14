@@ -14,7 +14,8 @@ exports.pin = function (req, res){
 		hostname: 'localhost',
 		port: 3001,
 		path: '/pins',
-		method: 'POST'
+		method: 'POST',
+		header: {'content-type':'application/json'}
 	};
 
 	var ourPost = http.request(options, function(res) {
