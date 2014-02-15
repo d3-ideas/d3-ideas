@@ -1,49 +1,48 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title><%= title %></title>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script src="http://openlayers.org/api/OpenLayers.js"></script>
-		<script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
-		<link rel='stylesheet' href='/stylesheets/style.css' />
-		<script>
-            var latlon;
-			onSuccess=function(data){
-				console.log(data);
-				var map = new mxn.Mapstraction('map', 'openlayers'); 
-				latlon = new mxn.LatLonPoint(data.coords.latitude,
-					data.coords.longitude);
-				map.setCenterAndZoom(latlon, 10);
-                $('#Latitude').text(data.coords.latitude);
-                $('#Longitude').text(data.coords.longitude);
-				$('#accuracy').text("Accuracy: "+data.coords.accuracy+" meter circle");
-			};
-            
-			onError=function(data){
-				console.log(data);
-			};
-            
-			window.onload = function(){
-			if(navigator.geolocation)
-				navigator.geolocation.getCurrentPosition(onSuccess, onError);
-			}
-            
-            addPin=function(){
-                $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
-                    alert(data);
-                });
-            };
-</script>
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script>
+        var latlon;
+        onSuccess=function(data){
+            console.log(data);
+            var map = new mxn.Mapstraction('map', 'openlayers'); 
+            latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
+            map.setCenterAndZoom(latlon, 10);
+            $('#Latitude').text('Latitude: '+data.coords.latitude);
+            $('#Longitude').text('Longitude: '+data.coords.longitude);
+            $('#accuracy').text("Accuracy: "+data.coords.accuracy+" meter circle");
+        };
+
+        onError=function(data){
+            console.log(data);
+        };
+
+        window.onload = function(){
+            if(navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+
+        addPin=function(){
+            $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
+                alert(data);
+            });
+        };
+    </script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
 		<p>Welcome to <%= title %></p>
         <h3>Current Location</h3>
-        Latitude: <div id='Latitude'></div>
-        Longitude: <div id='Longitude'></div>
+        <div id='Latitude'></div>
+        <div id='Longitude'></div>
 		<table>
             <tr>
-                <td></table><div id="accuracy"></div></td>
+                <td><div id="accuracy"></div></td>
                 <td><a href='#' onclick="addPin();">Pin this location</a></td>
             </tr>
         </table>

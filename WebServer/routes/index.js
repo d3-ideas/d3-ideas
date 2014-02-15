@@ -5,7 +5,7 @@
 var http = require('http');
 
 exports.index = function(req, res){
-  res.render('index', { title: 'd3-ideas' });
+  res.render('index', { title: 'TagIt' });
 };
 
 exports.pin = function (req, res){
