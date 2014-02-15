@@ -1,27 +1,18 @@
-//var MongoClient = require('mongodb').MongoClient;
-//var format = require('util').format;
-//var db;
-
-//MongoClient.connect('mongodb://127.0.0.1:27017/test', function(err, conn) {
-//    if(err) throw err;
-//    console.log("Connected to db");
-//    db = conn;
-//});
-
-//exports.findAllPins = function(req, res){
-//    db.collection('pins', function(err, collection) {
-//        collection.find().toArray(function(err, items) {
-//            res.send({'error': 'nothing working here yet'});
-//        });
-//    });
-//};
+exports.findAllPins = function(db){
+    return function(req, res){
+        var collection = db.get('pins');
+        collection.find({}, {}, function(err, pins) {
+            res.send(pins);
+        });
+    };
+};
 
 exports.addPin = function(db){
     return function(req, res){
         
         console.log(req.body);
         
-        var location = req.body.location;
+        var location = req.body.location; 
         var username = req.body.username;
         var pintime = req.body.pintime;
     
