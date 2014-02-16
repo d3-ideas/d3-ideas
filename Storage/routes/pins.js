@@ -15,13 +15,19 @@ exports.addPin = function(db){
         var location = req.body.location; 
         var username = req.body.username;
         var pintime = req.body.pintime;
+        var application = req.body.application;
+        
+        if (!username){
+            username = application;
+        };
     
         var collection = db.get('pins');
     
         collection.insert({
             "location" : location,
             "username" : username,
-            "pintime" : pintime
+            "pintime" : pintime,
+            "application" : application
         }, function (err,doc){
             if (err) {
                 res.send({'error':'An error has occurred adding your pin'});

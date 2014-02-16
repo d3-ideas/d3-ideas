@@ -7,7 +7,7 @@ var http = require('http');
 exports.pin = function (req, res){
         console.log(req.body);
 
-        var ourContent=JSON.stringify({'location':[req.body.lat,req.body.lon],'username':'sheetzam','pintime':new Date()});
+        var ourContent=JSON.stringify({'application':'Tagit Test','location':[req.body.lat,req.body.lon],'username':'sheetzam','pintime':new Date()});
 
         var options = {
                 hostname: 'localhost',
