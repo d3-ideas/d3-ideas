@@ -27,7 +27,7 @@ exports.addPin = function(db){
                 res.send({'error':'An error has occurred adding your pin'});
             } else {
                 console.log('Successfully added pin');
-                res.send('You have pinned your location');
+                res.send(doc); //You have pinned your location
             }
         });
     }
