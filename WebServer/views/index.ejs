@@ -29,7 +29,7 @@
 
         addPin=function(){
             $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
-                alert(data);
+                alert('You have successfully pinned this location.');
             });
         };
     </script>

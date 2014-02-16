@@ -18,13 +18,18 @@ exports.pin = function (req, res){
                         'content-length':ourContent.length}
         };
 
+        var origres = res;
         var ourPost = http.request(options, function(res) {
-                console.log('STATUS: ' + res.statusCode);
-                console.log('HEADERS: ' + JSON.stringify(res.headers));
-                res.setEncoding('utf8');
-                res.on('data', function (chunk) {
-                        console.log('BODY: ' + chunk);
-                });
+            console.log('STATUS: ' + res.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(res.headers));
+            res.setEncoding('utf8');
+
+            res.on('data', function (chunk) {
+                console.log('BODY: ' + chunk);
+            });
+
+            //return success to the client
+            origres.send(200);
         });
 
         ourPost.on('error', function(e) {
