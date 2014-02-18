@@ -29,7 +29,11 @@
 
         addPin=function(){
             $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
-                alert('You have successfully pinned this location.');
+                //Show temporary notification of success
+                $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
+                $('#PinSucess').fadeOut(3000, function(){
+                    //do something here.
+                });
             });
         };
     </script>
@@ -44,6 +48,7 @@
             <tr>
                 <td><div id="accuracy"></div></td>
                 <td><a href='#' onclick="addPin();">Pin this location</a></td>
+                <td><span id='PinResult'></span></td>
             </tr>
         </table>
         <p></p>
