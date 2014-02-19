@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
+    <link rel='stylesheet' href='/stylesheets/d3.css' />
+    <script>
+        var latlon;
+        onSuccess=function(data){
+            console.log(data);
+            var map = new mxn.Mapstraction('map', 'openlayers'); 
+            latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
+            var marker = new mxn.Marker(latlon);
+            map.addMarker(marker);
+            map.setCenterAndZoom(latlon, 15);
+            $('#Latitude').text('Latitude: '+data.coords.latitude);
+            $('#Longitude').text('Longitude: '+data.coords.longitude);
+            $('#accuracy').text("Accuracy: "+data.coords.accuracy+" meter circle");
+        };
+
+        onError=function(data){
+            console.log(data);
+        };
+
+        window.onload = function(){
+            if(navigator.geolocation)
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        }
+
+        addPin=function(){
+            $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
+                //Show temporary notification of success
+                $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
+                $('#PinSucess').fadeOut(3000, function(){
+                    //do something here.
+                });
+            });
+        };
+    </script>
+	</head>
+	<body>
+        <h3>Your current location is:</h3>
+        <div id='Latitude'></div>
+        <div id='Longitude'></div>
+		<table>
+            <tr>
+                <td><div id="accuracy"></div></td>
+                <td><a href='#' onclick="addPin();">Pin this location</a></td>
+                <td><span id='PinResult'></span></td>
+            </tr>
+        </table>
+        <p></p>
+        <div id="map"></div>
+<!--[if !(lt IE 8)]><!-->
+   <script type="text/javascript">
+     (function(){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src=document.location.protocol+"//d1agz031tafz8n.cloudfront.net/thedaywefightback.js/widget.min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})()
+   </script>
+<!--<![endif]-->
+	</body>
+</html>

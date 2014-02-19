@@ -4,7 +4,11 @@
 */
 var http = require('http');
 
-exports.pin = function (req, res){
+exports.pin = function(req, res){
+  res.render('pin', { title: 'TagIt' });
+};
+
+exports.addPin = function (req, res){
         console.log(req.body);
 
         var ourContent=JSON.stringify({'application':'Tagit Test','location':[req.body.lat,req.body.lon],'username':'sheetzam','pintime':new Date()});
