@@ -12,15 +12,18 @@ exports.addPin = function(db){
         
         console.log(req.body);
         
+        var gjv = require('geojson-validation');
+        
         var location = req.body.location; 
         var username = req.body.username;
         var pintime = req.body.pintime;
         var application = req.body.application;
         
-        if (!username){
-            username = application;
-        };
-    
+        if(!gjv.isPoint(location)){
+            res.send({'error':'The pin location was invalid.'});
+            return;
+        }
+        
         var collection = db.get('pins');
     
         collection.insert({
