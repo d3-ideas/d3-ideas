@@ -1,6 +1,7 @@
 //Module dependencies.
 var express = require('express');
 var pins = require('./routes/pins');
+var users = require('./routes/users');
 var http = require('http');
 var path = require('path');
 
@@ -33,6 +34,8 @@ app.get('/pins', pins.findAllPins(db));
 app.post('/pins', pins.addPin(db));
 //app.put('/pins/:id', pins.updatePin);
 //app.delete('/pins/:id', pins.deletePin);
+
+app.post('/users', users.addUser(db));
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('          / \\');
