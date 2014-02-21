@@ -5,13 +5,14 @@
 var http = require('http');
 
 exports.pin = function(req, res){
-    res.render('pin', { title: 'TagIt' });
+    console.log(req.session.username);
+    res.render('pin', { title: 'TagIt' , username:req.session.username});
 };
 
 exports.addPin = function (req, res){
         console.log(req.body);
 
-        var ourContent=JSON.stringify({'application':'Tagit Test','location':{'type':'Point','coordinates':[parseFloat(req.body.lat),parseFloat(req.body.lon)]},'username':'sheetzam','pintime':new Date()});
+        var ourContent=JSON.stringify({'application':'Tagit Test','location':{'type':'Point','coordinates':[parseFloat(req.body.lat),parseFloat(req.body.lon)]},'username':req.session.username,'pintime':new Date()});
 
 
         var options = {
