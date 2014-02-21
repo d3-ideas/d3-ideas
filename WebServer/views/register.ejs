@@ -3,19 +3,33 @@
 	<head>
 	<title><%= title %></title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script src="http://openlayers.org/api/OpenLayers.js"></script>
-    <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
     <link rel='stylesheet' href='/stylesheets/d3.css' />
     <script>
-
+        $( document ).ready( function(){
+            $('form').submit( function( event ){
+                event.preventDefault();
+                var $form = $( this ),
+                    username = $form.find("input[name='username']" ).val(),
+                    password = $form.find("input[name='password']" ).val(),
+                    url = $form.attr( "action");
+                var posting = $.post( url, {username: username, password: password});
+                posting.done(function( data ){
+                    console.log(data);
+                });
+            });
+        });
     </script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
-<!--[if !(lt IE 8)]><!-->
-   <script type="text/javascript">
-     (function(){var e=document.createElement("script");e.type="text/javascript";e.async=true;e.src=document.location.protocol+"//d1agz031tafz8n.cloudfront.net/thedaywefightback.js/widget.min.js";var t=document.getElementsByTagName("script")[0];t.parentNode.insertBefore(e,t)})()
-   </script>
-<!--<![endif]-->
+        <div id="register">
+            <form name="register" action="/register" method="post">
+                <input type="text" name="username" placeholder="Your Handle" autofocus>
+                <br>
+                <input type="password" name="password" placeholder="password">
+                <br>
+                <input type="submit" value="Let Me In" name="Submit">
+            </form>
+        </div>
 	</body>
 </html>

@@ -6,7 +6,7 @@
 var express = require('express');
 var routes = require('./routes');
 var register = require('./routes/register');
-var pin = require ('./routes/pin');
+var pin = require('./routes/pin');
 var http = require('http');
 var path = require('path');
 
@@ -28,16 +28,17 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+if ('development' === app.get('env')) {
+    app.use(express.errorHandler());
 }
 
 app.get('/', routes.index);
-app.get('/register', register.register);
+app.get('/register', register.registerGet);
+app.post('/register', register.registerPost);
 app.get('/pin', pin.pin);
 app.post('/pin', pin.addPin);
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');
     console.log('         / 3 \\');
     console.log('        /     \\');
@@ -49,5 +50,5 @@ http.createServer(app).listen(app.get('port'), function(){
     console.log('  / 1             2 \\');
     console.log(' /___________________\\');
     console.log('Express server listening on port ' + app.get('port'));
-    console.log('Press ctrl+c to exit');    
+    console.log('Press ctrl+c to exit');
 });
