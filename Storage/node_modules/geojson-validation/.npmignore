@@ -1,0 +1,17 @@
+*#
+node_modules
+npm-debug.log
+ssl
+.DS_STORE
+*~
+.idea
+
+nbproject
+
+# Ignore temporary files
+.tmp
+
+*.swo
+*.swp
+*.swn
+*.swm

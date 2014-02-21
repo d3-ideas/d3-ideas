@@ -11,7 +11,8 @@ exports.pin = function(req, res){
 exports.addPin = function (req, res){
         console.log(req.body);
 
-        var ourContent=JSON.stringify({'application':'Tagit Test','location':[req.body.lat,req.body.lon],'username':'sheetzam','pintime':new Date()});
+        var ourContent=JSON.stringify({'application':'Tagit Test','location':{'type':'Point','coordinates':[parseFloat(req.body.lat),parseFloat(req.body.lon)]},'username':'sheetzam','pintime':new Date()});
+
 
         var options = {
                 hostname: 'localhost',
