@@ -16,7 +16,7 @@ exports.addPin = function(db){
         
         var location = req.body.location; 
         var username = req.body.username;
-        var pintime = req.body.pintime;
+        var pintime = new Date();
         var application = req.body.application;
         
         if(!gjv.isPoint(location)){
@@ -27,10 +27,10 @@ exports.addPin = function(db){
         var collection = db.get('pins');
     
         collection.insert({
-            "location" : location,
-            "username" : username,
-            "pintime" : pintime,
-            "application" : application
+            'Location' : location,
+            'UserName' : username,
+            'PinTime' : pintime,
+            'Application' : application
         }, function (err,doc){
             if (err) {
                 res.send({'error':'An error has occurred adding your pin'});
