@@ -27,10 +27,10 @@ exports.addPin = function(db){
         var collection = db.get('pins');
     
         collection.insert({
-            "Location" : location,
-            "UserName" : username,
-            "PinTime" : pintime,
-            "Application" : application
+            'Location' : location,
+            'UserName' : username,
+            'PinTime' : pintime,
+            'Application' : application
         }, function (err,doc){
             if (err) {
                 res.send({'error':'An error has occurred adding your pin'});
