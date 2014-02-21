@@ -3,25 +3,14 @@
 	<head>
 	<title><%= title %></title>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="/js/register.js"></script>
     <link rel='stylesheet' href='/stylesheets/d3.css' />
     <script>
-        $( document ).ready( function(){
-            $('form').submit( function( event ){
-                event.preventDefault();
-                var $form = $( this ),
-                    username = $form.find("input[name='username']" ).val(),
-                    password = $form.find("input[name='password']" ).val(),
-                    url = $form.attr( "action");
-                var posting = $.post( url, {username: username, password: password});
-                posting.done(function( data ){
-                    console.log(data);
-                });
-            });
-        });
     </script>
 	</head>
 	<body>
 		<h1><%= title %></h1>
+        <div id="error"></div>
         <div id="register">
             <form name="register" action="/register" method="post">
                 <input type="text" name="username" placeholder="Your Handle" autofocus>

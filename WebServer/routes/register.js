@@ -3,5 +3,6 @@ exports.registerGet = function (req, res) {
 };
 
 exports.registerPost = function (req, res) {
+    console.log(req.body);
     res.json({status: 'approved'});
 };
