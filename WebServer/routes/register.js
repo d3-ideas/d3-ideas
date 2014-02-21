@@ -17,7 +17,7 @@ exports.registerPost = function (req, res) {
     console.log(req.body);
     var ourContent = JSON.stringify({'username': req.body.username,
                                     'password': req.body.password,
-                                    'createdon': Date.now()});
+                                    'createdOn': Date.now()});
     
     var options = {
                 hostname: 'localhost',
