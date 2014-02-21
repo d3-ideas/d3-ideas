@@ -6,14 +6,7 @@ exports.registerGet = function (req, res) {
 };
 
 exports.registerPost = function (req, res) {
-<<<<<<< HEAD
     req.session.username=req.body.username;
-    console.log(req.body.username);
-    console.log(req.session);
-    res.json({status: 'approved'});
-    //res.json({status: 'error', reason:'Sorry, that user already exists.'});
-    //res.json({status: 'error', reason:"Shit's on fire, yo"});
-=======
     console.log(req.body);
     var ourContent = JSON.stringify({'username': req.body.username,
                                     'password': req.body.password,
@@ -50,5 +43,4 @@ exports.registerPost = function (req, res) {
     // write data to request body
     ourPost.write(ourContent);
     ourPost.end();    
->>>>>>> 1941a5d5f47707c672f274a471184ce273a4c675
 };
