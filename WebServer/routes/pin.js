@@ -5,7 +5,7 @@
 var http = require('http');
 
 exports.pin = function(req, res){
-  res.render('pin', { title: 'TagIt' });
+    res.render('pin', { title: 'TagIt' });
 };
 
 exports.addPin = function (req, res){
