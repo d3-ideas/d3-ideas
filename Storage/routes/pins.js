@@ -24,6 +24,11 @@ exports.addPin = function(db){
             return;
         }
         
+        if(!checkApp(location, db)){
+            res.send({'error':'The application was invalid.'});
+            return;
+        }
+        
         var collection = db.get('pins');
     
         collection.insert({
@@ -41,3 +46,18 @@ exports.addPin = function(db){
         });
     }
 };
+
+	
+checkApp = function(findapp, db){
+    return function(req, res){
+        var apps = db.get('apps');
+ 
+        apps.insert({'application':findapp});
+ 
+        apps.findOne({application:findapp}, function(err,foundapp){
+            console.log('foundapp: ' + foundapp.application);
+            if(foundapp.application == findapp) res.send(true);
+            else res.send(false);
+        });        
+    }    
+}
