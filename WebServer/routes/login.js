@@ -1,17 +1,20 @@
 var http = require('http');
 
-exports.registerGet = function (req, res) {
-    res.render('register', { title: 'Registration' });
-    console.log(req.session.username);
+exports.loginGet = function(req, res){
+    //Should we check session state and pass through if they user already has a valid session?
+    
+    res.render('login', { title: 'TagIt' });
 };
 
-exports.registerPost = function (req, res) {
+exports.loginPost = function(req, res){
     req.session.username=req.body.username;
+    console.log('loginPost'+req.body);
     var ourContent = JSON.stringify({'username': req.body.username,
-                                    'password': req.body.password,
-                                    'createdOn': Date.now()});
+                                    'password': req.body.password});
     
-    var options = {
+    res.json({status: 'approved'});//just retrurn ok for testing
+    
+    /*var options = {
                 hostname: 'localhost',
                 port: 3001,
                 path: '/users',
@@ -22,6 +25,8 @@ exports.registerPost = function (req, res) {
 
     var origres = res;
     var ourPost = http.request(options, function(res) {
+            console.log('STATUS: ' + res.statusCode);
+            console.log('HEADERS: ' + JSON.stringify(res.headers));
             res.setEncoding('utf8');
 
             res.on('data', function (chunk) {
@@ -40,5 +45,5 @@ exports.registerPost = function (req, res) {
 
     // write data to request body
     ourPost.write(ourContent);
-    ourPost.end();    
+    ourPost.end(); */
 };

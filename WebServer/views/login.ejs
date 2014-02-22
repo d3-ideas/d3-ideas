@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="/js/login.js"></script>
+    <link rel='stylesheet' href='/stylesheets/d3.css' />
+    <script>
+    </script>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+        <div id="error"></div>
+        <div id="login">
+            <form name="login" action="/login" method="post">
+                <input type="text" name="username" placeholder="Your Handle" autofocus>
+                <br>
+                <input type="password" name="password" placeholder="password">
+                <br>
+                <input type="submit" value="Let Me In" name="Submit">
+            </form>
+        </div>
+	</body>
+</html>
