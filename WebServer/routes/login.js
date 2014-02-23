@@ -12,7 +12,7 @@ exports.loginPost = function(req, res){
     var ourContent = JSON.stringify({'username': req.body.username,
                                     'password': req.body.password});
     
-    res.json({status: 'approved'});//just retrurn ok for testing
+    res.json({status: 'approved'});//just return ok for testing
     
     /*var options = {
                 hostname: 'localhost',
