@@ -15,10 +15,12 @@ exports.addUser = function (db) {
             "AddedOn" : AddedOn
         }, function (err, doc) {
             if (err) {
+                console.log(err);
                 res.send({'error': 'An error has occurred adding your user ' + req.body.username});
             } else {
                 console.log('Successfully added user ' + req.body.username);
-                res.send(doc);
+                console.log(doc._id);
+                res.json({"_id": doc._id});
             }
         });
     };

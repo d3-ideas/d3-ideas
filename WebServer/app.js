@@ -31,7 +31,8 @@ app.use(express.session({
         port: 27017
     }),
     secret: 'zuperzecret here',
-    cookie: {maxAge:new Date(Date.now()+24*60*60)}
+        //one day=24 * 60 * 60 * 1000
+    cookie: {maxAge: 24 * 60 * 60 * 1000 * 365}
 }));
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));

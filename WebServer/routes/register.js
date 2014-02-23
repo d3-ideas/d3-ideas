@@ -40,5 +40,5 @@ exports.registerPost = function (req, res) {
 
     // write data to request body
     ourPost.write(ourContent);
-    ourPost.end();    
+    ourPost.end();
 };
