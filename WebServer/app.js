@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -12,6 +11,7 @@ var http = require('http');
 var path = require('path');
 
 var app = express();
+var MongoStore = require('connect-mongo')(express);
 
 // all environments
 app.set('port', process.env.PORT || 80);
@@ -23,7 +23,16 @@ app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('zuperzecret here'));
-app.use(express.session());
+app.use(express.session({
+    key: 'app.sess',
+    store: new MongoStore({
+        db: 'Sessions',
+        host: 'localhost',
+        port: 27017
+    }),
+    secret: 'zuperzecret here',
+    cookie: {maxAge:new Date(Date.now()+24*60*60)}
+}));
 app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
