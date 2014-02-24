@@ -9,9 +9,9 @@ exports.addUser = function (db) {
             collection = db.get('users');
     
         collection.insert({
-            "username" : username,
-            "password" : password,
-            "createdOn" : createdOn,
+            "UserName" : username,
+            "Password" : password,
+            "CreatedOn" : createdOn,
             "AddedOn" : AddedOn
         }, function (err, doc) {
             if (err) {
@@ -25,8 +25,33 @@ exports.addUser = function (db) {
         });
     };
 };
+
 exports.checkUser = function (db) {
     return function (req, res) {
         console.log('checking user');
+    };
+};
+
+exports.login = function (db) {
+    return function (req, res) {
+        console.log('logging in');
+        console.log(req.body);
+        
+        var users = db.get('users');
+
+        users.findOne({'UserName':req.body.username}, function(err,result){
+            if(!result) {
+                res.send({'error':'The username or password was invalid'});
+            }
+            else{
+                if(result.password != req.body.Password){
+                    res.send({'error':'The username or password was invalid'});
+                } 
+                else {
+                    console.log('Successfully logged in');
+                    res.send('Successful Login'); 
+                }
+            } 
+        });
     };
 };

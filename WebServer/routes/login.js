@@ -12,12 +12,12 @@ exports.loginPost = function(req, res){
     var ourContent = JSON.stringify({'username': req.body.username,
                                     'password': req.body.password});
     
-    res.json({status: 'approved'});//just return ok for testing
+    //res.json({status: 'approved'});//just return ok for testing
     
-    /*var options = {
+    var options = {
                 hostname: 'localhost',
                 port: 3001,
-                path: '/users',
+                path: '/users/login',
                 method: 'POST',
                 headers: {'content-type':'application/json',
                         'content-length':ourContent.length}
@@ -45,5 +45,5 @@ exports.loginPost = function(req, res){
 
     // write data to request body
     ourPost.write(ourContent);
-    ourPost.end(); */
+    ourPost.end(); 
 };
