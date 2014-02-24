@@ -8,7 +8,6 @@ exports.loginGet = function(req, res){
 
 exports.loginPost = function(req, res){
     req.session.username=req.body.username;
-    console.log('loginPost'+req.body);
     var ourContent = JSON.stringify({'username': req.body.username,
                                     'password': req.body.password});
     
@@ -24,26 +23,37 @@ exports.loginPost = function(req, res){
     };
 
     var origres = res;
-    var ourPost = http.request(options, function(res) {
-            console.log('STATUS: ' + res.statusCode);
-            console.log('HEADERS: ' + JSON.stringify(res.headers));
+    var ourReq = http.request(options, function(res) {
+        if (res.statusCode == 200){ 
             res.setEncoding('utf8');
 
             res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
+                var data = JSON.parse(chunk);
+                if (data.status == 'success'){
+                    console.log('success');
+                    //return success to the client
+                    origres.json({'status': 'success'});
+                } else {
+                    origres.json({'status': 'error', 'reason': data.reason});        
+                }
             });
 
-            //return success to the client
-            origres.json({status: 'approved'});
+
+        } else {
+            origres.json({'status': 'error', 'reason': 'failed to get user'});
+        }
     });
     
-
-    ourPost.on('error', function(e) {
-        console.log('problem with request: ' + e.message);
-        origres.json({status: 'error' + e.message});
+    ourReq.on('error', function(e) {
+        origres.json({status: 'error', 'reason': e.message});
     });
 
     // write data to request body
+<<<<<<< HEAD
     ourPost.write(ourContent);
     ourPost.end(); 
+=======
+    ourReq.write(ourContent);
+    ourReq.end(); 
+>>>>>>> Add validation of user credentials
 };

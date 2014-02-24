@@ -29,6 +29,23 @@ exports.addUser = function (db) {
 exports.checkUser = function (db) {
     return function (req, res) {
         console.log('checking user');
+        
+        var users = db.get('users'),
+            username = req.body.username,
+            password = req.body.password;
+        
+        users.findOne({$and:[{'username':username, 'password':password}]}, function(err,userPasswordOK){
+            if(userPasswordOK) {
+                res.json({'status': 'success'});
+            } else {
+                users.findOne({'username':username}, function(err,userExists){                          if(userExists){
+                        res.json({'status': 'error', 'reason':'The password was invalid.'});                    
+                    } else {
+                        res.json({'status': 'error', 'reason':'The user login was invalid.'});                
+                    }
+                });
+            } 
+        });
     };
 };
 

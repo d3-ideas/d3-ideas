@@ -5,7 +5,6 @@
 var http = require('http');
 
 exports.pin = function(req, res){
-    console.log(req.session.username);
     res.render('pin', { title: 'TagIt' , username:req.session.username});
 };
 
