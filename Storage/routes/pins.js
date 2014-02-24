@@ -1,14 +1,14 @@
-exports.findAllPins = function(db){
-    return function(req, res){
+exports.findAllPins = function (db) {
+    return function (req, res) {
         var collection = db.get('pins');
-        collection.find({}, {}, function(err, pins) {
+        collection.find({}, {}, function (err, pins) {
             res.send(pins);
         });
     };
 };
 
-exports.addPin = function(db){
-    return function(req, res){
+exports.addPin = function (db) {
+    return function (req, res){
         
         console.log(req.body);
         

@@ -37,7 +37,6 @@ app.post('/pins', pins.addPin(db));
 
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
-app.post('/users/login', users.login(db));
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('          / \\');
