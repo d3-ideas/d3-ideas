@@ -30,13 +30,14 @@ $(document).ready(function () {
     if(navigator.geolocation)
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     
-    map.addMarker(new mxn.Marker(new mxn.LatLonPoint(38.9949249,-77.0416414)));
-    
     $.getJSON('\pins', function (data) {
         console.log(data);
-console.log(data.length);
-    for (var i=0, len=data.length; i < len; i++) {
-        console.log(data[i]);
+        var test = JSON.parse(data.locations);
+console.log(test.length);
+    for (var i=0, len=test.length; i < len; i++) {
+        console.log(test[i].Location.coordinates);
+        map.addMarker(new mxn.Marker(new mxn.LatLonPoint(test[i].Location.coordinates[0],test[i].Location.coordinates[1])));
+        
     }
 
     });

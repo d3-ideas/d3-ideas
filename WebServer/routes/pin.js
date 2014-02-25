@@ -62,7 +62,8 @@ exports.getPins = function (req, res){
         
         dRes.on('data', function (data){
             console.log(data);
-            oRes.json(data);
+            oRes.json({'locations':data});
+            //oRes.json([{'first':'rob','last':'vignerot'}, {'first':'quinn', 'last':'mckew'}]);
         });
     });
                 

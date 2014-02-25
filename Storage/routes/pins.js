@@ -1,7 +1,7 @@
 exports.findAllPins = function (db) {
     return function (req, res) {
         var collection = db.get('pins');
-        collection.find({}, {}, function (err, pins) {
+        var stream = collection.find({}, {}, function (err, pins) {
             res.json(pins);
         });
     };
