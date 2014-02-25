@@ -50,6 +50,7 @@ app.get('/login', login.loginGet);
 app.post('/login', login.loginPost);
 app.get('/pin', pin.pin);
 app.post('/pin', pin.addPin);
+app.get('/pins', pin.getPins);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');

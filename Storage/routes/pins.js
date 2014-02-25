@@ -2,7 +2,7 @@ exports.findAllPins = function (db) {
     return function (req, res) {
         var collection = db.get('pins');
         collection.find({}, {}, function (err, pins) {
-            res.send(pins);
+            res.json(pins);
         });
     };
 };

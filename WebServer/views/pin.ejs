@@ -5,40 +5,8 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script src="http://openlayers.org/api/OpenLayers.js"></script>
     <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(openlayers)" type="text/javascript"></script>
+    <script src="/js/pin.js"></script>        
     <link rel='stylesheet' href='/stylesheets/d3.css' />
-    <script>
-        var latlon;
-        onSuccess=function(data){
-            console.log(data);
-            var map = new mxn.Mapstraction('map', 'openlayers'); 
-            latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
-            var marker = new mxn.Marker(latlon);
-            map.addMarker(marker);
-            map.setCenterAndZoom(latlon, 15);
-            $('#Latitude').text('Latitude: '+data.coords.latitude);
-            $('#Longitude').text('Longitude: '+data.coords.longitude);
-            $('#accuracy').text("Accuracy: "+data.coords.accuracy+" meter circle");
-        };
-
-        onError=function(data){
-            console.log(data);
-        };
-
-        window.onload = function(){
-            if(navigator.geolocation)
-            navigator.geolocation.getCurrentPosition(onSuccess, onError);
-        }
-
-        addPin=function(){
-            $.post('/pin', { 'lat':latlon.lat, 'lon':latlon.lon }, function(data){
-                //Show temporary notification of success
-                $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
-                $('#PinSucess').fadeOut(3000, function(){
-                    //do something here.
-                });
-            });
-        };
-    </script>
 	</head>
 	<body>
         <h3>Your current location is:</h3>
