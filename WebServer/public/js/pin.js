@@ -15,8 +15,12 @@ var onSuccess = function (data) {
     },
     addPin = function () {
         $.post('/pin', { 'lat': latlon.lat, 'lon': latlon.lon }, function (data) {
-            //Show temporary notification of success
-            $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
+            if (data.status === 'success'){
+                //Show temporary notification of success
+                $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
+            } else {
+                $('#PinResult').html('<div id="PinSucess">' + data.reason + '</div>');
+            }
             $('#PinSucess').fadeOut(3000, function () {
             //do something here.
             });
@@ -31,11 +35,11 @@ $(document).ready(function () {
     
     $.getJSON('/pins', function (data) {
         var i;
-        for (i in data.locations) {
-            if (data.locations.hasOwnProperty(i)) {
+        for (i in data) {
+            if (data.hasOwnProperty(i)) {
                 map.addMarker(
                     new mxn.Marker(
-                        new mxn.LatLonPoint(data.locations[i].Location.coordinates[0], data.locations[i].Location.coordinates[1])
+                        new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
                     )
                 );
             }

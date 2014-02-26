@@ -14,38 +14,42 @@ exports.addPin = function (db) {
         
         var gjv = require('geojson-validation'),
             location = req.body.location,
-            username = req.body.username,
+            userID = req.body.userID,
             pintime = new Date(),
             application = req.body.application,
             apps = db.get('apps');
  
 
         if (!gjv.isPoint(location)) {
-            res.send({'error': 'The pin location was invalid.'});
+            res.json({'status': 'error',
+                      'reason': 'The pin location was invalid.'});
             return;
         }
 
 // Uncomment the next line to insert the application pin (only need to do this once)        
-//        apps.insert({'Application':application});
+        //apps.insert({'application':application});
         
-        apps.findOne({'Application': application}, function (err, foundapp) {
+        apps.findOne({'application': application}, function (err, foundapp) {
             if (!foundapp) {
-                res.send({'error': 'The application was invalid.'});
+                res.json({'status': 'error',
+                          'reason': 'The application was invalid.'});
             } else {
                 application = foundapp._id;
                 var collection = db.get('pins');
     
                 collection.insert({
-                    'Location': location,
-                    'UserName': username,
-                    'PinTime': pintime,
-                    'Application': application
+                    'location': location,
+                    'userID': userID,
+                    'pinTime': pintime,
+                    'application': application
                 }, function (err, doc) {
                     if (err) {
-                        res.send({'error': 'An error has occurred adding your pin'});
+                        res.json({'status':'error',
+                                  'reason': 'An error has occurred adding your pin'});
                     } else {
                         console.log('Successfully added pin');
-                        res.send(doc); //You have pinned your location
+                        res.json({'status': 'success',
+                                 'pin': doc}); //You have pinned your location
                     }
                 });
             }

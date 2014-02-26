@@ -1,24 +1,20 @@
 exports.addUser = function (db) {
-    return function (req, res) {
-        console.log('adding user');
-//        console.log(req.body);
-        
+    return function (req, res) {    
         var username = req.body.username,
             password = req.body.password,
             createdOn = req.body.createdOn,
-            AddedOn = Date.now(),
+            addedOn = Date.now(),
             users = db.get('users');
     
         //see if we already have that user
-
         users.findOne({'UserName': req.body.username}, function (err, result) {
             if (!result) {
                 //if not, insert
                 users.insert({
-                    "UserName" : username,
-                    "Password" : password,
-                    "CreatedOn" : createdOn,
-                    "AddedOn" : AddedOn
+                    "username" : username,
+                    "password" : password,
+                    "createdOn" : createdOn,
+                    "addedOn" : addedOn
                 }, function (err, doc) {
                     if (err) {
                         console.log(err);
@@ -44,12 +40,12 @@ exports.checkUser = function (db) {
             username = req.body.username,
             password = req.body.password;
         
-        users.findOne({$and: [{'UserName': username, 'Password': password}]}, function (err, userPasswordOK) {
+        users.findOne({$and: [{'username': username, 'password': password}]}, function (err, userPasswordOK) {
             if (userPasswordOK) {
                 console.log(userPasswordOK);
                 res.json({'status': 'success', 'userID': userPasswordOK._id});
             } else {
-                users.findOne({'UserName': username}, function (err, userExists) {
+                users.findOne({'username': username}, function (err, userExists) {
                     if (userExists) {
                         res.json({'status': 'error', 'reason': 'The password was invalid.'});
                     } else {

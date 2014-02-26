@@ -12,7 +12,7 @@ exports.addPin = function (req, res) {
     var ourContent = JSON.stringify({'application': 'Tagit Test',
             'location': {'type': 'Point',
                       'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
-            'username': req.session.username,
+            'userID': req.session.userID,
             'pintime': new Date()
             }),
         
@@ -29,11 +29,8 @@ exports.addPin = function (req, res) {
             res.setEncoding('utf8');
 
             res.on('data', function (chunk) {
-                //do something with data
+                origres.json(JSON.parse(chunk));            
             });
-
-            //return success to the client
-            origres.send(200);
         });
 
     ourPost.on('error', function (e) {
@@ -48,7 +45,7 @@ exports.addPin = function (req, res) {
 //Performs GET request to storage to get pins for the user
 exports.getPins = function (req, res) {
     var dReq = JSON.stringify({'application': 'Tagit Test',
-                               'username': req.session.username,
+                               'userID': req.session.userID,
                                'filter': ''}),
         options = {
             hostname: 'localhost',
@@ -62,12 +59,9 @@ exports.getPins = function (req, res) {
         dGet = http.request(options, function (dRes) {
             dRes.setEncoding('utf8');
             dRes.on('data', function (data) {
-                console.log(data);
-                oRes.json({'locations': JSON.parse(data)});
-                //oRes.json([{'first':'rob','last':'vignerot'}, {'first':'quinn', 'last':'mckew'}]);
+                oRes.json(JSON.parse(data));
             });
-        });
-                
+        });               
     dGet.on('error', function (e) {
         console.log('problem with request: ' + e.message);
     });
