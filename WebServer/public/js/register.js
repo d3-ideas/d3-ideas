@@ -15,6 +15,7 @@ $(document).ready(function () {
         }
         posting = $.post(url, {username: username, password: pwHash});
         posting.done(function (data) {
+            console.log(data);
             if (data.status === "approved") {
                 window.location.assign("/Pin");
             } else if (data.status === "error") {

@@ -1,5 +1,5 @@
 exports.addUser = function (db) {
-    return function (req, res) {    
+    return function (req, res) {
         var username = req.body.username,
             password = req.body.password,
             createdOn = req.body.createdOn,
@@ -7,7 +7,7 @@ exports.addUser = function (db) {
             users = db.get('users');
     
         //see if we already have that user
-        users.findOne({'UserName': req.body.username}, function (err, result) {
+        users.findOne({'username': req.body.username}, function (err, result) {
             if (!result) {
                 //if not, insert
                 users.insert({
@@ -26,7 +26,7 @@ exports.addUser = function (db) {
                     }
                 });
             } else {
-                res.json({'error': 'The username is already taken'});
+                res.json({'error': 'That username is already taken'});
             }
         });
     };

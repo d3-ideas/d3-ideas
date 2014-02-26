@@ -44,7 +44,7 @@ exports.addPin = function (db) {
                     'application': application
                 }, function (err, doc) {
                     if (err) {
-                        res.json({'status':'error',
+                        res.json({'status': 'error',
                                   'reason': 'An error has occurred adding your pin'});
                     } else {
                         console.log('Successfully added pin');

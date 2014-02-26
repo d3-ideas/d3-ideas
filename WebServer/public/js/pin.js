@@ -15,7 +15,7 @@ var onSuccess = function (data) {
     },
     addPin = function () {
         $.post('/pin', { 'lat': latlon.lat, 'lon': latlon.lon }, function (data) {
-            if (data.status === 'success'){
+            if (data.status === 'success') {
                 //Show temporary notification of success
                 $('#PinResult').html('<div id="PinSucess">You have successfully pinned this location.</div>');
             } else {

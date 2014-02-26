@@ -13,35 +13,47 @@ exports.registerPost = function (req, res) {
     
     shaSum.update(password);
 
-    var hashedPassword = shaSum.digest('hex');
-    var ourContent = JSON.stringify({'username': req.body.username,
+    var returnData,
+        hashedPassword = shaSum.digest('hex'),
+        ourContent = JSON.stringify({'username': req.body.username,
                                     'password': hashedPassword,
                                     'createdOn': Date.now()}),
         options = {
-                hostname: 'localhost',
-                port: 3001,
-                path: '/users',
-                method: 'POST',
-                headers: {'content-type':'application/json',
-                        'content-length':ourContent.length}
+            hostname: 'localhost',
+            port: 3001,
+            path: '/users',
+            method: 'POST',
+            headers: {'content-type': 'application/json',
+                    'content-length': ourContent.length}
         },
 
-        origres = res,
-        ourPost = http.request(options, function(res) {
-            res.setEncoding('utf8');
+        ourPost = http.request(options, function (returnRes) {
+            returnRes.setEncoding('utf8');
 
-            res.on('data', function (chunk) {
-                console.log('BODY: ' + chunk);
+            returnRes.on('data', function (chunk) {
+                if (typeof returnData !== 'undefined') {
+                    returnData += chunk;
+                } else {
+                    returnData = chunk;
+                }
+            });
+            returnRes.on('end', function () {
+                returnData = JSON.parse(returnData);
+                if (typeof returnData.error !== 'undefined') {
+                    res.json({status: 'error', 'reason': returnData.error});
+                } else {
+                    req.session.userID = returnData.userID;
+                    //return success to the client
+                    res.json({status: 'approved'});
+                }
             });
 
-            //return success to the client
-            origres.json({status: 'approved'});
         });
     
 
     ourPost.on('error', function (e) {
         console.log('problem with request: ' + e.message);
-        origres.json({status: 'error' + e.message});
+        res.json({status: 'error' + e.message});
     });
 
     // write data to request body

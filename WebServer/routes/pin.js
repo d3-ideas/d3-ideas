@@ -29,7 +29,7 @@ exports.addPin = function (req, res) {
             res.setEncoding('utf8');
 
             res.on('data', function (chunk) {
-                origres.json(JSON.parse(chunk));            
+                origres.json(JSON.parse(chunk));
             });
         });
 
@@ -61,7 +61,7 @@ exports.getPins = function (req, res) {
             dRes.on('data', function (data) {
                 oRes.json(JSON.parse(data));
             });
-        });               
+        });
     dGet.on('error', function (e) {
         console.log('problem with request: ' + e.message);
     });

@@ -15,7 +15,8 @@ exports.loginPost = function (req, res) {
     
     shaSum.update(password);
 
-    var hashedPassword = shaSum.digest('hex'),
+    var returnData,
+        hashedPassword = shaSum.digest('hex'),
         ourContent = JSON.stringify({'username': req.body.username,
                                     'password': hashedPassword}),
         options = {
@@ -26,34 +27,39 @@ exports.loginPost = function (req, res) {
             headers: {'content-type': 'application/json',
                         'content-length': ourContent.length}
         },
-        origres = res,
-        
-        ourReq = http.request(options, function (res) {
-            if (res.statusCode === 200) {
-                res.setEncoding('utf8');
+        ourReq = http.request(options, function (returnRes) {
+            if (returnRes.statusCode === 200) {
+                returnRes.setEncoding('utf8');
 
-                res.on('data', function (chunk) {
-                    var data = JSON.parse(chunk);
+                returnRes.on('data', function (chunk) {
+                    if (typeof returnData !== 'undefined') {
+                        returnData += chunk;
+                    } else {
+                        returnData = chunk;
+                    }
+                });
+                returnRes.on('end', function () {
+                    var data = JSON.parse(returnData);
                     if (data.status === 'success') {
                         console.log('user ' + req.body.username + ' logged in.');
-                        //return success to the client
-                        origres.json({'status': 'success'});
                         //put back any session variables we need.
                         req.session.username = req.body.username;
                         req.session.userID = data.userID;
+                        //return success to the client
+                        res.json({'status': 'success'});
                     } else {
                         console.log('there was an error');
                         console.log(data);
-                        origres.json({'status': 'error', 'reason': data.reason});
+                        res.json({'status': 'error', 'reason': data.reason});
                     }
                 });
             } else {
-                origres.json({'status': 'error', 'reason': 'failed to get user'});
+                res.json({'status': 'error', 'reason': 'failed to get user'});
             }
         });
     
     ourReq.on('error', function (e) {
-        origres.json({status: 'error', 'reason': e.message});
+        res.json({status: 'error', 'reason': e.message});
     });
 
     // write data to request body
