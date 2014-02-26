@@ -38,6 +38,7 @@ exports.loginPost = function (req, res) {
                         console.log('user ' + req.body.username + ' logged in.');
                         //return success to the client
                         origres.json({'status': 'success'});
+                        //put back any session variables we need.
                         req.session.username = req.body.username;
                         req.session.userID = data.userID;
                     } else {

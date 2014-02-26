@@ -25,7 +25,7 @@ app.use(app.router);
 
 
 // development only
-if ('development' == app.get('env')) {
+if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
@@ -38,7 +38,7 @@ app.post('/pins', pins.addPin(db));
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
 
-http.createServer(app).listen(app.get('port'), function(){
+http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');
     console.log('         / 3 \\');
     console.log('        /     \\');
