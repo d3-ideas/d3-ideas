@@ -9,6 +9,9 @@
         "express": "3.4.8",
         "mongodb":"*",
         "ejs": "*",
-        "stylus": "*"
+        "stylus": "*",
+        "winston": "0.6.x",
+        "express-winston": "0.2.x",
+        "winston-mongodb": "0.4.x"
     }
 }

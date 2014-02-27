@@ -1,8 +1,12 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express');
+//require for mongodb logging
+var expressWinston = require('express-winston');
+var winston = require('winston');
+var MongoDB = require('winston-mongodb').MongoDB;
+//
 var routes = require('./routes');
 var register = require('./routes/register');
 var pin = require('./routes/pin');
@@ -19,6 +23,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
+app.use(expressWinston.logger({
+    transports: [
+        new winston.transports.MongoDB({
+            'db': 'Logs',
+            'collection': 'wslog',
+            'host': 'localhost',
+            'port': 27017
+        })
+    ]
+}));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
