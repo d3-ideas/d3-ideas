@@ -5,7 +5,12 @@
 var http = require('http');
 
 exports.pin = function (req, res) {
-    res.render('pin', { title: 'TagIt', username: req.session.username});
+    
+    if (typeof req.session.username !== 'undefined') {
+        res.render('pin', { title: 'TagIt', username: req.session.username});
+    } else {
+        res.redirect('/');
+    }
 };
 
 exports.addPin = function (req, res) {

@@ -13,13 +13,10 @@
         <div id='username'>User:<%= username %></div>
         <div id='Latitude'></div>
         <div id='Longitude'></div>
-		<table>
-            <tr>
-                <td><div id="accuracy"></div></td>
-                <td><a href='#' onclick="addPin();">Pin this location</a></td>
-                <td><span id='PinResult'></span></td>
-            </tr>
-        </table>
+        <div id="accuracy"></div>
+        <span id='PinResult'></span>
+        <div class='button'><a href='#' onclick="addPin();">Pin this location</a></div>
+        <div class='button'><a href='/logout' >Log Out</a></div>
         <p></p>
         <div id="map"></div>
 	</body>

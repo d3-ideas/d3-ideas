@@ -1,15 +1,14 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
-a {
-      color: #fff;
+.button {
+    color: #fff;
     border: 2px solid #2e80e0;
     background-color: #2e80e0;
     border-radius: 10px;
     padding: 10px;
     text-decoration: none;
-
 }
 #map {
   height: 400px;
