@@ -11,7 +11,8 @@ var routes = require('./routes');
 var register = require('./routes/register');
 var pin = require('./routes/pin');
 var login = require('./routes/login');
-var logout = require ('./routes/logout');
+var main = require('./routes/main');
+//var logout = require ('./routes/logout');
 var http = require('http');
 var path = require('path');
 
@@ -66,7 +67,8 @@ app.post('/login', login.loginPost);
 app.get('/pin', pin.pin);
 app.post('/pin', pin.addPin);
 app.get('/pins', pin.getPins);
-app.get('/logout', logout.logout);
+//app.get('/logout', logout.logout);
+app.get('/main', main.main);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');
