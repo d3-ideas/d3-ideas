@@ -16,7 +16,9 @@ var addmenu = function (txt, func) {
     var newcontrol = document.createElement("a");
     newcontrol.className = 'googlecontrol';
     newcontrol.appendChild(document.createTextNode(txt));
-    newcontrol.onclick = function(){alert('clicked');};
+    newcontrol.onclick = function(){
+        $('#map').toggleClass('fullscreen_menu');
+    };
     map.currentElement.appendChild(newcontrol);
 };
 
