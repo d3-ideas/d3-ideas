@@ -18,7 +18,8 @@ exports.addPin = function (req, res) {
             'location': {'type': 'Point',
                       'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
             'userID': req.session.userID,
-            'pintime': new Date()
+            'pintime': new Date(),
+            'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
             }),
         
         options = {
