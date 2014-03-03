@@ -16,7 +16,7 @@ var addmenu = function (txt, func) {
     var newcontrol = document.createElement("a");
     newcontrol.className = 'googlecontrol';
     newcontrol.appendChild(document.createTextNode(txt));
-    newcontrol.onclick = function(){
+    newcontrol.onclick = function () {
         $('#map').toggleClass('fullscreen_menu');
     };
     map.currentElement.appendChild(newcontrol);
@@ -24,16 +24,16 @@ var addmenu = function (txt, func) {
 
 $(document).ready(function () {
     map = new mxn.Mapstraction('map', 'googlev3');
-		map.addControls({
-			pan: true,
-			zoom: 'small',
-			map_type: true
-		});    
+    map.addControls({
+        pan: true,
+        zoom: 'small',
+        map_type: true
+    });
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     
-    addmenu('Menu','');
+    addmenu('Menu', '');
     
 /*    $.getJSON('/pins', function (data) {
         var i;

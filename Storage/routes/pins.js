@@ -12,28 +12,27 @@ exports.addPin = function (db) {
         
         console.log(req.body);
 
-        function addTag(newTag){
+        function addTag(newTag) {
             var ctags = db.get('tags');
             
-            if(!newTag){
+            if (!newTag) {
                 ctags.insert({
                     'pin': this._id,
                     'tag': newTag,
                     'createTime': this.pinTime,
                     'username': this.userID
-                }, function(err, tag){
+                }, function (err, tag) {
                     if (err) {
                         return {'status': 'error',
                                 'reason': 'An error has occurred adding your tag'};
                     } else {
                         return {'status': 'success',
-                                'tag': tag}
+                                'tag': tag};
                     }
                 });
-            }  
-            else{
-              return {'status': 'error',
-                      'reason': 'The tag was invalid.'};    
+            } else {
+                return {'status': 'error',
+                      'reason': 'The tag was invalid.'};
             }
         }
         
@@ -74,7 +73,7 @@ exports.addPin = function (db) {
                         res.json({'status': 'error',
                                   'reason': 'An error has occurred adding your pin'});
                     } else {
-                        if(Array.isArray(tags)){
+                        if (Array.isArray(tags)) {
                             tagresult = tags.map(addTag, doc);
                         }
                         

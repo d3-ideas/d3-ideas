@@ -12,7 +12,7 @@ var register = require('./routes/register');
 var pin = require('./routes/pin');
 var login = require('./routes/login');
 var main = require('./routes/main');
-var logout = require ('./routes/logout');
+var logout = require('./routes/logout');
 var http = require('http');
 var path = require('path');
 
