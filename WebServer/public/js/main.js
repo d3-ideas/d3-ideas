@@ -11,12 +11,27 @@ var onSuccess = function (data) {
         console.log(data);
     };
 
+var addmenu = function (txt, func) {
+    console.log(txt);
+    var newcontrol = document.createElement("a");
+    newcontrol.className = 'googlecontrol';
+    newcontrol.appendChild(document.createTextNode(txt));
+    newcontrol.onclick = function(){alert('clicked');};
+    map.currentElement.appendChild(newcontrol);
+};
 
 $(document).ready(function () {
-    map = new mxn.Mapstraction('map', 'openlayers');
+    map = new mxn.Mapstraction('map', 'googlev3');
+		map.addControls({
+			pan: true,
+			zoom: 'small',
+			map_type: true
+		});    
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
+    
+    addmenu('Menu','');
     
 /*    $.getJSON('/pins', function (data) {
         var i;
