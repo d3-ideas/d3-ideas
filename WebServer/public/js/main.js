@@ -15,7 +15,8 @@ var addmenu = function (txt, func) {
     console.log(txt);
     var newcontrol = document.createElement("a");
     newcontrol.className = 'googlecontrol';
-    newcontrol.appendChild(document.createTextNode(txt));
+    //newcontrol.appendChild(document.createTextNode(txt));
+    newcontrol.innerHTML = txt;
     newcontrol.onclick = function () {
         $('#map').toggleClass('fullscreen_menu');
     };
@@ -33,7 +34,7 @@ $(document).ready(function () {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     
-    addmenu('Menu', '');
+    addmenu('-', '');
     
 /*    $.getJSON('/pins', function (data) {
         var i;

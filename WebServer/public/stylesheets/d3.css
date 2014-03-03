@@ -4,7 +4,6 @@ html, body {
     padding: 0;
 }
 body {
-    padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 div.button{
@@ -24,14 +23,9 @@ div.fullscreen {
 }
 div.fullscreen_menu {
     position: relative;
-    min-height: 90%;
+    float:right;
 }
 
-div.menu {
-    background-color: #b0b0b0;
-    position: relative;
-    height: 100%;
-}
 a.googlecontrol:hover {
     cursor: pointer;
 }  
