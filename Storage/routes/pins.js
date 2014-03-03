@@ -78,7 +78,7 @@ exports.addPin = function (db) {
                             tagresult = tags.map(addTag, doc);
                         }
                         
-                        console.log('Successfully added pin' + tagresult.toString());
+                        console.log('Successfully added pin');
                         res.json({'status': 'success',
                                   'pin': doc,
                                   'tags': tagresult}); //You have pinned your location
