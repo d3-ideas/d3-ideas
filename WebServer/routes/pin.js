@@ -18,7 +18,6 @@ exports.addPin = function (req, res) {
             'location': {'type': 'Point',
                       'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
             'userID': req.session.userID,
-            'pintime': new Date(),
             'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
             }),
         
@@ -52,11 +51,12 @@ exports.addPin = function (req, res) {
 exports.getPins = function (req, res) {
     var dReq = JSON.stringify({'application': 'Tagit Test',
                                'userID': req.session.userID,
-                               'filter': ''}),
+                               'filter': '',
+                               'searchArea': {'type': 'Polygon', 'coordinates': [[[39,-76],[39,-78],[38,-76],[38,-76],[39,-76]]]}}),
         options = {
             hostname: 'localhost',
             port: 3001,
-            path: '/pins',
+            path: '/pins/within',
             method: 'GET',
             headers: {'content-type': 'application/json',
                     'content-length': dReq.length}

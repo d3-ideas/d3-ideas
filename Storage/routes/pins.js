@@ -1,9 +1,32 @@
 exports.findAllPins = function (db) {
     return function (req, res) {
         var collection = db.get('pins'),
-            stream = collection.find({}, {}, function (err, pins) {
-                res.json(pins);
-            });
+            
+        stream = collection.find({}, {}, function (err, pins) {
+            res.json(pins);
+        });
+    };
+};
+
+exports.findPinsWithin = function (db) {
+    return function (req, res) {
+        var collection = db.get('pins'),
+            polyFind = req.body.searchArea,
+            gjv = require('geojson-validation');
+            
+        if (!gjv.isPolygon(polyFind)) {
+            res.json({'status': 'error',
+                      'reason': 'The searchArea polygon was not valid.'});
+            return;
+        }
+        
+        collection.find(
+            {'location':
+                {$geoWithin:
+                    {$geometry: polyFind             
+            } } }, {}, function (err, pins) {
+            res.json(pins);
+        });
     };
 };
 
@@ -19,7 +42,7 @@ exports.addPin = function (db) {
                 ctags.insert({
                     'pin': this._id,
                     'tag': newTag,
-                    'createTime': this.pinTime,
+                    'createdOn': this.pinTime,
                     'username': this.userID
                 }, function (err, tag) {
                     if (err) {
@@ -66,7 +89,7 @@ exports.addPin = function (db) {
                 collection.insert({
                     'location': location,
                     'userID': userID,
-                    'pinTime': pintime,
+                    'createdOn': pintime,
                     'application': application
                 }, function (err, doc) {
                     if (err) {
