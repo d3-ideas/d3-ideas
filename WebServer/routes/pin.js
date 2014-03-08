@@ -4,6 +4,7 @@
 */
 var http = require('http');
 
+//route for /pin GET
 exports.pin = function (req, res) {
     
     if (typeof req.session.username !== 'undefined') {
@@ -13,6 +14,7 @@ exports.pin = function (req, res) {
     }
 };
 
+//route for /pin POST
 exports.addPin = function (req, res) {
     var ourContent = JSON.stringify({'application': 'Tagit Test',
             'location': {'type': 'Point',
@@ -47,12 +49,13 @@ exports.addPin = function (req, res) {
     ourPost.end();
 };
 
+//route for /pins GET
 //Performs GET request to storage to get pins for the user
 exports.getPins = function (req, res) {
     var dReq = JSON.stringify({'application': 'Tagit Test',
                                'userID': req.session.userID,
                                'filter': '',
-                               'searchArea': {'type': 'Polygon', 'coordinates': [[[39,-76],[39,-78],[38,-76],[38,-76],[39,-76]]]}}),
+                               'searchArea': {'type': 'Polygon', 'coordinates': [[[39,-76],[39,-78],[38,-78],[38,-76],[39,-76]]]}}),
         options = {
             hostname: 'localhost',
             port: 3001,

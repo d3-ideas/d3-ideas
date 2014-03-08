@@ -25,6 +25,11 @@ exports.findPinsWithin = function (db) {
                 {$geoWithin:
                     {$geometry: polyFind             
             } } }, {}, function (err, pins) {
+                if (err){
+                    res.json({'status': 'error',
+                            'reason': err});
+                    console.log('findPinsWithin failed - '+err);
+                }
             res.json(pins);
         });
     };

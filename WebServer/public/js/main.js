@@ -4,14 +4,27 @@ var latlon,
     bMenuVisible;
 
 var onSuccess = function (data) {
-        latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
-        var marker = new mxn.Marker(latlon);
-        map.addMarker(marker);
-        map.setCenterAndZoom(latlon, 15);
-    },
-    onError = function (data) {
-        console.log(data);
-    };
+    latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
+    map.setCenterAndZoom(latlon, 15);
+    console.log(map.getBounds());
+    
+    $.getJSON('/pins', function (data) {
+        var i;
+        for (i in data) {
+            if (data.hasOwnProperty(i)) {
+                map.addMarker(
+                    new mxn.Marker(
+                        new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
+                    )
+                );
+            }
+        }
+    });    
+};
+
+var onError = function (data) {
+    console.log(data);
+};
 
 var lMenuToggle = function () {
     if (!lMenuVisible){
@@ -45,25 +58,12 @@ $(document).ready(function () {
         zoom: 'small',
         map_type: true
     });
+    //map.addSmallControls();
+    //p.addLargeControls();
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     
     lMenuVisible = false;
     bMenuVisible = false;
-    
-    //addmenu('-', '');
-    
-/*    $.getJSON('/pins', function (data) {
-        var i;
-        for (i in data) {
-            if (data.hasOwnProperty(i)) {
-                map.addMarker(
-                    new mxn.Marker(
-                        new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
-                    )
-                );
-            }
-        }
-    });*/
 });
