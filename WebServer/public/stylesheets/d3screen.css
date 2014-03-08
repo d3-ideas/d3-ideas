@@ -1,28 +1,33 @@
-a.googlecontrol {
-    position: absolute;
-    bottom:40px;
-    left:0px;
-    width: 20px;
-    height: 40px;
+.menu{
+    position:absolute;
     border: 1px solid #b0b0b0;
     background-color: #b0b0b0;
     opacity: 0.7;
     color: black;
     font-size: 12px;
     text-align: center;
+}
+
+a.lMenuHandle {
+    position: absolute;
+    bottom:40px;
+    left:0px;
+    width: 20px;
+    height: 40px;
     z-index: 1;
 }
 
+a.lMenuHidden {
+    position: absolute;
+    top:0px;
+    left:0px;
+    width: 0px;
+    height: 100%;
+    z-index: 1;
+}
 
 div.fullscreen_menu {
     width:70%;
     float:right;
 }
 
-div.menu {
-    background-color: #b0b0b0;
-    position: relative;
-    height: 100%;
-    width:30%;
-    float:left;
-}

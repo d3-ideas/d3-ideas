@@ -1,5 +1,7 @@
 var latlon,
-    map;
+    map,
+    lMenuVisible,
+    bMenuVisible;
 
 var onSuccess = function (data) {
         latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
@@ -11,16 +13,29 @@ var onSuccess = function (data) {
         console.log(data);
     };
 
-var addmenu = function (txt, func) {
-    console.log(txt);
-    var newcontrol = document.createElement("a");
-    newcontrol.className = 'googlecontrol';
-    //newcontrol.appendChild(document.createTextNode(txt));
-    newcontrol.innerHTML = txt;
-    newcontrol.onclick = function () {
-        $('#map').toggleClass('fullscreen_menu');
+var lMenuToggle = function () {
+    if (!lMenuVisible){
+        $('#lMenu').css('width','300px');
+        $('#lMenuHandle').css('left','300px');
+        lMenuVisible = true;
+    } else {
+        $('#lMenu').css('width','0px');
+        $('#lMenuHandle').css('left','0px');
+        lMenuVisible = false;
     };
-    map.currentElement.appendChild(newcontrol);
+};
+
+var bMenuToggle = function () {
+    console.log('here');
+    if (!bMenuVisible){
+        $('#bMenu').css('height','400px');
+        $('#bMenuHandle').css('bottom','400px');
+        bMenuVisible = true;
+    } else {
+        $('#bMenu').css('height','0px');
+        $('#bMenuHandle').css('bottom','0px');
+        bMenuVisible = false;
+    };
 };
 
 $(document).ready(function () {
@@ -34,7 +49,10 @@ $(document).ready(function () {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
     
-    addmenu('-', '');
+    lMenuVisible = false;
+    bMenuVisible = false;
+    
+    //addmenu('-', '');
     
 /*    $.getJSON('/pins', function (data) {
         var i;

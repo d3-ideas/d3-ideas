@@ -12,6 +12,14 @@
 	</head>
 	<body>
         <div id="map" class='fullscreen'></div>
-        <div id='menu' class='menu'></div>
+        <div>
+            <div id='lMenu' class='menu' style='top:0px; left:0px; width: 0px; height: 100%; z-index: 1;'></div>
+            <a id='lMenuHandle' class='menu' style='bottom:40px; left:0px; width: 20px; height: 40px; z-index: 1;' onclick='lMenuToggle()'>+</a>
+        </div>
+        <div>
+            <a id='bMenuHandle' class='menu' style='bottom:0px;left:50%;width:200px;margin-left:-100px;z-index=100' onclick='bMenuToggle()'>Comments</a> 
+            <div id='bMenu' class='menu' style='left:50%; width:400px; margin-left:-200px; bottom:0px; height:0px'></div>
+        </div>
+
     </body>
 </html>
