@@ -81,11 +81,16 @@ exports.getPins = function (req, res) {
             });
             
             dRes.on('end', function () {
-                returnData = JSON.parse(returnData);
-                if (returnData.status == 'error') {
-                    res.json({status: 'error', 'reason': returnData.reason});
+                if (typeof returnData !== 'undefined') {
+                    returnData = JSON.parse(returnData);
+                    if (returnData.status == 'error') {
+                        res.json({status: 'error', 'reason': returnData.reason});
+                    } else {
+                        res.json(returnData);
+                    }
                 } else {
-                    res.json(returnData);
+                    console.log('returnData is undefined');
+                    res.json({status: 'error', 'reason': 'returnData is undefined'});
                 }
             });
         });

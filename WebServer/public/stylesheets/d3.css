@@ -6,6 +6,10 @@ html, body {
 body {
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+div.fullscreen {
+    position: relative;
+    min-height: 100%;
+}
 div.button{
     line-height: 44px;
 }
@@ -17,15 +21,33 @@ div.button{
     padding: 10px;
     text-decoration: none;
 }
-div.fullscreen {
-    position: relative;
-    min-height: 100%;
+.menu{
+    position:absolute;
+    border: 1px solid #b0b0b0;
+    background-color: #b0b0b0;
+    color: black;
+    font-size: 12px;
+    text-align: center;
 }
-div.fullscreen_menu {
-    position: relative;
-    float:right;
+a.lMenuHidden {
+    position: absolute;
+    top:0px;
+    left:0px;
+    width: 0px;
+    height: 100%;
+    z-index: 1;
 }
-
-a.googlecontrol:hover {
+#lMenuHandle:hover {
+    cursor: pointer;
+}
+#bMenuHandle:hover {
     cursor: pointer;
 }  
+div.comment {
+    background-color: #fff;
+    padding:2px;
+    border-style:solid;
+    border-width:2px;
+    border-color:#b0b0b0;
+    text-align: left;
+}
