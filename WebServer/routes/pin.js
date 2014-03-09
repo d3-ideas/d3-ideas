@@ -52,10 +52,15 @@ exports.addPin = function (req, res) {
 //route for /pins GET
 //Performs GET request to storage to get pins for the user
 exports.getPins = function (req, res) {
+    var returnData,
+        north = Number(req.query.viewBoundary.north),
+        south = Number(req.query.viewBoundary.south),
+        east = Number(req.query.viewBoundary.east),
+        west = Number(req.query.viewBoundary.west);
     var dReq = JSON.stringify({'application': 'Tagit Test',
                                'userID': req.session.userID,
                                'filter': '',
-                               'searchArea': {'type': 'Polygon', 'coordinates': [[[39,-76],[39,-78],[38,-78],[38,-76],[39,-76]]]}}),
+                               'searchArea': {'type': 'Polygon', 'coordinates': [[[north,east],[south,east],[south,west],[north,west],[north,east]]]}}),
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -67,8 +72,21 @@ exports.getPins = function (req, res) {
         oRes = res,
         dGet = http.request(options, function (dRes) {
             dRes.setEncoding('utf8');
-            dRes.on('data', function (data) {
-                oRes.json(JSON.parse(data));
+            dRes.on('data', function (chunk) {
+                if (typeof returnData !== 'undefined') {
+                    returnData += chunk;
+                } else {
+                    returnData = chunk;
+                }
+            });
+            
+            dRes.on('end', function () {
+                returnData = JSON.parse(returnData);
+                if (returnData.status == 'error') {
+                    res.json({status: 'error', 'reason': returnData.reason});
+                } else {
+                    res.json(returnData);
+                }
             });
         });
     dGet.on('error', function (e) {

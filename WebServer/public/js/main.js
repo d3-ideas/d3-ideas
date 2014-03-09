@@ -6,19 +6,26 @@ var latlon,
 var onSuccess = function (data) {
     latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
     map.setCenterAndZoom(latlon, 15);
-    console.log(map.getBounds());
     
-    $.getJSON('/pins', function (data) {
-        var i;
-        for (i in data) {
-            if (data.hasOwnProperty(i)) {
-                map.addMarker(
-                    new mxn.Marker(
-                        new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
-                    )
-                );
+    var viewBondary = map.getBounds();
+    var north = viewBondary.getNorthEast().lat,
+        east = viewBondary.getNorthEast().lng,
+        south = viewBondary.getSouthWest().lat,
+        west = viewBondary.getSouthWest().lng;
+    
+    $.getJSON('/pins', {viewBoundary:{'north':north, 'east':east, 'south':south, 'west':west}}, function (data) {
+        if (data.status != 'error'){
+            var i;
+            for (i in data) {
+                if (data.hasOwnProperty(i)) {
+                    map.addMarker(
+                        new mxn.Marker(
+                            new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
+                        )
+                    );
+                }
             }
-        }
+        } else {console.log('error-'+data.reason);};
     });    
 };
 
