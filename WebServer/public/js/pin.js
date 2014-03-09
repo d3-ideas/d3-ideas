@@ -32,7 +32,7 @@ $(document).ready(function () {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onSuccess, onError);
     }
-    
+  /*  
     $.getJSON('/pins', function (data) {
         var i;
         for (i in data) {
@@ -44,5 +44,5 @@ $(document).ready(function () {
                 );
             }
         }
-    });
+    });*/
 });
