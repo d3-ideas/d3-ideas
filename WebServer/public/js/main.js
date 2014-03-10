@@ -1,14 +1,39 @@
 var latlon,
     map,
     lMenuVisible,
-    bMenuVisible;
+    bMenuVisible,
+    selectedMarker;
+
+var mapClick = function(name, source, args) {
+    console.log('mapclick');
+    console.log(name);
+    console.log(source);
+    console.log(args);
+    selectedMarker = null;
+    //hide comments
+    //hide div for add comments
+    bMenuHide();
+}
+
+var markerClick = function(name, source, args) {
+    selectedMarker = source;
+    console.log('markerclick');
+    console.log(name);
+    console.log(source);
+    console.log(args);
+    //need to filter comments to only this marker
+    //show div for add comments
+    bMenuShow();
+}
 
 var getComments = function(){
-    var commentsfromjson = {comments:['Cool','I got laid here!']};
-    //console.log(Array.isArray(commentsfromjson.comments));
-    //var acomments = commentsfromjson.comments.map(function(comment){
-    //});
-    return '<div class="comment">test1</div><div class="comment">test1</div>';
+    
+    var comments = {comments:['Cool','So how many characters can you actually get within a 140 character limit?  Evidently it is more than I thought!  Wow I can keep typing still']};
+    
+    var markupcomments = comments.comments.map(function(comment){
+        return '<div class="comment">' + comment + '</div>'
+    });
+    return markupcomments.join('');
 }
 
 var lMenuToggle = function () {
@@ -40,8 +65,17 @@ var bMenuToggle = function () {
     };
 };
 
+var bMenuShow = function(){
+    if (!bMenuVisible) bMenuToggle();
+}
+
+var bMenuHide = function(){
+    if (bMenuVisible) bMenuToggle();
+}
+
 $(document).ready(function () {
     map = new mxn.Mapstraction('map', 'googlev3');
+    map.click.addHandler(mapClick);
     map.addControls({
         pan: true,
         zoom: 'small',
@@ -56,20 +90,18 @@ $(document).ready(function () {
     
             var viewBondary = map.getBounds();
             var north = viewBondary.getNorthEast().lat,
-                east = viewBondary.getNorthEast().lng,
+                east = viewBondary.getNorthEast().lon,
                 south = viewBondary.getSouthWest().lat,
-                west = viewBondary.getSouthWest().lng;
+                west = viewBondary.getSouthWest().lon;
     
             $.getJSON('/pins', {viewBoundary:{'north':north, 'east':east, 'south':south, 'west':west}}, function (data) {
                 if (data.status != 'error'){
                     var i;
                     for (i in data) {
                         if (data.hasOwnProperty(i)) {
-                            map.addMarker(
-                                new mxn.Marker(
-                                    new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1])
-                                )
-                            );
+                            var marker = new mxn.Marker(new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1]));
+                            marker.click.addHandler(markerClick);
+                            map.addMarker(marker);
                         }
                     }
                 } else {console.log('error-'+data.reason);};
