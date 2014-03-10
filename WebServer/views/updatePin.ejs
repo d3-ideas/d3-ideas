@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title><%= title %></title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="/js/md5-min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/d3.css' />
+    <script>
+    </script>
+	</head>
+	<body>
+		<h1><%= title %></h1>
+        <div id="error"></div>
+        <div id="login">
+            <form name="updatePin" action="/updatePin" method="post">
+                <input type="text" name="comment" placeholder="Comment" autofocus>
+                <br>
+                <input type="text" name="pinID" value='<%= pinID %>'>
+                <br>
+                <input type="submit" value="Update It" name="Submit">
+            </form>
+        </div>
+	</body>
+</html>

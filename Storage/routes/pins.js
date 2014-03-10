@@ -1,10 +1,9 @@
 exports.findAllPins = function (db) {
     return function (req, res) {
         var collection = db.get('pins'),
-            
-        stream = collection.find({}, {}, function (err, pins) {
-            res.json(pins);
-        });
+            stream = collection.find({}, {}, function (err, pins) {
+                res.json(pins);
+            });
     };
 };
 
@@ -21,17 +20,17 @@ exports.findPinsWithin = function (db) {
         }
         
         collection.find(
-            {'location':
-                {$geoWithin:
-                    {$geometry: polyFind             
-            } } }, {}, function (err, pins) {
-                if (err){
+            {'location': { $geoWithin: { $geometry: polyFind } } },
+            {},
+            function (err, pins) {
+                if (err) {
                     res.json({'status': 'error',
                             'reason': err});
-                    console.log('findPinsWithin failed - '+err);
+                    console.log('findPinsWithin failed - ' + err);
                 }
-            res.json(pins);
-        });
+                res.json(pins);
+            }
+        );
     };
 };
 
@@ -115,4 +114,10 @@ exports.addPin = function (db) {
         });
     };
 };
-                     
+
+exports.updatePin = function (db) {
+    return function (req, res) {
+        console.log(req.body);
+        res.json({'status' : 'success'});
+    };
+};

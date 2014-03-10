@@ -4,6 +4,52 @@
 */
 var http = require('http');
 
+// temporary page for showing a form to post an update to a pin
+// this should go away
+
+exports.updatePinGet = function (req, res) {
+    var pinID = '531dbddeb3fe7e99380000001',
+        title = 'Temporary Update Page';
+    res.render('updatePin', { title: title, pinID: pinID });
+};
+
+//accept a post to update a pin
+exports.updatePin = function (req, res) {
+    console.log(req.body);
+    res.render('updatePin', { title: 'Temporary Update Page', pinID: req.body.pinID });
+
+    var ourContent = JSON.stringify({'application': 'Tagit Test',
+        'pinID': req.body.pinID,
+        'userID': req.session.userID,
+        'comment': req.body.comment  //or is this a tag? I dunno
+        }),
+        
+        options = {
+            hostname: 'localhost',
+            port: 3001,
+            path: '/updatePin',
+            method: 'POST',
+            headers: {'content-type': 'application/json',
+                    'content-length': ourContent.length}
+        },
+        ourPost = http.request(options, function (postRes) {
+            postRes.setEncoding('utf8');
+
+            postRes.on('data', function (chunk) {
+                res.json(JSON.parse(chunk));
+            });
+        });
+
+    ourPost.on('error', function (e) {
+        console.log('problem with request: ' + e.message);
+    });
+
+    // write data to request body
+    ourPost.write(ourContent);
+    ourPost.end();
+
+};
+
 //route for /pin GET
 exports.pin = function (req, res) {
     
@@ -31,12 +77,11 @@ exports.addPin = function (req, res) {
             headers: {'content-type': 'application/json',
                     'content-length': ourContent.length}
         },
-        origres = res,
-        ourPost = http.request(options, function (res) {
-            res.setEncoding('utf8');
+        ourPost = http.request(options, function (postRes) {
+            postRes.setEncoding('utf8');
 
-            res.on('data', function (chunk) {
-                origres.json(JSON.parse(chunk));
+            postRes.on('data', function (chunk) {
+                res.json(JSON.parse(chunk));
             });
         });
 
@@ -56,11 +101,11 @@ exports.getPins = function (req, res) {
         north = Number(req.query.viewBoundary.north),
         south = Number(req.query.viewBoundary.south),
         east = Number(req.query.viewBoundary.east),
-        west = Number(req.query.viewBoundary.west);
-    var dReq = JSON.stringify({'application': 'Tagit Test',
+        west = Number(req.query.viewBoundary.west),
+        dReq = JSON.stringify({'application': 'Tagit Test',
                                'userID': req.session.userID,
                                'filter': '',
-                               'searchArea': {'type': 'Polygon', 'coordinates': [[[north,east],[south,east],[south,west],[north,west],[north,east]]]}}),
+                               'searchArea': {'type': 'Polygon', 'coordinates': [[[north, east], [south, east], [south, west], [north, west], [north, east]]]}}),
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -83,7 +128,7 @@ exports.getPins = function (req, res) {
             dRes.on('end', function () {
                 if (typeof returnData !== 'undefined') {
                     returnData = JSON.parse(returnData);
-                    if (returnData.status == 'error') {
+                    if (returnData.status === 'error') {
                         res.json({status: 'error', 'reason': returnData.reason});
                     } else {
                         res.json(returnData);

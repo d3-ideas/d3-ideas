@@ -69,6 +69,8 @@ app.post('/pin', pin.addPin);
 app.get('/pins', pin.getPins);
 app.get('/logout', logout.logout);
 app.get('/main', main.main);
+app.get('/updatePin', pin.updatePinGet);
+app.post('/updatePin', pin.updatePin);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');

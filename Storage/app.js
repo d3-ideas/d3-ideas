@@ -35,6 +35,7 @@ app.post('/pins', pins.addPin(db));
 //app.put('/pins/:id', pins.updatePin);
 //app.delete('/pins/:id', pins.deletePin);
 app.get('/pins/within', pins.findPinsWithin(db));
+app.post('/updatePin', pins.updatePin(db));
 
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
