@@ -2,7 +2,9 @@ var latlon,
     map,
     lMenuVisible,
     bMenuVisible,
-    selectedMarker;
+    selectedMarker,
+    lMenuVisible = false,
+    bMenuVisible = false;
 
 var mapClick = function(name, source, args) {
     console.log('mapclick');
@@ -111,6 +113,4 @@ $(document).ready(function () {
         });
     }
     
-    lMenuVisible = false;
-    bMenuVisible = false;
 });

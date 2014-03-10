@@ -13,13 +13,12 @@
 	<body>
         <div id="map" class='fullscreen'></div>
         <div id='lMenuArea'>
-            <div id='lMenu' class='menu' style='top:0px; left:0px; width: 0px; height: 100%;'></div>
-            <a id='lMenuHandle' class='menu' style='bottom:40px; left:0px; width: 20px; height: 40px;' onclick='lMenuToggle()'>+</a>
+            <div id='lMenu' class='menu'></div>
+            <a id='lMenuHandle' class='menu' onclick='lMenuToggle(); return false;' href='#'>+</a>
         </div>
         <div id='bMenuArea'>
-            <a id='bMenuHandle' class='menu' style='bottom:0px;left:50%;width:200px;margin-left:-100px;' onclick='bMenuToggle()'>Comments</a> 
-            <div id='bMenu' class='menu' style='left:50%; width:400px; margin-left:-200px; bottom:0px; height:0px'></div>
+            <a id='bMenuHandle' class='menu' onclick='bMenuToggle(); return false' href='#'>Comments</a> 
+            <div id='bMenu' class='menu'></div>
         </div>
-
     </body>
 </html>
