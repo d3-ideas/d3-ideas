@@ -1,3 +1,28 @@
+function addTag(tags, callback) {
+    console.log(tags);
+    var ctags = db.get('tags'),
+        success = true;
+        i;
+
+    for (i in tags) {
+        if (tags.hasOwnProperty(i)){
+            ctags.insert({
+                'pin': this._id,
+                'tag': newTag,
+                'createdOn': this.pinTime,
+                'username': this.userID
+            }, function (err, tag) {
+                if (err) {
+                    console.log(err);
+                    success = false;
+                }
+            });
+        }
+    }
+    //maybe we return true if it worked, false if it didn't?
+    callback(success);
+}
+
 exports.findAllPins = function (db) {
     return function (req, res) {
         var collection = db.get('pins'),
@@ -38,30 +63,6 @@ exports.addPin = function (db) {
     return function (req, res) {
         
         console.log(req.body);
-
-        function addTag(newTag) {
-            var ctags = db.get('tags');
-            
-            if (!newTag) {
-                ctags.insert({
-                    'pin': this._id,
-                    'tag': newTag,
-                    'createdOn': this.pinTime,
-                    'username': this.userID
-                }, function (err, tag) {
-                    if (err) {
-                        return {'status': 'error',
-                                'reason': 'An error has occurred adding your tag'};
-                    } else {
-                        return {'status': 'success',
-                                'tag': tag};
-                    }
-                });
-            } else {
-                return {'status': 'error',
-                      'reason': 'The tag was invalid.'};
-            }
-        }
         
         var gjv = require('geojson-validation'),
             location = req.body.location,
@@ -101,19 +102,21 @@ exports.addPin = function (db) {
                                   'reason': 'An error has occurred adding your pin'});
                     } else {
                         if (Array.isArray(tags)) {
-                            tagresult = tags.map(addTag, doc);
+                            addTag(tags, function(result){
+                                //maybe some logic here to check the result?
+                                //result will have the context of variables in addTag
+                                res.json({'status': 'success',
+                                          'pin': doc,
+                                          'tags': tagresult}); //You have pinned your location
+                            });
                         }
-                        
                         console.log('Successfully added pin');
-                        res.json({'status': 'success',
-                                  'pin': doc,
-                                  'tags': tagresult}); //You have pinned your location
-                    }
+                    };
                 });
             }
         });
     };
-};
+}
 
 exports.updatePin = function (db) {
     return function (req, res) {
