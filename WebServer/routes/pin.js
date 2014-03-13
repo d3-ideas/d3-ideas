@@ -16,7 +16,6 @@ exports.updatePinGet = function (req, res) {
 //accept a post to update a pin
 exports.updatePin = function (req, res) {
     console.log(req.body);
-    res.render('updatePin', { title: 'Temporary Update Page', pinID: req.body.pinID });
 
     var ourContent = JSON.stringify({'application': 'Tagit Test',
         'pinID': req.body.pinID,

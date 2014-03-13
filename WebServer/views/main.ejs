@@ -18,7 +18,15 @@
         </div>
         <div id='bMenuArea'>
             <a id='bMenuHandle' class='menu' onclick='bMenuToggle(); return false' href='#'>Comments</a> 
-            <div id='bMenu' class='menu'></div>
+            <div id='bMenu' class='menu'>
+                <div id="addComment">
+                    <textarea id="newComment" rows="3"  placeholder="Add comment..." spellcheck="true" maxlength="140"></textarea>
+                    <div >
+                        <a id="submitComment" onclick='submitCommentClick(); return false;' href=#>Post</a>
+                    </div>
+                </div>
+                <div id='comments'></div>
+            </div>
         </div>
     </body>
 </html>

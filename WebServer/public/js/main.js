@@ -3,6 +3,8 @@ var latlon,
     lMenuVisible,
     bMenuVisible,
     selectedMarker,
+    selectedPinID,
+    //change these variables into functions
     lMenuVisible = false,
     bMenuVisible = false;
 
@@ -23,6 +25,8 @@ var markerClick = function(name, source, args) {
     console.log(name);
     console.log(source);
     console.log(args);
+    console.log(source.getAttribute('pinID'));
+    selectedPinID = source.getAttribute('pinID');
     //need to filter comments to only this marker
     //show div for add comments
     bMenuShow();
@@ -37,6 +41,20 @@ var getComments = function(){
     });
     return markupcomments.join('');
 }
+
+var submitCommentClick = function(){
+    var comment = $("#newComment").val();
+    console.log({'pinID': selectedPinID, 'comment': comment});
+   
+    $.post('/updatePin',{'pinID': selectedPinID, 'comment': comment}, function (data) {
+            if (data.status === 'success') {
+                //get latest pins?
+console.log('You have succedded'+data);                
+            } else {
+console.log('You have failed!'+data);
+            }
+        });
+};
 
 var lMenuToggle = function () {
     if (!lMenuVisible){
@@ -56,8 +74,8 @@ var bMenuToggle = function () {
         $('#bMenuHandle').css('bottom','400px');
 
         //check to see if comments are already loaded
-        if ($('#bMenu').children().length == 0) {
-            $('#bMenu').append(getComments);
+        if ($('#comments').children().length == 0) {
+            $('#comments').append(getComments);
         }
         bMenuVisible = true;
     } else {
@@ -103,6 +121,7 @@ $(document).ready(function () {
                         if (data.hasOwnProperty(i)) {
                             var marker = new mxn.Marker(new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1]));
                             marker.click.addHandler(markerClick);
+                            marker.setAttribute('pinID',data[i]._id);
                             map.addMarker(marker);
                         }
                     }
