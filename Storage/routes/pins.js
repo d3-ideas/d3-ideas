@@ -1,16 +1,18 @@
-function addTag(tags, callback) {
-    console.log(tags);
+function addTag(db, tagobject, callback) {
+    console.log(tagobject);
     var ctags = db.get('tags'),
-        success = true;
+        success = true,
+        tags = tagobject.tags,
         i;
 
     for (i in tags) {
         if (tags.hasOwnProperty(i)){
             ctags.insert({
-                'pin': this._id,
-                'tag': newTag,
-                'createdOn': this.pinTime,
-                'username': this.userID
+                'pin': tagobject.pinID,
+                'tag': tags[i],
+                'createdOn': tagobject.createdOn,
+                'username': tagobject.userID,
+                'application': tagobject.application
             }, function (err, tag) {
                 if (err) {
                     console.log(err);
@@ -18,7 +20,7 @@ function addTag(tags, callback) {
                 }
             });
         }
-    }
+    } 
     //maybe we return true if it worked, false if it didn't?
     callback(success);
 }
@@ -71,7 +73,11 @@ exports.addPin = function (db) {
             application = req.body.application,
             tags = req.body.tags,
             tagresult,
-            apps = db.get('apps');
+            apps = db.get('apps'),
+            newPin = {'location': location,
+                      'userID': userID,
+                      'createdOn': pintime,
+                      'application': application};
  
 
         if (!gjv.isPoint(location)) {
@@ -102,7 +108,13 @@ exports.addPin = function (db) {
                                   'reason': 'An error has occurred adding your pin'});
                     } else {
                         if (Array.isArray(tags)) {
-                            addTag(tags, function(result){
+                            var newPin = {'location': location,
+                                        'userID': userID,
+                                        'createdOn': pintime,
+                                        'application': application,
+                                        'tags': tags,
+                                        'pinID': doc._id};
+                            addTag(db, newPin, function(result){
                                 //maybe some logic here to check the result?
                                 //result will have the context of variables in addTag
                                 res.json({'status': 'success',
