@@ -133,6 +133,38 @@ exports.addPin = function (db) {
 exports.updatePin = function (db) {
     return function (req, res) {
         console.log(req.body);
-        res.json({'status' : 'success'});
+        
+        var location = req.body.location,
+            userID = req.body.userID,
+            pintime = new Date(),
+            pinID = req.body.pinID,
+            application = req.body.application,
+            tags = req.body.tags,
+            apps = db.get('apps');
+
+        apps.findOne({'application': application}, function (err, foundapp) {
+            if (!foundapp) {
+                res.json({'status': 'error',
+                          'reason': 'The application was invalid.'});
+            } else {
+                application = foundapp._id;
+                
+                if (Array.isArray(tags)) {
+                    var newPin = {'location': location,
+                                'userID': userID,
+                                'createdOn': pintime,
+                                'application': application,
+                                'tags': tags,
+                                'pinID': pinID};
+                    addTag(db, newPin, function(result){
+                        //maybe some logic here to check the result?
+                        //result will have the context of variables in addTag
+                        res.json({'status': 'success',
+                                  'pin': pinID,
+                                  'tags': tags}); //You have pinned your location
+                    });
+                }
+            };
+        });
     };
 };

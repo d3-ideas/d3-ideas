@@ -20,7 +20,7 @@ exports.updatePin = function (req, res) {
     var ourContent = JSON.stringify({'application': 'Tagit Test',
         'pinID': req.body.pinID,
         'userID': req.session.userID,
-        'comment': req.body.comment  //or is this a tag? I dunno
+        'tags': req.body.comment  //or is this a tag? I dunno
         }),
         
         options = {
