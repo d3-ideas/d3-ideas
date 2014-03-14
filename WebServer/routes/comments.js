@@ -58,14 +58,14 @@ exports.addComment = function (req, res) {
 };
 
 exports.getComments = function (req, res) {
-    console.log(req.body);
+    console.log(req.query);
 
     var ourContent = JSON.stringify({'application': 'Tagit Test',
-        'pinIDs': req.body.pinIDs,
+        'pinIDs': req.query.pinIDs,
         'userID': req.session.userID,
         'filter': ''
         }),
-        
+        returnData,
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -74,7 +74,7 @@ exports.getComments = function (req, res) {
             headers: {'content-type': 'application/json',
                     'content-length': ourContent.length}
         },
-        ourPost = http.request(options, function (postRes) {
+        ourGet = http.request(options, function (postRes) {
             postRes.setEncoding('utf8');
 
             postRes.on('data', function (chunk) {
@@ -85,16 +85,16 @@ exports.getComments = function (req, res) {
                 }
             });
 
-            returnRes.on('end', function () {
-                res.json(JSON.parse(chunk));
+            postRes.on('end', function () {
+                res.json(JSON.parse(returnData));
             });
         });
 
-    ourPost.on('error', function (e) {
+    ourGet.on('error', function (e) {
         console.log('problem with request: ' + e.message);
     });
 
     // write data to request body
-    ourPost.write(ourContent);
-    ourPost.end();
+    ourGet.write(ourContent);
+    ourGet.end();
 };

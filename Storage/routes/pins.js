@@ -170,7 +170,7 @@ exports.getTags = function (db) {
     return function (req, res) {
         console.log(req.body);
         
-        var pinID = req.body.pinID,
+        var pinID = req.body.pinIDs,
             application = req.body.application,
             apps = db.get('apps'),
             tags = db.get('tags');
@@ -182,7 +182,7 @@ exports.getTags = function (db) {
             } else {
                 application = foundapp._id;
                 
-                apps.find({'pin': pinID}, function (err, pinTags) {
+                tags.find({'pin': {$in: pinID}}, function (err, pinTags) {
                     if (!pinTags) {
                         res.json({'status': 'error',
                                   'reason': 'The pin was invalid.'});
