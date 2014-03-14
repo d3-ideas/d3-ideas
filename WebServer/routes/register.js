@@ -47,7 +47,6 @@ exports.registerPost = function (req, res) {
                     res.json({status: 'approved'});
                 }
             });
-
         });
     
 

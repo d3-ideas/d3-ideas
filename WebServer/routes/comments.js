@@ -78,6 +78,14 @@ exports.getComments = function (req, res) {
             postRes.setEncoding('utf8');
 
             postRes.on('data', function (chunk) {
+                if (typeof returnData !== 'undefined') {
+                    returnData += chunk;
+                } else {
+                    returnData = chunk;
+                }
+            });
+
+            returnRes.on('end', function () {
                 res.json(JSON.parse(chunk));
             });
         });
