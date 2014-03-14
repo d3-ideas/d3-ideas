@@ -10,6 +10,7 @@ var MongoDB = require('winston-mongodb').MongoDB;
 var routes = require('./routes');
 var register = require('./routes/register');
 var pin = require('./routes/pin');
+var comments = require('./routes/comments');
 var login = require('./routes/login');
 var main = require('./routes/main');
 var logout = require('./routes/logout');
@@ -70,7 +71,8 @@ app.get('/pins', pin.getPins);
 app.get('/logout', logout.logout);
 app.get('/main', main.main);
 app.get('/updatePin', pin.updatePinGet);
-app.post('/updatePin', pin.updatePin);
+app.post('/comment', comments.addComment);
+app.get('/comment', comments.getComments);
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');

@@ -82,6 +82,9 @@ div.comment {
     bottom: 0px;
     height: 0px
 }
+#addComment{
+    display: none;
+}
 #newComment{
     width: 90%;
 }

@@ -2,33 +2,26 @@ var latlon,
     map,
     lMenuVisible,
     bMenuVisible,
-    selectedMarker,
-    selectedPinID,
+    selectedMarker = null,
     //change these variables into functions
     lMenuVisible = false,
     bMenuVisible = false;
 
 var mapClick = function(name, source, args) {
     console.log('mapclick');
-    console.log(name);
     console.log(source);
-    console.log(args);
     selectedMarker = null;
     //hide comments
-    //hide div for add comments
+    $('#addComment').css('display','none');
     bMenuHide();
 }
 
 var markerClick = function(name, source, args) {
     selectedMarker = source;
     console.log('markerclick');
-    console.log(name);
-    console.log(source);
-    console.log(args);
-    console.log(source.getAttribute('pinID'));
-    selectedPinID = source.getAttribute('pinID');
+    
     //need to filter comments to only this marker
-    //show div for add comments
+    $('#addComment').css('display','inherit');
     bMenuShow();
 }
 
@@ -44,9 +37,9 @@ var getComments = function(){
 
 var submitCommentClick = function(){
     var comment = $("#newComment").val();
-    console.log({'pinID': selectedPinID, 'comment': comment});
+    console.log({'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment});
    
-    $.post('/updatePin',{'pinID': selectedPinID, 'comment': comment}, function (data) {
+    $.post('/comment',{'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment}, function (data) {
             if (data.status === 'success') {
                 //get latest pins?
 console.log('You have succedded'+data);                
@@ -98,7 +91,7 @@ $(document).ready(function () {
     map.click.addHandler(mapClick);
     map.addControls({
         pan: true,
-        zoom: 'small',
+        zoom: 'large',
         map_type: true
     });
     //map.addSmallControls();

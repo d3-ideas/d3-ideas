@@ -13,41 +13,7 @@ exports.updatePinGet = function (req, res) {
     res.render('updatePin', { title: title, pinID: pinID });
 };
 
-//accept a post to update a pin
-exports.updatePin = function (req, res) {
-    console.log(req.body);
 
-    var ourContent = JSON.stringify({'application': 'Tagit Test',
-        'pinID': req.body.pinID,
-        'userID': req.session.userID,
-        'tags': [req.body.comment]  //or is this a tag? I dunno
-        }),
-        
-        options = {
-            hostname: 'localhost',
-            port: 3001,
-            path: '/updatePin',
-            method: 'POST',
-            headers: {'content-type': 'application/json',
-                    'content-length': ourContent.length}
-        },
-        ourPost = http.request(options, function (postRes) {
-            postRes.setEncoding('utf8');
-
-            postRes.on('data', function (chunk) {
-                res.json(JSON.parse(chunk));
-            });
-        });
-
-    ourPost.on('error', function (e) {
-        console.log('problem with request: ' + e.message);
-    });
-
-    // write data to request body
-    ourPost.write(ourContent);
-    ourPost.end();
-
-};
 
 //route for /pin GET
 exports.pin = function (req, res) {
