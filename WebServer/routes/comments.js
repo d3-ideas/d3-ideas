@@ -69,7 +69,7 @@ exports.getComments = function (req, res) {
         options = {
             hostname: 'localhost',
             port: 3001,
-            path: '/Tags',
+            path: '/tags',
             method: 'GET',
             headers: {'content-type': 'application/json',
                     'content-length': ourContent.length}
