@@ -32,13 +32,14 @@ if ('development' === app.get('env')) {
 app.get('/pins', pins.findAllPins(db));
 //app.get('/pins/:id', pins.findById);
 app.post('/pins', pins.addPin(db));
-//app.put('/pins/:id', pins.updatePin);
-//app.delete('/pins/:id', pins.deletePin);
 app.get('/pins/within', pins.findPinsWithin(db));
 app.post('/updatePin', pins.updatePin(db));
+app.get('/tags', pins.getTags(db));
 
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
+
+
 
 http.createServer(app).listen(app.get('port'), function () {
     console.log('          / \\');

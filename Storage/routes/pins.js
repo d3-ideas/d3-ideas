@@ -107,8 +107,7 @@ exports.addPin = function (db) {
                                   'reason': 'An error has occurred adding your pin'});
                     } else {
                         if (Array.isArray(tags)) {
-                            var newPin = {'location': location,
-                                        'userID': userID,
+                            var newPin = {'userID': userID,
                                         'createdOn': pintime,
                                         'application': application,
                                         'tags': tags,
@@ -149,8 +148,7 @@ exports.updatePin = function (db) {
                 application = foundapp._id;
                 
                 if (Array.isArray(tags)) {
-                    var newPin = {'location': location,
-                                'userID': userID,
+                    var newPin = {'userID': userID,
                                 'createdOn': pintime,
                                 'application': application,
                                 'tags': tags,
@@ -163,6 +161,38 @@ exports.updatePin = function (db) {
                                   'tags': tags}); //You have pinned your location
                     });
                 }
+            };
+        });
+    };
+};
+
+exports.getTags = function (db) {
+    return function (req, res) {
+        console.log(req.body);
+        
+        var pinID = req.body.pinID,
+            application = req.body.application,
+            apps = db.get('apps'),
+            tags = db.get('tags');
+
+        apps.findOne({'application': application}, function (err, foundapp) {
+            if (!foundapp) {
+                res.json({'status': 'error',
+                          'reason': 'The application was invalid.'});
+            } else {
+                application = foundapp._id;
+                
+                apps.find({'pin': pinID}, function (err, pinTags) {
+                    if (!pinTags) {
+                        res.json({'status': 'error',
+                                  'reason': 'The pin was invalid.'});
+                    } else {
+                        res.json({'status': 'success',
+                                  'pin': pinID,
+                                  'tags': pinTags});
+                
+                    }
+                });
             };
         });
     };
