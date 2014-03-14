@@ -1,5 +1,4 @@
 function addTag(db, tagobject, callback) {
-    console.log(tagobject);
     var ctags = db.get('tags'),
         success = true,
         tags = tagobject.tags,
