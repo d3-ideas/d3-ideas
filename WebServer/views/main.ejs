@@ -5,17 +5,31 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(googlev3,[geocoder])" type="text/javascript"></script>
-        <script src="/js/main.js"></script>        
+        <script src="/js/main.js"></script>
         <link rel='stylesheet' href='/stylesheets/d3.css' />
         <link media="Screen" href="/stylesheets/d3screen.css" type="text/css" rel="stylesheet" />
         <link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 480px)" href="/stylesheets/d3mobile.css" type="text/css" rel="stylesheet" />
 	</head>
 	<body>
         <div id="map" class='fullscreen'></div>
+    <!-- Old menu
         <div id='lMenuArea'>
             <div id='lMenu' class='menu'></div>
-            <a id='lMenuHandle' class='menu' onclick='lMenuToggle(); return false;' href='#'>+</a>
+            <a id='lMenuHandle' onclick='lMenuToggle(); return false;' href='#'>+</a>
         </div>
+    -->
+        
+    <!-- New Mwnu -->
+        <div id="left-menu-block">
+            <div id="left-menu-content">
+                <ul>
+                    <li>Some Menu Item</li>
+                    <li>Another menu Item</li>
+                </ul>
+            </div>
+            <a id='left-menu-handle' onclick='lMenuToggle(); return false;' href='#'></a>
+        </div>
+        
         <div id='bMenuArea'>
             <a id='bMenuHandle' class='menu' onclick='bMenuToggle(); return false' href='#'>Comments</a> 
             <div id='bMenu' class='menu'>

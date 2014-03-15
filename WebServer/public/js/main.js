@@ -55,7 +55,7 @@ var submitCommentClick = function () {
 };
 
 var lMenuToggle = function () {
-    if (!lMenuVisible) {
+/*    if (!lMenuVisible) {
         $('#lMenu').css('width', '300px');
         $('#lMenuHandle').css('left', '300px');
         lMenuVisible = true;
@@ -64,6 +64,8 @@ var lMenuToggle = function () {
         $('#lMenuHandle').css('left', '0px');
         lMenuVisible = false;
     }
+*/
+    $('#left-menu-block').toggleClass('extended');
 };
 
 var bMenuToggle = function () {
