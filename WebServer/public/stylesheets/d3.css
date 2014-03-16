@@ -1,10 +1,17 @@
+*, *:before, *:after {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
 body {
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.5rem;
+    font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 div.fullscreen {
     position: relative;
@@ -50,14 +57,13 @@ div.button {
     padding: 0 15px;
 }
 #left-menu-content ul li {
-    text-size: 15px;
-    line-height: 22px;
+    line-height: 1.3rem;
     display: block;
     margin: 10px 0;
 }
 #left-menu-handle {
     position: absolute;
-    right: -26px;
+    right: -25px;
     bottom: 15px;
     border: 1px solid #666;
     border-radius: 0px 5px 5px 0px;
@@ -143,4 +149,18 @@ div.comment {
 }
 #newComment{
     width: 90%;
+}
+
+
+/* Small screens (default) */
+html { font-size: 100%; }
+ 
+/* Medium screens (640px) */
+@media (min-width: 40rem) {
+html { font-size: 112%; }
+}
+ 
+/* Large screens (1024px) */
+@media (min-width: 64rem) {
+html { font-size: 120%; }
 }
