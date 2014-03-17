@@ -20,7 +20,7 @@ function addTag(db, tagobject, callback) {
             });
         }
     } 
-    //maybe we return true if it worked, false if it didn't?
+    
     callback(success);
 }
 
@@ -71,7 +71,6 @@ exports.addPin = function (db) {
             pintime = new Date(),
             application = req.body.application,
             tags = req.body.tags,
-            tagresult,
             apps = db.get('apps'),
             newPin = {'location': location,
                       'userID': userID,
@@ -94,38 +93,49 @@ exports.addPin = function (db) {
                           'reason': 'The application was invalid.'});
             } else {
                 application = foundapp._id;
-                var collection = db.get('pins');
+                var pins = db.get('pins');
     
-                collection.insert({
-                    'location': location,
-                    'userID': userID,
-                    'createdOn': pintime,
-                    'application': application
-                }, function (err, doc) {
-                    if (err) {
-                        res.json({'status': 'error',
-                                  'reason': 'An error has occurred adding your pin'});
+                pins.findOne({'location': location, 'application': application}, function (err, foundpin) {
+                    if (!foundpin) {
+                        pins.insert(newPin, function (err, doc) {
+                            if (err) {
+                                res.json({'status': 'error',
+                                          'reason': 'An error has occurred adding your pin'});
+                            } else {
+                                if (Array.isArray(tags)) {
+                                    var newPin = {'userID': userID,
+                                                'createdOn': pintime,
+                                                'application': application,
+                                                'tags': tags,
+                                                'pinID': doc._id};
+                                    addTag(db, newPin, function(tagresult){
+                                        res.json({'status': 'success',
+                                                  'pin': doc._id,
+                                                  'tags': tagresult}); 
+                                    });
+                                }
+                                console.log('Successfully added pin');
+                            };
+                        });
                     } else {
                         if (Array.isArray(tags)) {
                             var newPin = {'userID': userID,
                                         'createdOn': pintime,
                                         'application': application,
                                         'tags': tags,
-                                        'pinID': doc._id};
-                            addTag(db, newPin, function(result){
-                                //maybe some logic here to check the result?
-                                //result will have the context of variables in addTag
+                                        'pinID': foundpin._id};
+                            addTag(db, newPin, function(tagresult){
                                 res.json({'status': 'success',
-                                          'pin': doc,
-                                          'tags': tagresult}); //You have pinned your location
+                                          'pin': foundpin._id,
+                                          'tags': tagresult});
                             });
                         }
-                        console.log('Successfully added pin');
-                    };
-                });
+                        console.log('Successfully added tags to existing pin');
+                    }
+                });    
             }
         });
-    };
+    } 
 }
 
 exports.updatePin = function (db) {
