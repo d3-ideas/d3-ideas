@@ -106,7 +106,7 @@ div.button {
     font-size: 1.75rem;
     color: #666;
 }
-#left-menu-block.extended span:before {
+#left-menu-block.extended #left-menu-handle span:before {
     content: "\f100";
 }
 
@@ -118,6 +118,34 @@ div.button {
     opacity: 1;
 }
 
+#left-menu-pin {
+    position: absolute;
+    right: -1.626rem;
+    top: 15px;
+    border: 1px solid #666;
+    border-radius: 0px 5px 5px 0px;
+    border-left: none;
+    display: block;
+    height: 1.876rem;
+    width: 1.626rem;
+    background-color: #b0b0b0;
+    opacity: 0.75;
+    text-decoration: none;
+    padding-left: 0.3rem;
+}
+
+#left-menu-pin span:before {
+    display: block;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\f041";
+    font-size: 1.75rem;
+    color: #666;
+}
 /* End New menu */
 
 .menu {
