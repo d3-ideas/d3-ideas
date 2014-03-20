@@ -110,7 +110,9 @@ div.button {
     content: "\f100";
 }
 
-
+#left-menu-pin:hover,
+#left-menu-pin:active,
+#left-menu-pin:focus,
 #left-menu-handle:hover,
 #left-menu-handle:active,
 #left-menu-handle:focus,
@@ -147,6 +149,24 @@ div.button {
     color: #666;
 }
 /* End New menu */
+#addPinMenu{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -6.25rem;
+    width: 12.5rem;
+    z-index: 1;
+    background-color: #b0b0b0;
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid #666;
+    opacity: 0.9;
+    text-align: center;    
+    visibility: hidden;
+}
+
+#addPinMenu.on{
+    visibility: visible;
+}
 
 .menu {
     position:absolute;

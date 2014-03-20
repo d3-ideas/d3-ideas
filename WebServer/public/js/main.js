@@ -3,10 +3,12 @@ var latlon,
     lMenuVisible,
     bMenuVisible,
     selectedMarker = null,
-    viewPins,
-    //change these variables into functions
-    lMenuVisible = false,
-    bMenuVisible = false;
+    viewPins;
+
+var addPinToggle = function () {
+    $('#addPinMenu').toggleClass('on');
+   return true;  
+};
 
 var getComments = function () {
     var comments,
@@ -55,16 +57,6 @@ var submitCommentClick = function () {
 };
 
 var lMenuToggle = function () {
-/*    if (!lMenuVisible) {
-        $('#lMenu').css('width', '300px');
-        $('#lMenuHandle').css('left', '300px');
-        lMenuVisible = true;
-    } else {
-        $('#lMenu').css('width', '0px');
-        $('#lMenuHandle').css('left', '0px');
-        lMenuVisible = false;
-    }
-*/
     $('#left-menu-block').toggleClass('extended');
 };
 
@@ -98,10 +90,24 @@ var bMenuHide = function () {
 var mapClick = function (name, source, args) {
     console.log('mapclick');
     console.log(source);
+    console.log(args);
     selectedMarker = null;
     //hide comments
     $('#addComment').css('display', 'none');
     bMenuHide();
+    
+    if ($('#addPinMenu').hasClass('on')) {
+        $('#addPinMenu').toggleClass('on');
+        $.post('/pin', { 'lat': args.location.lat, 'lon': args.location.lon }, function (data) {
+            console.log(data);
+            if (data.status === 'success') {
+                var marker = new mxn.Marker(args.location);
+                marker.click.addHandler(markerClick);
+                marker.setAttribute('pinID', data.pin);
+                map.addMarker(marker);
+            }
+        });        
+    }
 };
 
 var markerClick = function (name, source, args) {
