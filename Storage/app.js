@@ -6,6 +6,7 @@ var http = require('http');
 var path = require('path');
 
 var app = express();
+var io = require('socket.io').listen(app);
 
 var mongo = require('mongodb');
 var monk = require('monk');
@@ -38,6 +39,17 @@ app.get('/tags', pins.getTags(db));
 
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
+
+io.sockets.on('connection', function (socket) {
+    socket.on('getPinsAll', function (data) {
+        console.log(data);
+        pins.findAllPins(db, data)  // will need to modify the findAllPins arguments
+        
+        // do I emit a response?
+    });
+    
+    // other function calls
+});
 
 
 
