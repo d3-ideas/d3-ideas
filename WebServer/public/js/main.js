@@ -6,9 +6,16 @@ var latlon,
     viewPins;
 
 var addPinToggle = function () {
-    $('#addPinMenu').toggleClass('on');
-   return true;  
+    $('#left-menu-pin').toggleClass('on');
+    if ($('#comments-block').css('float') != 'right' && $('#comments-block').hasClass('open')){
+        bMenuToggle();
+    }
+    return true;  
 };
+var addPinOff = function () {
+    $('#left-menu-pin').removeClass('on');
+    return true; 
+}
 
 var getComments = function () {
     var comments,
@@ -58,10 +65,27 @@ var submitCommentClick = function () {
 
 var lMenuToggle = function () {
     $('#left-menu-block').toggleClass('extended');
+    bMenuHide();
+    addPinOff();
 };
 
+$(document).on('click', '.comment-item', function(){
+    var target = this;
+    var targetID = $(target).data('commentid');
+    if (!$(target).find('.comment-options').hasClass('active')) {
+        $('.comment-options').removeClass('active').slideUp();
+        $(target).children('.comment-options').addClass('active').slideDown();
+    }
+} );
+
+function clearCommentOptions() {
+    $('.comment-options').removeClass('active').slideUp();
+}
+
 var bMenuToggle = function () {
-    if (!bMenuVisible) {
+    $('#comments-content').slideToggle();
+    $('#comments-block').toggleClass('open');
+/*    if (!bMenuVisible) {
         $('#bMenu').css('height', '400px');
         $('#bMenuHandle').css('bottom', '400px');
 
@@ -75,15 +99,18 @@ var bMenuToggle = function () {
         $('#bMenuHandle').css('bottom', '0px');
         bMenuVisible = false;
     }
+*/
 };
 
 var bMenuShow = function () {
     if (!bMenuVisible) bMenuToggle();
+    addPinOff();
 };
 
 var bMenuHide = function () {
     if (bMenuVisible) {
         bMenuToggle();
+        clearCommentOptions();
     }
 };
 
@@ -96,8 +123,8 @@ var mapClick = function (name, source, args) {
     $('#addComment').css('display', 'none');
     bMenuHide();
     
-    if ($('#addPinMenu').hasClass('on')) {
-        $('#addPinMenu').toggleClass('on');
+    if ($('#left-menu-pin').hasClass('on')) {
+        $('#left-menu-pin').toggleClass('on');
         $.post('/pin', { 'lat': args.location.lat, 'lon': args.location.lon }, function (data) {
             console.log(data);
             if (data.status === 'success') {
