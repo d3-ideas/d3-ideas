@@ -10,29 +10,120 @@
         <link rel='stylesheet' href='/stylesheets/normalize.css' />
         <link rel='stylesheet' href='/stylesheets/d3.css' />
 	</head>
-	<body>
+	<body class="pindrop">
+        <div id='comments-block'>
+            <a id='comments-handle' onclick='bMenuToggle(); return false' href='#'>Comments</a>
+            <div id="addComment">
+                <textarea id="newComment" placeholder="140 chracters of awesome ..." spellcheck="true" maxlength="140"></textarea>
+                <a id="submitComment" onclick='submitCommentClick(); return false;' href=#>TagIt!</a>
+                <div class="clearFix"></div>
+            </div>
+            <div id='comments-content'>
+                <div class="comment-item" data-commentid="1">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="2">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="3">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="4">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="5">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="6">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="7">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="8">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="9">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="10">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="11">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="12">
+                    <p>This is a comment. Lets fill this space up with some fake text. Lorem Ipsum and shit.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="13">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="14">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+                <div class="comment-item" data-commentid="15">
+                    <p>This text is 140 characters. Bacon ipsum dolor sit lorem amet bresaola drumstick sausage ground round landjaeger, bacon pork loin meatballs.</p>
+                    <div class="comment-options"><span>Options here...</span></div>
+                </div>
+            </div>
+        </div>
+        
         <div id="map" class='fullscreen'></div>
-        <div id="addPinMenu">Click on Map to Add Pin</div>
+        <!-- <div id="addPinMenu">Click on Map to Add Pin</div> -->
+        
         <div id="left-menu-block">
             <div id="left-menu-content">
-                <ul>
-                    <li>Some Menu Item</li>
-                    <li>Another menu Item</li>
-                </ul>
+                <div id="filter-block" class="left-menu-item closed first">
+                    <span class="left-menu-item-title">Filters</span>
+                    <ul class="left-menu-item-list">
+                        <li>Filter 1</li>
+                        <li>Filter 2</li>
+                        <li>Filter 3</li>
+                        <li>Filter 4</li>
+                        <li>Filter 5</li>
+                        <li>Filter 6</li>
+                        <li>Filter 7</li>
+                        <li>Filter 8</li>
+                        <li>Filter 9</li>
+                        <li>Filter 10</li>
+                        <li>Filter 11</li>
+                        <li>Filter 12</li>
+                    </ul>
+                </div>
+                <div id="settings-block" class="left-menu-item closed last">
+                    <span class="left-menu-item-title">Settings</span>
+                    <ul class="left-menu-item-list">
+                        <li>Setting 1</li>
+                        <li>Setting 2</li>
+                        <li>Setting 3</li>
+                        <li>Setting 4</li>
+                        <li>Setting 5</li>
+                        <li>Setting 6</li>
+                        <li>Setting 7</li>
+                        <li>Setting 8</li>
+                        <li>Setting 9</li>
+                        <li>Setting 10</li>
+                        <li>Setting 11</li>
+                        <li>Setting 12</li>
+                    </ul>
+                </div>
             </div>
             <a id='left-menu-pin' onclick='addPinToggle(); return false;' href='#'><span></span></a>
             <a id='left-menu-handle' onclick='lMenuToggle(); return false;' href='#'><span></span></a>
-        </div>
-        
-        <div id='bMenuArea'>
-            <a id='bMenuHandle' class='menu' onclick='bMenuToggle(); return false' href='#'>Comments</a> 
-            <div id='bMenu' class='menu'>
-                <div id="addComment">
-                    <textarea id="newComment" rows="3"  placeholder="Add comment..." spellcheck="true" maxlength="140"></textarea>
-                    <a id="submitComment" onclick='submitCommentClick(); return false;' href=#>Post</a>
-                </div>
-                <div id='comments'></div>
-            </div>
         </div>
     </body>
 </html>
