@@ -78,6 +78,15 @@ $(document).on('click', '.comment-item', function(){
     }
 } );
 
+$(document).on('click', '.left-menu-item.closed .left-menu-item-title', function(){
+    var target = this;
+    $('.left-menu-item.open .left-menu-item-list').slideUp();
+    $('.left-menu-item.open').removeClass('open').addClass('closed');
+    
+    $(this).parent().children('.left-menu-item-list').slideDown();
+    $(this).parent().removeClass('closed').addClass('open');
+});
+
 function clearCommentOptions() {
     $('.comment-options').removeClass('active').slideUp();
 }
@@ -121,7 +130,7 @@ var mapClick = function (name, source, args) {
     console.log(args);
     selectedMarker = null;
     //hide comments
-    $('#addComment').css('display', 'none');
+    $('#addComment').slideUp();
     bMenuHide();
     
     if ($('#left-menu-pin').hasClass('on')) {
@@ -143,7 +152,7 @@ var markerClick = function (name, source, args) {
     console.log('markerclick');
     
     //need to filter comments to only this marker
-    $('#addComment').css('display', 'inherit');
+    $('#addComment').slideDown();
     bMenuShow();
 };
 
