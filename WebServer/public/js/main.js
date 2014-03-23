@@ -83,8 +83,9 @@ function clearCommentOptions() {
 }
 
 var bMenuToggle = function () {
-    $('#comments-content').slideToggle();
     $('#comments-block').toggleClass('open');
+    clearCommentOptions();
+    
 /*    if (!bMenuVisible) {
         $('#bMenu').css('height', '400px');
         $('#bMenuHandle').css('bottom', '400px');

@@ -229,7 +229,13 @@ div.button {
     content: "\f103";
 }
 #comments-content {
-    display: none;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+    transition: height 0.5s linear;
+}
+#comments-block.open #comments-content {
+    height: auto;
     width: 100%;
     margin-bottom: 15px;
 }
