@@ -14,7 +14,7 @@ function addTag(db, tagobject, callback) {
                 'application': tagobject.application
             }, function (err, tag) {
                 if (err) {
-                    console.log(err);
+                    console.log(err); 
                     success = false;
                 }
             });
@@ -24,14 +24,20 @@ function addTag(db, tagobject, callback) {
     callback(success);
 }
 
-exports.findAllPins = function (db) {
-    return function (req, res) {
-        var collection = db.get('pins'),
-            stream = collection.find({}, {}, function (err, pins) {
-                res.json(pins);
-            });
-    };
+exports.findAllPins = function (db, data, callback) {
+    console.log(data);
+    var cPins = db.get('pins');
+
+    cPins.find({}, {}, function (err, pins) {
+        if(err){
+            callback({'error': err}, {});
+        }
+        else{
+            callback(undefined, pins);
+        }
+    });
 };
+
 
 exports.findPinsWithin = function (db) {
     return function (req, res) {

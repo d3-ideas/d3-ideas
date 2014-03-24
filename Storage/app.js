@@ -30,7 +30,6 @@ if ('development' === app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/pins', pins.findAllPins(db));
 //app.get('/pins/:id', pins.findById);
 app.post('/pins', pins.addPin(db));
 app.get('/pins/within', pins.findPinsWithin(db));
@@ -40,12 +39,29 @@ app.get('/tags', pins.getTags(db));
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
 
+app.get('/pins', function(req, res){
+    console.log(req.query);
+    pins.findAllPins(db, req.query, function(error, res){
+        if (typeof error !== 'undefined'){
+            res.send({'error': error.error});
+        }
+        else {
+            res.send(res);
+        }
+    });
+});
+
 io.sockets.on('connection', function (socket) {
     socket.on('getPinsAll', function (data) {
         console.log(data);
-        pins.findAllPins(db, data)  // will need to modify the findAllPins arguments
-        
-        // do I emit a response?
+        pins.findAllPins(db, data, function(error, res){
+            if (typeof error !== 'undefined'){
+                socket.emit('getPinsAll', {'error': error.error});
+            }
+            else {
+                socket.emit('getPinsAll', {'data': res});
+            }
+        });        
     });
     
     // other function calls
