@@ -18,7 +18,7 @@
             console.log(data);
         });
         $('#get_names').click(function(){
-            socket.emit('giveMeNames');
+            socket.emit('giveMeNames', {count:5});
             return false;
         });
     </script>
