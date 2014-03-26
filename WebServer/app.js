@@ -2,14 +2,20 @@
  * Module dependencies.
  */
 var express = require('express');
-//require for mongodb logging
+
+// set up the web socket to the storage engine
+var io = require('socket.io-client');
+var socket = io.connect('http://localhost:3002');
+
+// require for mongodb logging
 var expressWinston = require('express-winston');
 var winston = require('winston');
 var MongoDB = require('winston-mongodb').MongoDB;
-//
+
+// And now our routes
 var routes = require('./routes');
 var register = require('./routes/register');
-var pin = require('./routes/pin');
+var pin = require('./routes/pin')(socket);
 var comments = require('./routes/comments');
 var login = require('./routes/login');
 var main = require('./routes/main');

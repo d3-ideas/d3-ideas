@@ -6,7 +6,7 @@ var http = require('http');
 var path = require('path');
 
 var app = express();
-var io = require('socket.io').listen(app);
+var io = require('socket.io').listen(3002);
 
 var mongo = require('mongodb');
 var monk = require('monk');
@@ -52,6 +52,9 @@ app.get('/pins', function(req, res){
 });
 
 io.sockets.on('connection', function (socket) {
+    socket.on('server custom event', function(data){
+        console.log(data);
+    });
     socket.on('getPinsAll', function (data) {
         console.log(data);
         pins.findAllPins(db, data, function(error, res){
