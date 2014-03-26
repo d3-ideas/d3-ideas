@@ -1,6 +1,5 @@
 var latlon,
     map,
-    lMenuVisible,
     bMenuVisible,
     selectedMarker = null,
     viewPins;
@@ -31,10 +30,13 @@ var getComments = function () {
                 var i;
                 if (Array.isArray(data.tags)) {
                     comments = data.tags.map(function (tag) {
-                        return '<div class="comment">' + tag.tag + '</div>';
+                        //return '<div class="comment">' + tag.tag + '</div>';
+                        return '<div class="comment-item" data-commentid="' + tag._id + '">' +
+                                '<p>' + tag.tag + '</p>' + 
+                                '<div class="comment-options"><span>Options here...</span></div></div>';
                     });
                     
-                    $('#comments').append(comments.join());
+                    $('#comments-content').append(comments.join(''));
                 }
             } else {
                 //console.log('error-'+data.reason);
@@ -94,22 +96,6 @@ function clearCommentOptions() {
 var bMenuToggle = function () {
     $('#comments-block').toggleClass('open');
     clearCommentOptions();
-    
-/*    if (!bMenuVisible) {
-        $('#bMenu').css('height', '400px');
-        $('#bMenuHandle').css('bottom', '400px');
-
-        //check to see if comments are already loaded
-        if ($('#comments').children().length === 0) {
-            getComments();
-        }
-        bMenuVisible = true;
-    } else {
-        $('#bMenu').css('height', '0px');
-        $('#bMenuHandle').css('bottom', '0px');
-        bMenuVisible = false;
-    }
-*/
 };
 
 var bMenuShow = function () {
@@ -122,6 +108,13 @@ var bMenuHide = function () {
         bMenuToggle();
         clearCommentOptions();
     }
+};
+
+var addMarker = function (id, lat, lon){
+    var marker = new L.marker([lat, lon]);
+    //marker.click.addHandler(markerClick);
+    marker.setAttribute('pinID', id);
+    map.addControl(marker);
 };
 
 var mapClick = function (name, source, args) {
@@ -156,7 +149,7 @@ var markerClick = function (name, source, args) {
     bMenuShow();
 };
 
-$(document).ready(function () {
+/*$(document).ready(function () {
     map = new mxn.Mapstraction('map', 'googlev3');
     map.click.addHandler(mapClick);
     map.addControls({
@@ -191,6 +184,7 @@ $(document).ready(function () {
                                 map.addMarker(marker);
                             }
                         }
+                        getComments();
                     } else {
                         console.log('error-' + data.reason);
                     }
@@ -201,4 +195,4 @@ $(document).ready(function () {
                 });
         });
     }
-});
+});*/
