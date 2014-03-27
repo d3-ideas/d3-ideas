@@ -32,41 +32,68 @@ if ('development' === app.get('env')) {
 
 //app.get('/pins/:id', pins.findById);
 app.post('/pins', pins.addPin(db));
-app.get('/pins/within', pins.findPinsWithin(db));
 app.post('/updatePin', pins.updatePin(db));
 app.get('/tags', pins.getTags(db));
 
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
 
+
+
+app.get('/pins/within', function(req, res){
+    console.log(req.body);
+    pins.findPinsWithin(db, req.body, function(error,result){
+        if (typeof error !== 'undefined'){
+            res.send({'error': error});
+        }
+        else {
+            res.send(result);
+        }
+    });
+});
+
 app.get('/pins', function(req, res){
     console.log(req.query);
-    pins.findAllPins(db, req.query, function(error, res){
+    pins.findAllPins(db, req.query, function(error, result){
         if (typeof error !== 'undefined'){
             res.send({'error': error.error});
         }
         else {
-            res.send(res);
+            res.send(result);
         }
     });
 });
 
 io.sockets.on('connection', function (socket) {
+
     socket.on('server custom event', function(data){
         console.log(data);
     });
+
     socket.on('getPinsAll', function (data) {
         console.log(data);
         pins.findAllPins(db, data, function(error, res){
             if (typeof error !== 'undefined'){
-                socket.emit('getPinsAll', {'error': error.error});
+                socket.emit('getPinsAll', {'error': error});
             }
             else {
                 socket.emit('getPinsAll', {'data': res});
             }
         });        
     });
-    
+
+    socket.on('getPinsWithin', function (data) {
+        console.log(data);
+        pins.findPinsWithin(db, data, function(error, res){
+            if (typeof error !== 'undefined'){
+                socket.emit('getPinsWithin', {'error':error});
+            }
+            else {
+                socket.emit('getPinsWithin', {'data': res});
+            }
+        });        
+    });
+
     // other function calls
 });
 

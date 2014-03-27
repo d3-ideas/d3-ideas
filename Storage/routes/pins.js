@@ -20,7 +20,6 @@ function addTag(db, tagobject, callback) {
             });
         }
     }
-    
     callback(success);
 }
 
@@ -39,31 +38,31 @@ exports.findAllPins = function (db, data, callback) {
 };
 
 
-exports.findPinsWithin = function (db) {
-    return function (req, res) {
-        var collection = db.get('pins'),
-            polyFind = req.body.searchArea,
-            gjv = require('geojson-validation');
+exports.findPinsWithin = function (db, data, callback) {
+    console.log(data);
+
+    var cPins = db.get('pins'),
+        polyFind = data.searchArea,
+        gjv = require('geojson-validation');
             
-        if (!gjv.isPolygon(polyFind)) {
-            res.json({'status': 'error',
-                      'reason': 'The searchArea polygon was not valid.'});
-            return;
-        }
+    if (!gjv.isPolygon(polyFind)) {
+        callback({'status': 'error',
+                  'reason': 'The searchArea polygon was not valid.'}, {});
+        return;
+    }
         
-        collection.find(
-            {'location': { $geoWithin: { $geometry: polyFind } } },
-            {},
-            function (err, pins) {
-                if (err) {
-                    res.json({'status': 'error',
-                            'reason': err});
-                    console.log('findPinsWithin failed - ' + err);
-                }
-                res.json(pins);
+    cPins.find(
+        {'location': { $geoWithin: { $geometry: polyFind } } },
+        {},
+        function (err, pins) {
+            if (err) {
+                callback({'status': 'error',
+                          'reason': err});
+                console.log('findPinsWithin failed - ' + err);
             }
-        );
-    };
+            callback(undefined, pins);
+        }
+    );
 };
 
 exports.addPin = function (db) {
