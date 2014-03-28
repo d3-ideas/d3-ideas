@@ -31,7 +31,6 @@ if ('development' === app.get('env')) {
 }
 
 //app.get('/pins/:id', pins.findById);
-app.post('/pins', pins.addPin(db));
 app.post('/updatePin', pins.updatePin(db));
 app.get('/tags', pins.getTags(db));
 
@@ -64,6 +63,19 @@ app.get('/pins', function(req, res){
     });
 });
 
+app.post('/pins', function(req, res){
+    console.log(req.body);
+    pins.addPin(db, req.body, function(error,result){
+        if (typeof error !== 'undefined'){
+            res.send({'error': error});
+        }
+        else {
+            res.send(result);
+        }
+    });
+});
+
+
 io.sockets.on('connection', function (socket) {
 
     socket.on('server custom event', function(data){
@@ -90,6 +102,18 @@ io.sockets.on('connection', function (socket) {
             }
             else {
                 socket.emit('getPinsWithin', {'data': res});
+            }
+        });        
+    });
+
+    socket.on('addPin', function (data) {
+        console.log(data);
+        pins.addPin(db, data, function(error, res){
+            if (typeof error !== 'undefined'){
+                socket.emit('addPin', {'error':error});
+            }
+            else {
+                socket.emit('addPin', {'data': res});
             }
         });        
     });
