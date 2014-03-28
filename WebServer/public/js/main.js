@@ -1,7 +1,7 @@
 var latlon,
     map,
     bMenuVisible,
-    selectedMarker = null,
+    selectedMarkerID = null,
     viewPins;
 
 var addPinToggle = function () {
@@ -53,9 +53,9 @@ var getComments = function () {
 
 var submitCommentClick = function () {
     var comment = $("#newComment").val();
-    console.log({'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment});
+    console.log({'pinID': selectedMarkerID, 'comment': comment});
    
-    $.post('/comment', {'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment}, function (data) {
+    $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
         if (data.status === 'success') {
             //get latest pins?
             console.log('You have succedded'+data);                
@@ -112,87 +112,37 @@ var bMenuHide = function () {
 
 var addMarker = function (id, lat, lon){
     var marker = new L.marker([lat, lon]);
-    //marker.click.addHandler(markerClick);
-    marker.setAttribute('pinID', id);
+    marker.on('click', markerClick);
+    marker.pinID = id;
     map.addControl(marker);
+    console.log(marker);
 };
 
-var mapClick = function (name, source, args) {
+var mapClick = function (event) {
     console.log('mapclick');
-    console.log(source);
-    console.log(args);
-    selectedMarker = null;
+    console.log(event);
+    selectedMarkerID = null;
+    
     //hide comments
     $('#addComment').slideUp();
     bMenuHide();
     
     if ($('#left-menu-pin').hasClass('on')) {
         $('#left-menu-pin').toggleClass('on');
-        $.post('/pin', { 'lat': args.location.lat, 'lon': args.location.lon }, function (data) {
+        $.post('/pin', { 'lat': event.latlng.lat, 'lon': event.latlng.lng }, function (data) {
             console.log(data);
             if (data.status === 'success') {
-                var marker = new mxn.Marker(args.location);
-                marker.click.addHandler(markerClick);
-                marker.setAttribute('pinID', data.pin);
-                map.addMarker(marker);
+                addMarker(data.pin, event.latlng.lat, event.latlng.lng);
             }
         });        
     }
 };
 
-var markerClick = function (name, source, args) {
-    selectedMarker = source;
-    console.log('markerclick');
-    
+var markerClick = function (event) {
+    selectedMarkerID = event.target.pinID;
+
     //need to filter comments to only this marker
     $('#addComment').slideDown();
     bMenuShow();
 };
 
-/*$(document).ready(function () {
-    map = new mxn.Mapstraction('map', 'googlev3');
-    map.click.addHandler(mapClick);
-    map.addControls({
-        pan: true,
-        zoom: 'large',
-        map_type: true
-    });
-    //map.addSmallControls();
-    //p.addLargeControls();
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (data) {
-            latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
-            map.setCenterAndZoom(latlon, 15);
-    
-            var viewBondary = map.getBounds(),
-                north = viewBondary.getNorthEast().lat,
-                east = viewBondary.getNorthEast().lon,
-                south = viewBondary.getSouthWest().lat,
-                west = viewBondary.getSouthWest().lon;
-    
-            $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
-                .done(function (data) {
-                    if (data.status !== 'error') {
-                        var i,
-                            marker;
-                        for (i in data) {
-                            if (data.hasOwnProperty(i)) {
-                                viewPins = data;
-                                marker = new mxn.Marker(new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1]));
-                                marker.click.addHandler(markerClick);
-                                marker.setAttribute('pinID', data[i]._id);
-                                map.addMarker(marker);
-                            }
-                        }
-                        getComments();
-                    } else {
-                        console.log('error-' + data.reason);
-                    }
-                })
-                .fail(function ( jqxhr, textStatus, error ) {
-                    var err = textStatus + ", " + error;
-                    console.log( "Request Failed: " + err );
-                });
-        });
-    }
-});*/
