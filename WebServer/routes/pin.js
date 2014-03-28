@@ -28,6 +28,7 @@ module.exports = function (socket) {
     };
 
     //route for /pins GET
+    //Performs GET request to storage to get pins for the user
     routes.getPins = function (req, res) {
         var returnData,
             north = Number(req.query.viewBoundary.north),
