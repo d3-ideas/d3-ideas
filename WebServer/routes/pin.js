@@ -80,38 +80,21 @@ module.exports = function(socket){
                 method: 'GET',
                 headers: {'content-type': 'application/json',
                         'content-length': dReq.length}
-            },
-            oRes = res,
-            dGet = http.request(options, function (dRes) {
-                dRes.setEncoding('utf8');
-                dRes.on('data', function (chunk) {
-                    if (typeof returnData !== 'undefined') {
-                        returnData += chunk;
-                    } else {
-                        returnData = chunk;
-                    }
-                });
-
-                dRes.on('end', function () {
-                    if (typeof returnData !== 'undefined') {
-                        returnData = JSON.parse(returnData);
-                        if (returnData.status === 'error') {
-                            res.json({status: 'error', 'reason': returnData.reason});
-                        } else {
-                            res.json(returnData);
-                        }
-                    } else {
-                        console.log('returnData is undefined');
-                        res.json({status: 'error', 'reason': 'returnData is undefined'});
-                    }
-                });
-            });
-        dGet.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
+            };
+        socket.emit('getPinsWithin', dReq);
+        socket.on('getPinsWithin', function () {
+            if (typeof returnData !== 'undefined') {
+                returnData = JSON.parse(returnData);
+                if (returnData.status === 'error') {
+                    res.json({status: 'error', 'reason': returnData.reason});
+                } else {
+                    res.json(returnData);
+                }
+            } else {
+                console.log('returnData is undefined');
+                res.json({status: 'error', 'reason': 'returnData is undefined'});
+            }
         });
-
-        dGet.write(dReq);
-        dGet.end();
     };
     return routes;
 };
