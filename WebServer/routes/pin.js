@@ -6,20 +6,8 @@ module.exports = function(socket){
     */
     var http = require('http');
 
-    // temporary page for showing a form to post an update to a pin
-    // this should go away
-
-    routes.updatePinGet = function (req, res) {
-        var pinID = '531dbddeb3fe7e99380000001',
-            title = 'Temporary Update Page';
-        res.render('updatePin', { title: title, pinID: pinID });
-    };
-
-
-
     //route for /pin GET
     routes.pin = function (req, res) {
-        
         if (typeof req.session.username !== 'undefined') {
             res.render('pin', { title: 'TagIt', username: req.session.username});
         } else {
@@ -29,40 +17,17 @@ module.exports = function(socket){
 
     //route for /pin POST
     routes.addPin = function (req, res) {
-        var ourContent = JSON.stringify({'application': 'Tagit Test',
-                'location': {'type': 'Point',
-                          'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
-                'userID': req.session.userID,
-                'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
-                }),
-
-            options = {
-                hostname: 'localhost',
-                port: 3001,
-                path: '/pins',
-                method: 'POST',
-                headers: {'content-type': 'application/json',
-                        'content-length': ourContent.length}
-            },
-            ourPost = http.request(options, function (postRes) {
-                postRes.setEncoding('utf8');
-
-                postRes.on('data', function (chunk) {
-                    res.json(JSON.parse(chunk));
-                });
-            });
-
-        ourPost.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
+        var ourContent = JSON.stringify({
+            'application': 'Tagit Test',
+            'location': {'type': 'Point',
+                'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
+            'userID': req.session.userID,
+            'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
         });
-
-        // write data to request body
-        ourPost.write(ourContent);
-        ourPost.end();
+        socket.emit('addPin',ourContent);
     };
 
     //route for /pins GET
-    //Performs GET request to storage to get pins for the user
     routes.getPins = function (req, res) {
         var returnData,
             north = Number(req.query.viewBoundary.north),
@@ -72,15 +37,7 @@ module.exports = function(socket){
             dReq = JSON.stringify({'application': 'Tagit Test',
                                    'userID': req.session.userID,
                                    'filter': '',
-                                   'searchArea': {'type': 'Polygon', 'coordinates': [[[north, east], [south, east], [south, west], [north, west], [north, east]]]}}),
-            options = {
-                hostname: 'localhost',
-                port: 3001,
-                path: '/pins/within',
-                method: 'GET',
-                headers: {'content-type': 'application/json',
-                        'content-length': dReq.length}
-            };
+                                   'searchArea': {'type': 'Polygon', 'coordinates': [[[north, east], [south, east], [south, west], [north, west], [north, east]]]}});
         socket.emit('getPinsWithin', dReq);
         socket.on('getPinsWithin', function () {
             if (typeof returnData !== 'undefined') {
