@@ -85,7 +85,7 @@ http.createServer(app).listen(app.get('port'), function () {
     console.log('         / 3 \\');
     console.log('        /     \\');
     console.log('       /       \\');
-    console.log('      /   d 3   \\');
+    console.log('      /   d 4   \\');
     console.log('     /   ideas   \\');
     console.log('    /             \\');
     console.log('   /               \\');
