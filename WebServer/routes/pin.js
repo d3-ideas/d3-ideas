@@ -1,10 +1,10 @@
-module.exports = function(socket){
-    var routes = {};
+module.exports = function (socket) {
     /* 
     * Post for pins - acts as middle layer between the web client and the storage server
     * takes a post and sends it to the storage system
     */
-    var http = require('http');
+    var routes = {},
+		http = require('http');
 
     //route for /pin GET
     routes.pin = function (req, res) {
@@ -24,7 +24,7 @@ module.exports = function(socket){
             'userID': req.session.userID,
             'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
         });
-        socket.emit('addPin',ourContent);
+        socket.emit('addPin', ourContent);
     };
 
     //route for /pins GET
