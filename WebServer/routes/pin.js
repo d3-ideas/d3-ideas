@@ -43,11 +43,11 @@ module.exports = function (socket) {
         socket.on('getPinsWithin', function (returnData) {
             console.log(returnData);
             if (typeof returnData !== 'undefined') {
-                returnData = JSON.parse(returnData);
+                //returnData = JSON.parse(returnData);
                 if (returnData.status === 'error') {
                     res.json({status: 'error', 'reason': returnData.reason});
                 } else {
-                    res.json(returnData);
+                    res.json(returnData.data);
                 }
             } else {
                 console.log('returnData is undefined');
