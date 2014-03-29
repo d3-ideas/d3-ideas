@@ -76,7 +76,6 @@ app.post('/pin', pin.addPin);
 app.get('/pins', pin.getPins);
 app.get('/logout', logout.logout);
 app.get('/main', main.main);
-app.get('/updatePin', pin.updatePinGet);
 app.post('/comment', comments.addComment);
 app.get('/comment', comments.getComments);
 
