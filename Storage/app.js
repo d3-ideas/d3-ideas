@@ -97,7 +97,7 @@ io.sockets.on('connection', function (socket) {
     socket.on('getPinsWithin', function (data) {
         console.log(data);
         pins.findPinsWithin(db, data, function(error, res){
-            if (typeof error !== 'undefined'){
+           if (typeof error !== 'undefined'){
                 socket.emit('getPinsWithin', {'error':error});
             }
             else {

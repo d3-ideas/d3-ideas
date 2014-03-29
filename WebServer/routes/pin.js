@@ -40,7 +40,8 @@ module.exports = function (socket) {
                                    'filter': '',
                                    'searchArea': {'type': 'Polygon', 'coordinates': [[[north, east], [south, east], [south, west], [north, west], [north, east]]]}});
         socket.emit('getPinsWithin', dReq);
-        socket.on('getPinsWithin', function () {
+        socket.on('getPinsWithin', function (returnData) {
+            console.log(returnData);
             if (typeof returnData !== 'undefined') {
                 returnData = JSON.parse(returnData);
                 if (returnData.status === 'error') {

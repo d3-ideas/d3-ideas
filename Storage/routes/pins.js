@@ -45,11 +45,12 @@ exports.findAllPins = function (db, data, callback) {
 // returns an array of pins.
 exports.findPinsWithin = function (db, data, callback) {
     console.log(data);
-
+    var newData = JSON.parse(data);
     var cPins = db.get('pins'),
-        polyFind = data.searchArea,
+        polyFind = newData.searchArea,
         gjv = require('geojson-validation');
             
+    console.log(polyFind);
     if (!gjv.isPolygon(polyFind)) {
         callback({'status': 'error',
                   'reason': 'The searchArea polygon was not valid.'}, {});
@@ -70,7 +71,7 @@ exports.findPinsWithin = function (db, data, callback) {
 
 exports.addPin = function (db, data, callback) {
     console.log(data);
-         
+    data = JSON.parse(data);     
     var gjv = require('geojson-validation'), 
         location = data.location,
         userID = data.userID,
