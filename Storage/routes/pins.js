@@ -1,12 +1,12 @@
 function addTag(db, tagobject, callback) {
-    var ctags = db.get('tags'),
+    var cTags = db.get('tags'),
         success = true,
         tags = tagobject.tags,
         i;
 
     for (i in tags) {
         if (tags.hasOwnProperty(i)) {
-            ctags.insert({
+            cTags.insert({
                 'pin': tagobject.pinID,
                 'tag': tags[i],
                 'createdOn': tagobject.createdOn,
@@ -143,80 +143,76 @@ exports.addPin = function (db, data, callback) {
     });
 };
 
-exports.updatePin = function (db) {
-    return function (req, res) {
-        console.log(req.body);
+exports.updatePin = function (db, data, callback) {
+    console.log(data);
+    data = JSON.parse(data); 
         
-        var location = req.body.location,
-            userID = req.body.userID,
-            pintime = new Date(),
-            pinID = req.body.pinID,
-            application = req.body.application,
-            tags = req.body.tags,
-            apps = db.get('apps');
+    var location = data.location,
+        userID = data.userID,
+        pintime = new Date(),
+        pinID = data.pinID,
+        application = data.application,
+        tags = data.tags,
+        cApps = db.get('apps');
 
-        apps.findOne({'application': application}, function (err, foundapp) {
-            if (!foundapp) {
-                res.json({'status': 'error',
-                          'reason': 'The application was invalid.'});
-            } else {
-                application = foundapp._id;
+    cApps.findOne({'application': application}, function (err, foundapp) {
+        if (!foundapp) {
+            callback({'status': 'error',
+                      'reason': 'The application was invalid.'}, []);
+        } else {
+            application = foundapp._id;
                 
-                if (Array.isArray(tags)) {
-                    var newPin = {'userID': userID,
-                                'createdOn': pintime,
-                                'application': application,
-                                'tags': tags,
-                                'pinID': pinID};
-                    addTag(db, newPin, function (result) {
-                        //maybe some logic here to check the result?
-                        //result will have the context of variables in addTag
-                        res.json({'status': 'success',
+            if (Array.isArray(tags)) {
+                var newPin = {'userID': userID,
+                            'createdOn': pintime,
+                            'application': application,
+                            'tags': tags,
+                            'pinID': pinID};
+                addTag(db, newPin, function (result) {
+                    callback([], {'status': 'success',
                                   'pin': pinID,
-                                  'tags': tags}); //You have pinned your location
-                    });
-                }
-            }
-        });
-    };
-};
-
-exports.getTags = function (db) {
-    return function (req, res) {
-        console.log(req.body);
-        
-        var pinID = req.body.pinIDs,
-            application = req.body.application,
-            filter = req.body.filter,
-            apps = db.get('apps'),
-            tags = db.get('tags'),
-            tagQuery;
-
-        apps.findOne({'application': application}, function (err, foundapp) {
-            if (!foundapp) {
-                res.json({'status': 'error',
-                          'reason': 'The application was invalid.'});
-            } else {
-                application = foundapp._id;
-                
-                if (filter) {
-                    tagQuery = {'pin': {$in: pinID}, 'application': application, 'tag': filter};
-                } else {
-                    tagQuery = {'pin': {$in: pinID}, 'application': application};
-                }
-                    
-                tags.find(tagQuery, function (err, pinTags) {
-                    if (!pinTags) {
-                        res.json({'status': 'error',
-                                  'reason': 'The pin was invalid.'});
-                    } else {
-                        res.json({'status': 'success',
-                                  'pin': pinID,
-                                  'tags': pinTags});
-                
-                    }
+                                  'tags': tags}); 
                 });
             }
-        });
-    };
+        }
+    });
+};
+
+exports.getTags = function (db, data, callback) {
+    console.log(data);
+    data = JSON.parse(data); 
+        
+    var pinID = data.pinIDs,
+        application = data.application,
+        filter = data.filter,
+        cApps = db.get('apps'),
+        cTags = db.get('tags'),
+        tagQuery;
+
+    cApps.findOne({'application': application}, function (err, foundapp) {
+        if (!oundapp) {
+            callback({'status': 'error',
+                      'reason': 'The application was invalid.'}, []);
+        } else {
+            application = foundapp._id;
+                
+            if (filter) {
+                tagQuery = {'pin': {$in: pinID}, 'application': application, 'tag': filter};
+            } else {
+                tagQuery = {'pin': {$in: pinID}, 'application': application};
+            }
+                    
+             cTags.find(tagQuery, function (err, pinTags) {
+                 if (!pinTags) {
+                     callback({'status': 'error',
+                               'reason': 'The pin was invalid.'}, []);
+                 } else {
+                     callback([], {'status': 'success',
+                               'pin': pinID,
+                               'tags': pinTags});
+             
+                 }
+             });
+        }
+    });
 };

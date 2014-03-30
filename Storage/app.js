@@ -31,9 +31,6 @@ if ('development' === app.get('env')) {
 }
 
 //app.get('/pins/:id', pins.findById);
-app.post('/updatePin', pins.updatePin(db));
-app.get('/tags', pins.getTags(db));
-
 app.get('/users', users.checkUser(db));
 app.post('/users', users.addUser(db));
 
@@ -66,6 +63,30 @@ app.get('/pins', function(req, res){
 app.post('/pins', function(req, res){
     console.log(req.body);
     pins.addPin(db, req.body, function(error,result){
+        if (typeof error !== 'undefined'){
+            res.send({'error': error});
+        }
+        else {
+            res.send(result);
+        }
+    });
+});
+
+app.post('/updatePin', function(req, res){
+    console.log(req.body);
+    pins.updatePin(db, req.body, function(error,result){
+        if (typeof error !== 'undefined'){
+            res.send({'error': error});
+        }
+        else {
+            res.send(result);
+        }
+    });
+});
+
+app.get('/tags', function(req, res){
+    console.log(req.body);
+    pins.getTags(db, req.body, function(error,result){
         if (typeof error !== 'undefined'){
             res.send({'error': error});
         }
@@ -118,7 +139,30 @@ io.sockets.on('connection', function (socket) {
         });        
     });
 
-    // other function calls
+    socket.on('updatePin', function (data) {
+        console.log(data);
+        pins.updatePin(db, data, function(error, res){
+            if (typeof error !== 'undefined'){
+                socket.emit('updatePin', {'error':error});
+            }
+            else {
+                socket.emit('updatePin', {'data': res});
+            }
+        });        
+    });
+
+    socket.on('getTags', function (data) {
+        console.log(data);
+        pins.getTags(db, data, function(error, res){
+            if (typeof error !== 'undefined'){
+                socket.emit('getTags', {'error':error});
+            }
+            else {
+                socket.emit('getTags', {'data': res});
+            }
+        });        
+    });
+    
 });
 
 
