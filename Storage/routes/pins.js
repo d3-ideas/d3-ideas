@@ -179,8 +179,8 @@ exports.updatePin = function (db, data, callback) {
 };
 
 exports.getTags = function (db, data, callback) {
-    console.log(data);
-    data = JSON.parse(data); 
+    console.log(typeof data);
+    //data = JSON.parse(data); 
         
     var pinID = data.pinIDs,
         application = data.application,
@@ -190,7 +190,7 @@ exports.getTags = function (db, data, callback) {
         tagQuery;
 
     cApps.findOne({'application': application}, function (err, foundapp) {
-        if (!oundapp) {
+        if (!foundapp) {
             callback({'status': 'error',
                       'reason': 'The application was invalid.'}, []);
         } else {
