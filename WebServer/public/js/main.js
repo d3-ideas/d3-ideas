@@ -1,20 +1,22 @@
 var latlon,
     map,
+    markers = new L.FeatureGroup(),
     bMenuVisible,
     selectedMarkerID = null,
     viewPins;
 
 var addPinToggle = function () {
     $('#left-menu-pin').toggleClass('on');
-    if ($('#comments-block').css('float') != 'right' && $('#comments-block').hasClass('open')){
+    if ($('#comments-block').css('float') !== 'right' && $('#comments-block').hasClass('open')) {
         bMenuToggle();
     }
-    return true;  
+    return true;
 };
+
 var addPinOff = function () {
     $('#left-menu-pin').removeClass('on');
-    return true; 
-}
+    return true;
+};
 
 var getComments = function () {
     var comments,
@@ -25,14 +27,13 @@ var getComments = function () {
     
     $.getJSON('/comment', {'pinIDs': pins})
         .done(function (data) {
-            console.log(data);
             if (data.status !== 'error') {
                 var i;
                 if (Array.isArray(data.tags)) {
                     comments = data.tags.map(function (tag) {
                         //return '<div class="comment">' + tag.tag + '</div>';
                         return '<div class="comment-item" data-commentid="' + tag._id + '">' +
-                                '<p>' + tag.tag + '</p>' + 
+                                '<p>' + tag.tag + '</p>' +
                                 '<div class="comment-options"><span>Options here...</span></div></div>';
                     });
                     
@@ -58,9 +59,9 @@ var submitCommentClick = function () {
     $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
         if (data.status === 'success') {
             //get latest pins?
-            console.log('You have succedded'+data);                
+            console.log('You have succedded' + data);                
         } else {
-            console.log('You have failed!'+data);
+            console.log('You have failed!' + data);
         }
     });
 };
@@ -71,16 +72,16 @@ var lMenuToggle = function () {
     addPinOff();
 };
 
-$(document).on('click', '.comment-item', function(){
-    var target = this;
-    var targetID = $(target).data('commentid');
+$(document).on('click', '.comment-item', function () {
+    var target = this,
+        targetID = $(target).data('commentid');
     if (!$(target).find('.comment-options').hasClass('active')) {
         $('.comment-options').removeClass('active').slideUp();
         $(target).children('.comment-options').addClass('active').slideDown();
     }
-} );
+});
 
-$(document).on('click', '.left-menu-item.closed .left-menu-item-title', function(){
+$(document).on('click', '.left-menu-item.closed .left-menu-item-title', function () {
     var target = this;
     $('.left-menu-item.open .left-menu-item-list').slideUp();
     $('.left-menu-item.open').removeClass('open').addClass('closed');
@@ -91,7 +92,7 @@ $(document).on('click', '.left-menu-item.closed .left-menu-item-title', function
 
 function clearCommentOptions() {
     $('.comment-options').removeClass('active').slideUp();
-}
+};
 
 var bMenuToggle = function () {
     $('#comments-block').toggleClass('open');
@@ -110,12 +111,12 @@ var bMenuHide = function () {
     }
 };
 
-var addMarker = function (id, lat, lon){
+var addMarker = function (id, lat, lon) {
     var marker = new L.marker([lat, lon]);
     marker.on('click', markerClick);
     marker.pinID = id;
-    map.addControl(marker);
-    console.log(marker);
+    markers.addLayer(marker);
+    map.addLayer(markers);
 };
 
 var mapClick = function (event) {
@@ -138,6 +139,14 @@ var mapClick = function (event) {
     }
 };
 
+var mapDrag = function (event) {
+    console.log(event);
+    markers.clearLayers();
+    getPins();
+    selectedMarkerID = null;
+    console.log(markers.getLayers());
+};
+
 var markerClick = function (event) {
     selectedMarkerID = event.target.pinID;
 
@@ -146,3 +155,34 @@ var markerClick = function (event) {
     bMenuShow();
 };
 
+//get the pins for the visible area
+var getPins = function () {
+    console.log('Getting pins');
+    var viewBondary = map.getBounds(),
+        north = viewBondary.getNorth(),
+        east = viewBondary.getEast(),
+        south = viewBondary.getSouth(),
+        west = viewBondary.getWest();
+
+    $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
+        .done(function (data) {
+            if (data.status !== 'error') {
+                var i,
+                    marker;
+                for (i in data) {
+                    if (data.hasOwnProperty(i)) {
+                        viewPins = data;
+                        addMarker(data[i]._id, data[i].location.coordinates[0], data[i].location.coordinates[1]);
+                    }
+                }
+
+                getComments();
+            } else {
+                console.log('error-' + data.reason);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("Request Failed: " + err);
+        });
+};
