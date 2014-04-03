@@ -74,21 +74,9 @@ div.button {
 #left-menu-block.extended {
     transition: left 1s ease;
     left: 0;
+    box-shadow: 3px 0 5px #777777;
 }
-.left-menu-item-list {
-    padding: 0.938rem 0.938rem 1px;
-    background-color: #eee;
-    margin: -9px 0.938rem 0;
-    border-left: 1px solid #666;
-    border-right: 1px solid #666;
-    display: none;
-}
-.left-menu-item-list li {
-    line-height: 1.3rem;
-    display: block;
-    margin: 10px 0;
-}
-#left-menu-handle {
+.left-menu-handle {
     position: absolute;
     right: -1.626rem;
     top: 10px;
@@ -101,10 +89,12 @@ div.button {
     background-color: #b0b0b0;
     opacity: 0.75;
     text-decoration: none;
-    padding-left: 0.3rem;
+    padding: 0.2rem 0 0 0.15rem;
 }
-
-#left-menu-handle span:before {
+#left-menu-settings.left-menu-handle {
+    top: 2.7rem;
+}
+.left-menu-handle span:before {
     display: block;
     font-family: FontAwesome;
     font-style: normal;
@@ -112,21 +102,25 @@ div.button {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    content: "\f101";
-    font-size: 1.75rem;
+    content: "\f0b0";
+    font-size: 1.5rem;
     color: #666;
+}
+#left-menu-block.extended .left-menu-handle {
+    box-shadow: 3px 0 5px #777777;
 }
 #left-menu-block.extended #left-menu-handle span:before {
     content: "\f100";
+}
+#left-menu-settings.left-menu-handle span:before {
+    content: "\f013";
 }
 
 #left-menu-pin:hover,
 #left-menu-pin:active,
 #left-menu-pin:focus,
-#left-menu-handle:hover,
-#left-menu-handle:active,
-#left-menu-handle:focus,
-#left-menu-block.extended #left-menu-handle {
+.left-menu-handle:hover,
+#left-menu-block.extended .left-menu-handle {
     opacity: 1;
 }
 #left-menu-block.extended #left-menu-pin {
@@ -136,7 +130,7 @@ div.button {
 #left-menu-pin {
     position: absolute;
     right: -1.626rem;
-    top: 2.9rem;
+    top: 4.9rem;
     border: 1px solid #666;
     border-radius: 0px 5px 5px 0px;
     border-left: none;
@@ -170,8 +164,21 @@ div.button {
 #left-menu-pin.on span:before{
     color: #E6A340;
 }
-.left-menu-item-title {
+.left-menu-item-list {
+    padding: 0.938rem 0.938rem 1px;
+    background-color: #eee;
+    margin: -9px 0.938rem 0;
+    border-left: 1px solid #666;
+    border-right: 1px solid #666;
+    display: none;
+}
+.left-menu-item-list li {
+    line-height: 1.3rem;
     display: block;
+    margin: 10px 0;
+}
+.left-menu-item-title {
+    display: none;
     text-align: center;
     border-top: 1ps solid #333;
     font-size: 1.2rem;
@@ -179,52 +186,15 @@ div.button {
     border-top: 1px solid #000;
     border-right: 1px solid #000;
     background-color: #fff;
-    color: #666;
+    color: #000;
     box-shadow: 3px 3px 3px #666;
     position: relative;
     z-index: 2;
 }
-.left-menu-item.closed .left-menu-item-title:hover {
-    cursor: pointer;
-    color: #333;
+.left-menu-item.active .left-menu-item-title,
+.left-menu-item.active .left-menu-item-list {
+    display: block;
 }
-.left-menu-item.first .left-menu-item-title {
-    border-radius: 0 5px 0 0;
-}
-.left-menu-item.last .left-menu-item-title {
-    border-radius: 0 0 5px 0;
-}
-.left-menu-item.last .left-menu-item-list {
-    border-radius: 0 0 5px 5px;
-    border-bottom: 1px solid #000;
-}
-#left-menu-content .left-menu-item-title:before {
-    display: inline-block;
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-size: 1.1rem;
-    padding-right: 3px;
-}
-#filter-block .left-menu-item-title:before {
-    content: "\f0b0";    
-}
-#settings-block .left-menu-item-title:before {
-    content: "\f013";
-}
-.left-menu-item.open .left-menu-item-title {
-    color: #000;
-}
-
-
-
-
-
-
-
-
 /* End Left Menu */
 
 /* Comments */

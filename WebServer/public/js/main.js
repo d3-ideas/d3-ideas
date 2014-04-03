@@ -66,10 +66,22 @@ var submitCommentClick = function () {
     });
 };
 
-var lMenuToggle = function () {
-    $('#left-menu-block').toggleClass('extended');
-    bMenuHide();
-    addPinOff();
+var lMenuToggle = function (menuTarget) {
+    if ($('#left-menu-block').hasClass('extended')) {
+        if ($('#'+menuTarget+'-block').hasClass('active')) {
+            $('#left-menu-block').removeClass('extended');
+            $('.left-menu-item').removeClass('active');
+        }
+        else {
+            $('.left-menu-item').toggleClass('active');
+        }
+    }
+    else {
+        $('#left-menu-block').addClass('extended');
+        $('#'+menuTarget+'-block').addClass('active');
+        bMenuHide();
+        addPinOff();
+    }
 };
 
 $(document).on('click', '.comment-item', function () {
