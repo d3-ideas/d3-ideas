@@ -131,7 +131,9 @@
         <script type="text/javascript" charset="utf-8">
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (data) {
-        map = L.map('map').setView([data.coords.latitude, data.coords.longitude], 15);
+        map = new L.Map('map', {zoomControl: false});
+        map.addControl( L.control.zoom({position: 'bottomright'}) );
+        map.setView([data.coords.latitude, data.coords.longitude], 15);
         map.on('click', mapClick);
         map.on('dragend', mapDrag);
         map.on('zoomstart', mapDrag);
