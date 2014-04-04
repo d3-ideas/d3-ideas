@@ -145,7 +145,9 @@ exports.addPin = function (db, data, callback) {
 
 exports.updatePin = function (db, data, callback) {
     console.log(data);
-    data = JSON.parse(data); 
+	if (typeof data !== 'object'){
+		data = JSON.parse(data);
+	}
         
     var location = data.location,
         userID = data.userID,
