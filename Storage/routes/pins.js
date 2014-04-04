@@ -209,7 +209,7 @@ exports.getTags = function (db, data, callback) {
                      callback({'status': 'error',
                                'reason': 'The pin was invalid.'}, []);
                  } else {
-                     callback([], {'status': 'success',
+                     callback(undefined, {'status': 'success',
                                'pin': pinID,
                                'tags': pinTags});
              

@@ -86,6 +86,8 @@ exports.getComments = function (req, res) {
             });
 
             postRes.on('end', function () {
+				console.log('returned from getComments');
+				console.log(returnData);
                 res.json(JSON.parse(returnData));
             });
         });

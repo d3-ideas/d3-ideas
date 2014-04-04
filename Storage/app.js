@@ -87,6 +87,8 @@ app.post('/updatePin', function(req, res){
 app.get('/tags', function(req, res){
     console.log(req.body);
     pins.getTags(db, req.body, function(error,result){
+		console.log(error);
+		console.log(typeof error);
         if (typeof error !== 'undefined'){
             res.send({'error': error});
         }
