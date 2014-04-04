@@ -20,10 +20,14 @@ var addPinOff = function () {
 
 var getComments = function () {
     var comments,
+        pins;
+    
+    if (viewPins) {
         pins = viewPins.map(function (location) {
             return location._id;
         });
     console.log(pins);
+    }
     
     $.getJSON('/comment', {'pinIDs': pins})
         .done(function (data) {
@@ -37,7 +41,7 @@ var getComments = function () {
                                 '<div class="comment-options"><span>Options here...</span></div></div>';
                     });
                     
-                    $('#comments-content').append(comments.join(''));
+                    $('#comments-content').replaceWith(comments.join(''));
                 }
             } else {
                 //console.log('error-'+data.reason);
