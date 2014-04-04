@@ -126,10 +126,12 @@
             <a id='left-menu-pin' onclick='addPinToggle(); return false;' href='#'><span></span></a>
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
         <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
         <script src="/js/main.js"></script>     
         <script type="text/javascript" charset="utf-8">
-if (navigator.geolocation) {
+if (Modernizr.geolocation) {
+	console.log(Modernizr.geolocation);
     navigator.geolocation.getCurrentPosition(function (data) {
         map = L.map('map').setView([data.coords.latitude, data.coords.longitude], 15);
         map.on('click', mapClick);
@@ -139,7 +141,11 @@ if (navigator.geolocation) {
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
         getPins();
-    });
+    },function(){
+		alert(';-\(');
+	});
+} else {
+	alert('Yeah, I\'m gonna hafta ask you to let me know where tou are, mmkay?');
 }
         </script>
     </body>
