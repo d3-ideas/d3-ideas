@@ -27,7 +27,6 @@ function addTag(db, tagobject, callback) {
 // Find all the pins in the db
 // returns an array of pins.
 exports.findAllPins = function (db, data, callback) {
-    console.log(data);
     var cPins = db.get('pins');
 
     cPins.find({}, {}, function (err, pins) {
@@ -44,13 +43,11 @@ exports.findAllPins = function (db, data, callback) {
 // Find all the pins within a specified polygon
 // returns an array of pins.
 exports.findPinsWithin = function (db, data, callback) {
-    console.log(data);
     var newData = JSON.parse(data);
     var cPins = db.get('pins'),
         polyFind = newData.searchArea,
         gjv = require('geojson-validation');
             
-    console.log(polyFind);
     if (!gjv.isPolygon(polyFind)) {
         callback({'status': 'error',
                   'reason': 'The searchArea polygon was not valid.'}, {});
@@ -70,7 +67,6 @@ exports.findPinsWithin = function (db, data, callback) {
 };
 
 exports.addPin = function (db, data, callback) {
-    console.log(data);
     data = JSON.parse(data);     
     var gjv = require('geojson-validation'), 
         location = data.location,
@@ -144,7 +140,6 @@ exports.addPin = function (db, data, callback) {
 };
 
 exports.updatePin = function (db, data, callback) {
-    console.log(data);
 	if (typeof data !== 'object'){
 		data = JSON.parse(data);
 	}
@@ -181,9 +176,6 @@ exports.updatePin = function (db, data, callback) {
 };
 
 exports.getTags = function (db, data, callback) {
-    console.log(typeof data);
-    //data = JSON.parse(data); 
-        
     var pinID = data.pinIDs,
         application = data.application,
         filter = data.filter,
