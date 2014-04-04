@@ -43,7 +43,12 @@ exports.findAllPins = function (db, data, callback) {
 // Find all the pins within a specified polygon
 // returns an array of pins.
 exports.findPinsWithin = function (db, data, callback) {
-    var newData = JSON.parse(data);
+	if (typeof data !== 'object'){
+		var newData = JSON.parse(data);
+	}
+	else {
+		newData = data;
+	}
     var cPins = db.get('pins'),
         polyFind = newData.searchArea,
         gjv = require('geojson-validation');

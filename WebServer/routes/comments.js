@@ -37,7 +37,6 @@ exports.addComment = function (req, res) {
                         res.json({'status': 'success'});
                     } else {
                         console.log('there was an error');
-                        console.log(data);
                         res.json({'status': 'error', 'reason': data.reason});
                     }
                 });

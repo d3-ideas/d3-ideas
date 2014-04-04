@@ -15,7 +15,7 @@ var MongoDB = require('winston-mongodb').MongoDB;
 // And now our routes
 var routes = require('./routes');
 var register = require('./routes/register');
-var pin = require('./routes/pin')(socket);
+var pin = require('./routes/pin');
 var comments = require('./routes/comments');
 var login = require('./routes/login');
 var main = require('./routes/main');

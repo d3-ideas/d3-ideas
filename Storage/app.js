@@ -37,7 +37,7 @@ app.post('/users', users.addUser(db));
 
 
 app.get('/pins/within', function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     pins.findPinsWithin(db, req.body, function(error,result){
         if (typeof error !== 'undefined'){
             res.send({'error': error});
@@ -49,7 +49,7 @@ app.get('/pins/within', function(req, res){
 });
 
 app.get('/pins', function(req, res){
-    console.log(req.query);
+    //console.log(req.query);
     pins.findAllPins(db, req.query, function(error, result){
         if (typeof error !== 'undefined'){
             res.send({'error': error.error});
@@ -61,7 +61,7 @@ app.get('/pins', function(req, res){
 });
 
 app.post('/pins', function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     pins.addPin(db, req.body, function(error,result){
         if (typeof error !== 'undefined'){
             res.send({'error': error});
@@ -73,7 +73,7 @@ app.post('/pins', function(req, res){
 });
 
 app.post('/updatePin', function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     pins.updatePin(db, req.body, function(error,result){
         if (typeof error !== 'undefined'){
             res.send({'error': error});
@@ -85,10 +85,10 @@ app.post('/updatePin', function(req, res){
 });
 
 app.get('/tags', function(req, res){
-    console.log(req.body);
+    //console.log(req.body);
     pins.getTags(db, req.body, function(error,result){
-		console.log(error);
-		console.log(typeof error);
+		//console.log(error);
+		//console.log(typeof error);
         if (typeof error !== 'undefined'){
             res.send({'error': error});
         }
@@ -101,12 +101,8 @@ app.get('/tags', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 
-    socket.on('server custom event', function(data){
-        console.log(data);
-    });
-
     socket.on('getPinsAll', function (data) {
-        console.log(data);
+        //console.log(data);
         pins.findAllPins(db, data, function(error, res){
             if (typeof error !== 'undefined'){
                 socket.emit('getPinsAll', {'error': error});
@@ -118,6 +114,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('getPinsWithin', function (data) {
+		console.log('in getPinsWithin');
         console.log(data);
         pins.findPinsWithin(db, data, function(error, res){
            if (typeof error !== 'undefined'){
@@ -130,7 +127,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('addPin', function (data) {
-        console.log(data);
+        //console.log(data);
         pins.addPin(db, data, function(error, res){
             if (typeof error !== 'undefined'){
                 socket.emit('addPin', {'error':error});
@@ -142,7 +139,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('updatePin', function (data) {
-        console.log(data);
+        //console.log(data);
         pins.updatePin(db, data, function(error, res){
             if (typeof error !== 'undefined'){
                 socket.emit('updatePin', {'error':error});
@@ -154,7 +151,7 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('getTags', function (data) {
-        console.log(data);
+        //console.log(data);
         pins.getTags(db, data, function(error, res){
             if (typeof error !== 'undefined'){
                 socket.emit('getTags', {'error':error});
