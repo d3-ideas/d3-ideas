@@ -8,7 +8,7 @@ app.get('*', function(req, res){
 });
 app.post('*', function(req, res){
 	res.send('thanks');
-	child=exec('cd .. && git pull',
+	child=exec('cd /root/node/d3-ideas && git pull',
 		function (error, stdout, stderr){
 			console.log('stdout: ' + stdout);
 			console.log('stderr: ' + stderr);
