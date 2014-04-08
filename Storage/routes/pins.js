@@ -72,7 +72,10 @@ exports.findPinsWithin = function (db, data, callback) {
 };
 
 exports.addPin = function (db, data, callback) {
-    data = JSON.parse(data);     
+    if (typeof data !== 'object'){
+		var data = JSON.parse(data);
+	}
+ 
     var gjv = require('geojson-validation'), 
         location = data.location,
         userID = data.userID,
@@ -116,7 +119,7 @@ exports.addPin = function (db, data, callback) {
                                               'tags': tags,
                                               'pinID': doc._id};
                                 addTag(db, tagPin, function (tagresult) {
-                                    callback([], {'status': 'success',
+                                    callback(undefined, {'status': 'success',
                                               'pin': doc._id,
                                               'tags': tagresult});
                                 });
@@ -132,7 +135,7 @@ exports.addPin = function (db, data, callback) {
                                     'tags': tags,
                                     'pinID': foundpin._id};
                         addTag(db, tagPin, function (tagresult) {
-                            callback({}, {'status': 'success',
+                            callback(undefined, {'status': 'success',
                                       'pin': foundpin._id,
                                       'tags': tagresult});
                         });

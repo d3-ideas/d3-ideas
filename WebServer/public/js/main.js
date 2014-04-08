@@ -19,6 +19,7 @@ var addPinOff = function () {
 };
 
 var getComments = function () {
+    console.log('start getComments');
     var comments,
         pins;
     
@@ -155,13 +156,17 @@ var mapClick = function (event) {
     }
 };
 
-var mapDrag = function (event) {
+var mapDblClick = function(event){
+    console.log('start mapDblClick');
+}
+
+var mapMoveEnd = function(event){
+    console.log('start mapMoveEnd');
     console.log(event);
     markers.clearLayers();
     getPins();
-    selectedMarkerID = null;
-    console.log(markers.getLayers());
-};
+    selectedMarkerID = null;    
+}
 
 var markerClick = function (event) {
     selectedMarkerID = event.target.pinID;
@@ -173,7 +178,7 @@ var markerClick = function (event) {
 
 //get the pins for the visible area
 var getPins = function () {
-    console.log('Getting pins');
+    console.log('start getPins');
     var viewBondary = map.getBounds(),
         north = viewBondary.getNorth(),
         east = viewBondary.getEast(),
@@ -182,6 +187,7 @@ var getPins = function () {
 
     $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
         .done(function (data) {
+            console.log('getPins .done');
             if (data.status !== 'error') {
                 var i,
                     marker;
@@ -199,6 +205,7 @@ var getPins = function () {
         })
         .fail(function (jqxhr, textStatus, error) {
             var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
+            console.log("getPins Failed: " + err);
         });
+    console.log('end getPins');
 };

@@ -137,8 +137,8 @@ if (Modernizr.geolocation) {
         map.addControl( L.control.zoom({position: 'bottomright'}) );
         map.setView([data.coords.latitude, data.coords.longitude], 15);
         map.on('click', mapClick);
-        map.on('dragend', mapDrag);
-        map.on('zoomstart', mapDrag);
+        map.on('dblclick', mapDblClick);
+        map.on('moveend', mapMoveEnd);
 
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 

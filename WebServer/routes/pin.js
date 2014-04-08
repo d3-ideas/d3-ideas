@@ -27,13 +27,15 @@ exports.pin = function (req, res) {
 
 //route for /pin POST
 exports.addPin = function (req, res) {
+    console.log('enter addPin');
+    var returnData;
+    
     var ourContent = JSON.stringify({'application': 'Tagit Test',
             'location': {'type': 'Point',
                       'coordinates': [parseFloat(req.body.lat), parseFloat(req.body.lon)]},
             'userID': req.session.userID,
             'tags': ['tag1', 'tag2', 'tag3']  //placeholder for app defined tags
             }),
-        
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -42,12 +44,37 @@ exports.addPin = function (req, res) {
             headers: {'content-type': 'application/json',
                     'content-length': ourContent.length}
         },
-        ourPost = http.request(options, function (postRes) {
+        ourPost;
+    console.log('content is ' + ourContent);
+    ourPost = http.request(options, function (postRes) {
             postRes.setEncoding('utf8');
 
             postRes.on('data', function (chunk) {
-                res.json(JSON.parse(chunk));
+                console.log('addPin data');
+                if (typeof returnData !== 'undefined') {
+                    returnData += chunk;
+                } else {
+                    returnData = chunk;
+                }
+                console.log('addPin data' + returnData);
             });
+        
+            postRes.on('end', function () {
+                console.log('addPin end' + returnData);
+                if (typeof returnData !== 'undefined') {
+					if (typeof returnData !== 'object') {
+						returnData = JSON.parse(returnData);
+					}
+                    if (returnData.status === 'error') {
+                        res.json({status: 'error', 'reason': returnData.reason});
+                    } else {
+                        res.json(returnData);
+                    }
+                } else {
+                    console.log('returnData is undefined');
+                    res.json({status: 'error', 'reason': 'returnData is undefined'});
+                }
+            });        
         });
 
     ourPost.on('error', function (e) {
