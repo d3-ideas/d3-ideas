@@ -23,37 +23,41 @@ var getComments = function () {
     var comments,
         pins;
     
+   // 
     if (viewPins) {
+        console.log(viewPins);
         pins = viewPins.map(function (location) {
             return location._id;
         });
-    console.log(pins);
-    }
-    
-    $.getJSON('/comment', {'pinIDs': pins})
-        .done(function (data) {
-            if (data.status !== 'error') {
-                var i;
-                if (Array.isArray(data.tags)) {
-                    comments = data.tags.map(function (tag) {
-                        //return '<div class="comment">' + tag.tag + '</div>';
-                        return '<div class="comment-item" data-commentid="' + tag._id + '">' +
-                                '<p>' + tag.tag + '</p>' +
-                                '<div class="comment-options"><span>Options here...</span></div></div>';
-                    });
-                    
-                    $('#comments-content').replaceWith(comments.join(''));
-                }
-            } else {
-                //console.log('error-'+data.reason);
-                console.log('error');
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
-        });
 
+        $.getJSON('/comment', {'pinIDs': pins})
+            .done(function (data) {
+                console.log(data);
+                if (data.status !== 'error') {
+                    var i;
+                    if (Array.isArray(data.tags)) {
+                        console.log('getComments isArray');
+                        comments = data.tags.map(function (tag) {
+                            return '<div class="comment-item" data-commentid="' + tag._id + '">' +
+                                    '<p>' + tag.tag + '</p>' +
+                                    '<div class="comment-options"><span>Options here...</span></div></div>';
+                        });
+                        
+                        console.log(comments);
+                        $('#comments-content').html(comments.join(''));
+                    }
+                } else {
+                    console.log('error'+data);
+                }
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            });
+    } else {
+        console.log('getComments nopins');
+        $('#comments-content').html('');
+    }
     return true;
 };
 
@@ -185,6 +189,7 @@ var getPins = function () {
         south = viewBondary.getSouth(),
         west = viewBondary.getWest();
 
+    viewPins = null;
     $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
         .done(function (data) {
             console.log('getPins .done');
