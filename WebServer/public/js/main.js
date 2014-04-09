@@ -23,7 +23,6 @@ var getComments = function () {
     var comments,
         pins;
     
-   // 
     if (viewPins) {
         console.log(viewPins);
         pins = viewPins.map(function (location) {
@@ -38,8 +37,10 @@ var getComments = function () {
                     if (Array.isArray(data.tags)) {
                         console.log('getComments isArray');
                         comments = data.tags.map(function (tag) {
-                            return '<div class="comment-item" data-commentid="' + tag._id + '">' +
+                           // var tagDate = moment(tag.createdOn);
+                            return '<div class="comment-item" data-commentid="' + tag._id + '" data-pinid="' + tag.pin + '">' +
                                     '<p>' + tag.tag + '</p>' +
+                                    '<p>' + moment(tag.createdOn).fromNow() + '</p>' + 
                                     '<div class="comment-options"><span>Options here...</span></div></div>';
                         });
                         
