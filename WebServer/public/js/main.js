@@ -1,167 +1,216 @@
 var latlon,
     map,
-    lMenuVisible,
+    markers = new L.FeatureGroup(),
     bMenuVisible,
-    selectedMarker = null,
+    selectedMarkerID = null,
     viewPins;
 
 var addPinToggle = function () {
-    $('#addPinMenu').toggleClass('on');
-   return true;  
+    $('#left-menu-pin').toggleClass('on');
+    if ($('#comments-block').css('float') !== 'right' && $('#comments-block').hasClass('open')) {
+        bMenuToggle();
+    }
+    return true;
+};
+
+var addPinOff = function () {
+    $('#left-menu-pin').removeClass('on');
+    return true;
 };
 
 var getComments = function () {
+    console.log('start getComments');
     var comments,
+        pins;
+    
+   // 
+    if (viewPins) {
+        console.log(viewPins);
         pins = viewPins.map(function (location) {
             return location._id;
         });
-    console.log(pins);
-    
-    $.getJSON('/comment', {'pinIDs': pins})
-        .done(function (data) {
-            console.log(data);
-            if (data.status !== 'error') {
-                var i;
-                if (Array.isArray(data.tags)) {
-                    comments = data.tags.map(function (tag) {
-                        return '<div class="comment">' + tag.tag + '</div>';
-                    });
-                    
-                    $('#comments').append(comments.join());
-                }
-            } else {
-                //console.log('error-'+data.reason);
-                console.log('error');
-            }
-        })
-        .fail(function (jqxhr, textStatus, error) {
-            var err = textStatus + ", " + error;
-            console.log("Request Failed: " + err);
-        });
 
+        $.getJSON('/comment', {'pinIDs': pins})
+            .done(function (data) {
+                console.log(data);
+                if (data.status !== 'error') {
+                    var i;
+                    if (Array.isArray(data.tags)) {
+                        console.log('getComments isArray');
+                        comments = data.tags.map(function (tag) {
+                            return '<div class="comment-item" data-commentid="' + tag._id + '">' +
+                                    '<p>' + tag.tag + '</p>' +
+                                    '<div class="comment-options"><span>Options here...</span></div></div>';
+                        });
+                        
+                        console.log(comments);
+                        $('#comments-content').html(comments.join(''));
+                    }
+                } else {
+                    console.log('error'+data);
+                }
+            })
+            .fail(function (jqxhr, textStatus, error) {
+                var err = textStatus + ", " + error;
+                console.log("Request Failed: " + err);
+            });
+    } else {
+        console.log('getComments nopins');
+        $('#comments-content').html('');
+    }
     return true;
 };
 
 var submitCommentClick = function () {
     var comment = $("#newComment").val();
-    console.log({'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment});
+    console.log({'pinID': selectedMarkerID, 'comment': comment});
    
-    $.post('/comment', {'pinID': selectedMarker.getAttribute('pinID'), 'comment': comment}, function (data) {
+    $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
         if (data.status === 'success') {
             //get latest pins?
-            console.log('You have succedded'+data);                
+            console.log('You have succedded' + data);                
         } else {
-            console.log('You have failed!'+data);
+            console.log('You have failed!' + data);
         }
     });
 };
 
-var lMenuToggle = function () {
-    $('#left-menu-block').toggleClass('extended');
+var lMenuToggle = function (menuTarget) {
+    if ($('#left-menu-block').hasClass('extended')) {
+        if ($('#'+menuTarget+'-block').hasClass('active')) {
+            $('#left-menu-block').removeClass('extended');
+            $('.left-menu-item').removeClass('active');
+        }
+        else {
+            $('.left-menu-item').toggleClass('active');
+        }
+    }
+    else {
+        $('#left-menu-block').addClass('extended');
+        $('#'+menuTarget+'-block').addClass('active');
+        bMenuHide();
+        addPinOff();
+    }
+};
+
+$(document).on('click', '.comment-item', function () {
+    var target = this,
+        targetID = $(target).data('commentid');
+    if (!$(target).find('.comment-options').hasClass('active')) {
+        $('.comment-options').removeClass('active').slideUp();
+        $(target).children('.comment-options').addClass('active').slideDown();
+    }
+});
+
+$(document).on('click', '.left-menu-item.closed .left-menu-item-title', function () {
+    var target = this;
+    $('.left-menu-item.open .left-menu-item-list').slideUp();
+    $('.left-menu-item.open').removeClass('open').addClass('closed');
+    
+    $(this).parent().children('.left-menu-item-list').slideDown();
+    $(this).parent().removeClass('closed').addClass('open');
+});
+
+function clearCommentOptions() {
+    $('.comment-options').removeClass('active').slideUp();
 };
 
 var bMenuToggle = function () {
-    if (!bMenuVisible) {
-        $('#bMenu').css('height', '400px');
-        $('#bMenuHandle').css('bottom', '400px');
-
-        //check to see if comments are already loaded
-        if ($('#comments').children().length === 0) {
-            getComments();
-        }
-        bMenuVisible = true;
-    } else {
-        $('#bMenu').css('height', '0px');
-        $('#bMenuHandle').css('bottom', '0px');
-        bMenuVisible = false;
-    }
+    $('#comments-block').toggleClass('open');
+    clearCommentOptions();
 };
 
 var bMenuShow = function () {
     if (!bMenuVisible) bMenuToggle();
+    addPinOff();
 };
 
 var bMenuHide = function () {
     if (bMenuVisible) {
         bMenuToggle();
+        clearCommentOptions();
     }
 };
 
-var mapClick = function (name, source, args) {
+var addMarker = function (id, lat, lon) {
+    var marker = new L.marker([lat, lon]);
+    marker.on('click', markerClick);
+    marker.pinID = id;
+    markers.addLayer(marker);
+    map.addLayer(markers);
+};
+
+var mapClick = function (event) {
     console.log('mapclick');
-    console.log(source);
-    console.log(args);
-    selectedMarker = null;
+    console.log(event);
+    selectedMarkerID = null;
+    
     //hide comments
-    $('#addComment').css('display', 'none');
+    $('#addComment').slideUp();
     bMenuHide();
     
-    if ($('#addPinMenu').hasClass('on')) {
-        $('#addPinMenu').toggleClass('on');
-        $.post('/pin', { 'lat': args.location.lat, 'lon': args.location.lon }, function (data) {
+    if ($('#left-menu-pin').hasClass('on')) {
+        $('#left-menu-pin').toggleClass('on');
+        $.post('/pin', { 'lat': event.latlng.lat, 'lon': event.latlng.lng }, function (data) {
             console.log(data);
             if (data.status === 'success') {
-                var marker = new mxn.Marker(args.location);
-                marker.click.addHandler(markerClick);
-                marker.setAttribute('pinID', data.pin);
-                map.addMarker(marker);
+                addMarker(data.pin, event.latlng.lat, event.latlng.lng);
             }
         });        
     }
 };
 
-var markerClick = function (name, source, args) {
-    selectedMarker = source;
-    console.log('markerclick');
-    
+var mapDblClick = function(event){
+    console.log('start mapDblClick');
+}
+
+var mapMoveEnd = function(event){
+    console.log('start mapMoveEnd');
+    console.log(event);
+    markers.clearLayers();
+    getPins();
+    selectedMarkerID = null;    
+}
+
+var markerClick = function (event) {
+    selectedMarkerID = event.target.pinID;
+
     //need to filter comments to only this marker
-    $('#addComment').css('display', 'inherit');
+    $('#addComment').slideDown();
     bMenuShow();
 };
 
-$(document).ready(function () {
-    map = new mxn.Mapstraction('map', 'googlev3');
-    map.click.addHandler(mapClick);
-    map.addControls({
-        pan: true,
-        zoom: 'large',
-        map_type: true
-    });
-    //map.addSmallControls();
-    //p.addLargeControls();
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (data) {
-            latlon = new mxn.LatLonPoint(data.coords.latitude, data.coords.longitude);
-            map.setCenterAndZoom(latlon, 15);
-    
-            var viewBondary = map.getBounds(),
-                north = viewBondary.getNorthEast().lat,
-                east = viewBondary.getNorthEast().lon,
-                south = viewBondary.getSouthWest().lat,
-                west = viewBondary.getSouthWest().lon;
-    
-            $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
-                .done(function (data) {
-                    if (data.status !== 'error') {
-                        var i,
-                            marker;
-                        for (i in data) {
-                            if (data.hasOwnProperty(i)) {
-                                viewPins = data;
-                                marker = new mxn.Marker(new mxn.LatLonPoint(data[i].location.coordinates[0], data[i].location.coordinates[1]));
-                                marker.click.addHandler(markerClick);
-                                marker.setAttribute('pinID', data[i]._id);
-                                map.addMarker(marker);
-                            }
-                        }
-                    } else {
-                        console.log('error-' + data.reason);
+//get the pins for the visible area
+var getPins = function () {
+    console.log('start getPins');
+    var viewBondary = map.getBounds(),
+        north = viewBondary.getNorth(),
+        east = viewBondary.getEast(),
+        south = viewBondary.getSouth(),
+        west = viewBondary.getWest();
+
+    viewPins = null;
+    $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
+        .done(function (data) {
+            console.log('getPins .done');
+            if (data.status !== 'error') {
+                var i,
+                    marker;
+                for (i in data) {
+                    if (data.hasOwnProperty(i)) {
+                        viewPins = data;
+                        addMarker(data[i]._id, data[i].location.coordinates[0], data[i].location.coordinates[1]);
                     }
-                })
-                .fail(function ( jqxhr, textStatus, error ) {
-                    var err = textStatus + ", " + error;
-                    console.log( "Request Failed: " + err );
-                });
+                }
+
+                getComments();
+            } else {
+                console.log('error-' + data.reason);
+            }
+        })
+        .fail(function (jqxhr, textStatus, error) {
+            var err = textStatus + ", " + error;
+            console.log("getPins Failed: " + err);
         });
-    }
-});
+    console.log('end getPins');
+};

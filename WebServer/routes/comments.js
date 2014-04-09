@@ -2,7 +2,6 @@ var http = require('http');
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
-    console.log(req.body);
 
     var returnData,
         ourContent = JSON.stringify({'application': 'Tagit Test',
@@ -38,7 +37,6 @@ exports.addComment = function (req, res) {
                         res.json({'status': 'success'});
                     } else {
                         console.log('there was an error');
-                        console.log(data);
                         res.json({'status': 'error', 'reason': data.reason});
                     }
                 });
@@ -58,7 +56,6 @@ exports.addComment = function (req, res) {
 };
 
 exports.getComments = function (req, res) {
-    console.log(req.query);
 
     var ourContent = JSON.stringify({'application': 'Tagit Test',
         'pinIDs': req.query.pinIDs,

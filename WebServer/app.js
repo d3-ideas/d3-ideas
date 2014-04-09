@@ -2,11 +2,17 @@
  * Module dependencies.
  */
 var express = require('express');
-//require for mongodb logging
+
+// set up the web socket to the storage engine
+var io = require('socket.io-client');
+var socket = io.connect('http://localhost:3002');
+
+// require for mongodb logging
 var expressWinston = require('express-winston');
 var winston = require('winston');
 var MongoDB = require('winston-mongodb').MongoDB;
-//
+
+// And now our routes
 var routes = require('./routes');
 var register = require('./routes/register');
 var pin = require('./routes/pin');
@@ -65,7 +71,6 @@ app.post('/pin', pin.addPin);
 app.get('/pins', pin.getPins);
 app.get('/logout', logout.logout);
 app.get('/main', main.main);
-app.get('/updatePin', pin.updatePinGet);
 app.post('/comment', comments.addComment);
 app.get('/comment', comments.getComments);
 app.post('//cgi-bin', function(req, res){
@@ -78,7 +83,7 @@ http.createServer(app).listen(app.get('port'), function () {
     console.log('         / 3 \\');
     console.log('        /     \\');
     console.log('       /       \\');
-    console.log('      /   d 3   \\');
+    console.log('      /   d 4   \\');
     console.log('     /   ideas   \\');
     console.log('    /             \\');
     console.log('   /               \\');

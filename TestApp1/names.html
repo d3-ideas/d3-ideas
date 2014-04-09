@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>Testing</title>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+    </script>
+	</head>
+	<body>
+		<h1>Welcome to Names</h1>
+		<div><a id='get_names' href='#' onclick="">Get Names</a></div>
+	</body>
+    <script>
+        var socket = io.connect('http://localhost');
+        socket.on('namesHere', function(data){
+            console.log(data);
+        });
+        $('#get_names').click(function(){
+            socket.emit('giveMeNames', {count:5});
+            return false;
+        });
+    </script>
+</html>
