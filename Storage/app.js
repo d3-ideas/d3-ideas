@@ -6,7 +6,7 @@ var http = require('http');
 var path = require('path');
 
 var app = express();
-var io = require('socket.io').listen(3002);
+var io = require('socket.io').listen(3002, 'localhost');
 
 var mongo = require('mongodb');
 var monk = require('monk');
