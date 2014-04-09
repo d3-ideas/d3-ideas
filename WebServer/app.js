@@ -3,10 +3,6 @@
  */
 var express = require('express');
 
-// set up the web socket to the storage engine
-var io = require('socket.io-client');
-var socket = io.connect('http://localhost:3002');
-
 // require for mongodb logging
 var expressWinston = require('express-winston');
 var winston = require('winston');
