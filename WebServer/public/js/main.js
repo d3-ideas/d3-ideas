@@ -1,7 +1,6 @@
 var latlon,
     map,
     markers = new L.FeatureGroup(),
-    bMenuVisible,
     selectedMarkerID = null,
     viewPins;
 
@@ -64,7 +63,6 @@ var getComments = function () {
 
 var submitCommentClick = function () {
     var comment = $("#newComment").val();
-    console.log({'pinID': selectedMarkerID, 'comment': comment});
    
     $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
         if (data.status === 'success') {
@@ -93,13 +91,45 @@ var lMenuToggle = function (menuTarget) {
         addPinOff();
     }
 };
+var markerSelected = function (pinID) {
+    selectedMarkerID = pinID;
+    markers.eachLayer(function(marker) {
+        if(marker.pinID !== selectedMarkerID){
+            marker.setOpacity(.3);
+        } else marker.setOpacity(1);
+    });
+    
+    $('#addComment').slideDown();
+    $('.comment-options').removeClass('active').slideUp();
+};
+
+var markerDeSelected = function () {
+    selectedMarkerID = null;
+    markers.eachLayer(function(marker) {
+        marker.setOpacity(1);
+    });
+
+    $('#addComment').slideUp();
+    $('.comment-options').removeClass('active').slideUp();
+}
+
+var markerToggle = function (pinID) {
+    if (pinID && (selectedMarkerID !== pinID)) {
+        markerSelected(pinID);
+    } else {
+        markerDeSelected();
+    }
+};
 
 $(document).on('click', '.comment-item', function () {
     var target = this,
-        targetID = $(target).data('commentid');
+        targetID = $(target).data('commentid'),
+        pinID = $(target).data('pinid');
+
     if (!$(target).find('.comment-options').hasClass('active')) {
-        $('.comment-options').removeClass('active').slideUp();
+        markerSelected(pinID);
         $(target).children('.comment-options').addClass('active').slideDown();
+        
     }
 });
 
@@ -121,18 +151,6 @@ var bMenuToggle = function () {
     clearCommentOptions();
 };
 
-var bMenuShow = function () {
-    if (!bMenuVisible) bMenuToggle();
-    addPinOff();
-};
-
-var bMenuHide = function () {
-    if (bMenuVisible) {
-        bMenuToggle();
-        clearCommentOptions();
-    }
-};
-
 var addMarker = function (id, lat, lon) {
     var marker = new L.marker([lat, lon]);
     marker.on('click', markerClick);
@@ -142,13 +160,11 @@ var addMarker = function (id, lat, lon) {
 };
 
 var mapClick = function (event) {
-    console.log('mapclick');
-    console.log(event);
     selectedMarkerID = null;
+    markerToggle();
     
     //hide comments
     $('#addComment').slideUp();
-    bMenuHide();
     
     if ($('#left-menu-pin').hasClass('on')) {
         $('#left-menu-pin').toggleClass('on');
@@ -165,6 +181,7 @@ var mapDblClick = function(event){
     console.log('start mapDblClick');
 }
 
+//executes after the map is zoomed in/out, moved, or re-sized
 var mapMoveEnd = function(event){
     console.log('start mapMoveEnd');
     console.log(event);
@@ -173,12 +190,9 @@ var mapMoveEnd = function(event){
     selectedMarkerID = null;    
 }
 
+//when a marker is clicked or tabbed to and enter is pressed
 var markerClick = function (event) {
-    selectedMarkerID = event.target.pinID;
-
-    //need to filter comments to only this marker
-    $('#addComment').slideDown();
-    bMenuShow();
+    markerToggle (event.target.pinID);
 };
 
 //get the pins for the visible area
