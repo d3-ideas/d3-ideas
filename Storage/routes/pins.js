@@ -174,7 +174,7 @@ exports.updatePin = function (db, data, callback) {
                             'tags': tags,
                             'pinID': pinID};
                 addTag(db, newPin, function (result) {
-                    callback([], {'status': 'success',
+                    callback(undefined, {'status': 'success',
                                   'pin': pinID,
                                   'tags': tags}); 
                 });
