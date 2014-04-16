@@ -17,6 +17,8 @@ var addPinOff = function () {
     return true;
 };
 
+//var getCommentHTML = function (pinID, 
+
 var getComments = function () {
     console.log('start getComments');
     var comments,
@@ -67,9 +69,11 @@ var submitCommentClick = function () {
     $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
         if (data.status === 'success') {
             //get latest pins?
-            console.log('You have succedded' + data);                
+            console.log('You have succedded');                
+            console.log(data);
         } else {
-            console.log('You have failed!' + data);
+            console.log('You have failed!');
+            console.log(data);
         }
     });
 };
@@ -91,6 +95,7 @@ var lMenuToggle = function (menuTarget) {
         addPinOff();
     }
 };
+
 var markerSelected = function (pinID) {
     selectedMarkerID = pinID;
     markers.eachLayer(function(marker) {
@@ -101,6 +106,10 @@ var markerSelected = function (pinID) {
     
     $('#addComment').slideDown();
     $('.comment-options').removeClass('active').slideUp();
+    
+    console.log($('.comment-item[data-pinid="'+pinID+'"]'));
+    $('.comment-item[data-pinid="'+pinID+'"]').show();
+    $('.comment-item[data-pinid!="'+pinID+'"]').hide();
 };
 
 var markerDeSelected = function () {
@@ -111,6 +120,7 @@ var markerDeSelected = function () {
 
     $('#addComment').slideUp();
     $('.comment-options').removeClass('active').slideUp();
+    $('.comment-item').show();
 }
 
 var markerToggle = function (pinID) {
