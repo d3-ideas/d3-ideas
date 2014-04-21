@@ -1,13 +1,16 @@
 var http = require('http');
+var findHashTags=require('find-hashtags');
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
 
     var returnData,
-        ourContent = JSON.stringify({'application': 'Tagit Test',
+		theTags=findHashTags(req.body.comment),
+        ourContent = JSON.stringify({
+			'application': 'Tagit Test',
             'pinID': req.body.pinID,
             'userID': req.session.userID,
-            'tags': [req.body.comment]  //or is this a tag? I dunno
+            'tags': [{'comment':req.body.comment}, {'tags':theTags}]
             }),
         
         options = {
@@ -32,8 +35,10 @@ exports.addComment = function (req, res) {
             
                 postRes.on('end', function () {
                     var data = JSON.parse(returnData);
+					console.log('\\/ addComment return from storage engine \\/');
+					console.log(data);
                     if (data.status === 'success') {
-                        //return success to the client
+                        //return the comment id to the client
                         res.json({'status': 'success'});
                     } else {
                         console.log('there was an error');
@@ -52,7 +57,7 @@ exports.addComment = function (req, res) {
     // write data to request body
     ourPost.write(ourContent);
     ourPost.end();
-
+	console.log(theTags);
 };
 
 exports.getComments = function (req, res) {
