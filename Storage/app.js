@@ -79,6 +79,7 @@ app.post('/updatePin', function(req, res){
             res.send({'error': error});
         }
         else {
+            console.log(result);
             res.send(result);
         }
     });

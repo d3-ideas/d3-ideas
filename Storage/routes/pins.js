@@ -1,9 +1,24 @@
 function addTag(db, tagobject, callback) {
     var cTags = db.get('tags'),
-        success = true,
+        resultTags = new Array(0),
         tags = tagobject.tags,
         i;
-
+    
+    function tagAdded(err, tag){
+        if (err){
+            console.log(err); 
+            resultTags.push({'error': err});
+        }
+        else{
+            resultTags.push(tag);
+        }
+        
+        if(resultTags.length == tags.length){
+            console.log('Tags Done : ' + resultTags);
+            callback(resultTags);
+        }
+    }
+    
     for (i in tags) {
         if (tags.hasOwnProperty(i)) {
             cTags.insert({
@@ -12,15 +27,9 @@ function addTag(db, tagobject, callback) {
                 'createdOn': tagobject.createdOn,
                 'username': tagobject.userID,
                 'application': tagobject.application
-            }, function (err, tag) {
-                if (err) {
-                    console.log(err); 
-                    success = false;
-                }
-            });
+            }, tagAdded);
         }
     }
-    callback(success);
 }
 
 
@@ -215,6 +224,41 @@ exports.getTags = function (db, data, callback) {
              
                  }
              });
+        }
+    });
+};
+
+exports.deleteTag = function (db, data, callback) {
+	if (typeof data !== 'object'){
+		data = JSON.parse(data);
+	}
+
+    var tagID = data.tagIDs,
+        application = data.application,
+        cApps = db.get('apps'),
+        cTags = db.get('tags'),
+        tagQuery;
+
+    cApps.findOne({'application': application}, function (err, foundapp) {
+        if (!foundapp) {
+            callback({'status': 'error',
+                      'reason': 'The application was invalid.'}, []);
+        } else {
+            application = foundapp._id;
+                
+            tagQuery = {'_id': {$in: tagID}, 'application': application};
+                    
+            cTags.find(tagQuery, function (err, pinTags) {
+                if (!pinTags) {
+                    callback({'status': 'error',
+                           'reason': 'The pin was invalid.'}, undefined);
+                } else {
+                    callback(undefined, {'status': 'success',
+                               'pin': pinID,
+                               'tags': pinTags});
+             
+                }
+            });
         }
     });
 };
