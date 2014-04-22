@@ -5,7 +5,8 @@ function addTag(db, tagobject, callback) {
         i;
     
     function tagAdded(err, tag){
-        console.log('Tag :' + tag);
+        delete tag.application;
+        
         if (err){
             console.log(err); 
             resultTags.push({'error': err});
@@ -15,7 +16,6 @@ function addTag(db, tagobject, callback) {
         }
         
         if(resultTags.length == tags.length){
-            console.log('Tags Done : ' + resultTags);
             callback(resultTags);
         }
     }
