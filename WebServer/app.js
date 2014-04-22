@@ -2,6 +2,7 @@
  * Module dependencies.
  */
 var express = require('express');
+var _ = require('underscore');
 
 // require for mongodb logging
 var expressWinston = require('express-winston');
@@ -69,7 +70,7 @@ app.get('/logout', logout.logout);
 app.get('/main', main.main);
 app.post('/comment', comments.addComment);
 app.get('/comment', comments.getComments);
-app.post('//cgi-bin', function(req, res){
+app.post('//cgi-bin', function (req, res){
 	console.log('got here');
 	res.send('no');
 });

@@ -1,17 +1,19 @@
-var http = require('http');
-var findHashTags=require('find-hashtags');
+var http = require('http'),
+	findHashTags = require('find-hashtags'),
+	ourTags = [];
+
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
 
     var returnData,
-		theTags=findHashTags(req.body.comment),
+		theTags = findHashTags(req.body.comment),
         ourContent = JSON.stringify({
 			'application': 'Tagit Test',
             'pinID': req.body.pinID,
             'userID': req.session.userID,
-            'tags': [{'comment':req.body.comment}, {'tags':theTags}]
-            }),
+            'tags': [req.body.comment]
+        }),
         
         options = {
             hostname: 'localhost',
@@ -67,6 +69,7 @@ exports.getComments = function (req, res) {
         'userID': req.session.userID,
         'filter': ''
         }),
+		theTags,
         returnData,
         options = {
             hostname: 'localhost',
@@ -88,7 +91,14 @@ exports.getComments = function (req, res) {
             });
 
             postRes.on('end', function () {
-                res.json(JSON.parse(returnData));
+				returnData=JSON.parse(returnData);
+				for (i in returnData.tags){
+					returnData.tags[i].tags=findHashTags(returnData.tags[i].tag);
+					if (returnData.tags[i].tags !== null){
+						returnData.tags[i].tags=returnData.tags[i].tags.sort();
+					}
+				}
+                res.json(returnData);
             });
         });
 
