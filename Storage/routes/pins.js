@@ -5,6 +5,7 @@ function addTag(db, tagobject, callback) {
         i;
     
     function tagAdded(err, tag){
+        console.log('Tag :' + tag);
         if (err){
             console.log(err); 
             resultTags.push({'error': err});
@@ -185,7 +186,7 @@ exports.updatePin = function (db, data, callback) {
                 addTag(db, newPin, function (result) {
                     callback(undefined, {'status': 'success',
                                   'pin': pinID,
-                                  'tags': tags}); 
+                                  'tags': result}); 
                 });
             }
         }
