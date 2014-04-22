@@ -37,11 +37,16 @@ exports.addComment = function (req, res) {
             
                 postRes.on('end', function () {
                     var data = JSON.parse(returnData);
-					console.log('\\/ addComment return from storage engine \\/');
-					console.log(data);
+					//console.log('\\/ addComment return from storage engine \\/');
+					//console.log(data);
                     if (data.status === 'success') {
-                        //return the comment id to the client
-                        res.json({'status': 'success'});
+						data.tags[0].comment=data.tags[0].tag;
+						delete(data.tags[0].tag);
+						theTags=findHashTags(data.tags[0].tag);
+						if (theTags !== null){
+							data.tags[0].tags=theTags.sort();
+						}
+                        res.json(data.tags[0]);
                     } else {
                         console.log('there was an error');
                         res.json({'status': 'error', 'reason': data.reason});
@@ -59,7 +64,7 @@ exports.addComment = function (req, res) {
     // write data to request body
     ourPost.write(ourContent);
     ourPost.end();
-	console.log(theTags);
+	//console.log(theTags);
 };
 
 exports.getComments = function (req, res) {
