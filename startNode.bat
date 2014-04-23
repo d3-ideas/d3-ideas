@@ -6,7 +6,7 @@ START "runas /user:administrator" cmd /K "cd C:\GitHub\d3-ideas\Storage\ & nodem
 
 TIMEOUT 3
 
-START "runas /user:administrator" cmd /K "cd C:\GitHub\d3-ideas\WebServer\ & nodemon app"
+START "runas /user:administrator" cmd /K "set port=3000 & cd C:\GitHub\d3-ideas\WebServer\ & nodemon app"
 
 timeout 3
 

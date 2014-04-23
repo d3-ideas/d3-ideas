@@ -17,7 +17,12 @@ var addPinOff = function () {
     return true;
 };
 
-//var getCommentHTML = function (pinID, 
+var getCommentHTML = function (comment) {
+    return  '<div class="comment-item" data-commentid="' + comment._id + '" data-pinid="' + comment.pin + '">' +
+                                '<p>' + comment.comment + '</p>' +
+                                '<p>' + moment(comment.createdOn).fromNow() + '</p>' + 
+                                '<div class="comment-options"><span>Options here...</span></div></div>';
+};
 
 var getComments = function () {
     console.log('start getComments');
@@ -33,23 +38,15 @@ var getComments = function () {
         $.getJSON('/comment', {'pinIDs': pins})
             .done(function (data) {
                 console.log(data);
-                if (data.status !== 'error') {
-                    var i;
-                    if (Array.isArray(data.tags)) {
-                        console.log('getComments isArray');
-                        comments = data.tags.map(function (tag) {
-                           // var tagDate = moment(tag.createdOn);
-                            return '<div class="comment-item" data-commentid="' + tag._id + '" data-pinid="' + tag.pin + '">' +
-                                    '<p>' + tag.tag + '</p>' +
-                                    '<p>' + moment(tag.createdOn).fromNow() + '</p>' + 
-                                    '<div class="comment-options"><span>Options here...</span></div></div>';
-                        });
+                var i;
+                if (Array.isArray(data)) {
+                    console.log('getComments isArray');
+                    comments = data.map(function (comment) {
+                        return getCommentHTML(comment);
+                    });
                         
-                        console.log(comments);
-                        $('#comments-content').html(comments.join(''));
-                    }
-                } else {
-                    console.log('error'+data);
+                    console.log(comments);
+                    $('#comments-content').html(comments.join(''));
                 }
             })
             .fail(function (jqxhr, textStatus, error) {
@@ -66,16 +63,19 @@ var getComments = function () {
 var submitCommentClick = function () {
     var comment = $("#newComment").val();
    
-    $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment}, function (data) {
-        if (data.status === 'success') {
+    $.post('/comment', {'pinID': selectedMarkerID, 'comment': comment})
+        .done(function (data) {
             //get latest pins?
-            console.log('You have succedded');                
+            console.log('post /comment succedded');                
             console.log(data);
-        } else {
-            console.log('You have failed!');
+            $('#comments-content').prepend(getCommentHTML(data));
+            $("#newComment").val('');
+            console.log(selectedMarkerID);
+        })
+        .fail(function() {
+            console.log('post /comment failed!');
             console.log(data);
-        }
-    });
+        });
 };
 
 var lMenuToggle = function (menuTarget) {
