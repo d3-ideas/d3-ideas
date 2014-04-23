@@ -37,16 +37,19 @@ exports.addComment = function (req, res) {
             
                 postRes.on('end', function () {
                     var data = JSON.parse(returnData);
-					//console.log('\\/ addComment return from storage engine \\/');
-					//console.log(data);
+
                     if (data.status === 'success') {
-						data.tags[0].comment=data.tags[0].tag;
-						delete(data.tags[0].tag);
-						theTags=findHashTags(data.tags[0].tag);
-						if (theTags !== null){
-							data.tags[0].tags=theTags.sort();
+                        var comment = {_id:data.tags[0]._id,
+                                       pin:data.tags[0].pin,
+                                       createdOn:data.tags[0].tag.createdOn,
+                                       username:data.tags[0].username,
+                                       comment:data.tags[0].tag,
+                                       tags:findHashTags(data.tags[0].tag.tag)};
+                        
+						if (comment.tags !== null){
+							comment.tags=theTags.sort();
 						}
-                        res.json(data.tags[0]);
+                        res.json(comment);
                     } else {
                         console.log('there was an error');
                         res.json({'status': 'error', 'reason': data.reason});
@@ -97,13 +100,20 @@ exports.getComments = function (req, res) {
 
             postRes.on('end', function () {
 				returnData=JSON.parse(returnData);
-				for (i in returnData.tags){
-					returnData.tags[i].tags=findHashTags(returnData.tags[i].tag);
-					if (returnData.tags[i].tags !== null){
-						returnData.tags[i].tags=returnData.tags[i].tags.sort();
+                var comments = returnData.tags.map(function(tag){
+                    var comment = {_id:tag._id,
+                                   pin:tag.pin,
+                                   createdOn:tag.createdOn,
+                                   username:null,
+                                   comment:tag.tag,
+                                   tags:findHashTags(tag.tag)};
+                    
+					if (comment.tags !== null){
+						comment.tags=comment.tags.sort();
 					}
-				}
-                res.json(returnData);
+                    return comment;
+				});
+                res.json(comments);
             });
         });
 
