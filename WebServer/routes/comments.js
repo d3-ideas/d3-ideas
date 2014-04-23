@@ -44,7 +44,7 @@ exports.addComment = function (req, res) {
                                        createdOn:data.tags[0].tag.createdOn,
                                        username:data.tags[0].username,
                                        comment:data.tags[0].tag,
-                                       tags:findHashTags(data.tags[0].tag.tag)};
+                                       tags:findHashTags(data.tags[0].tag)};
                         
 						if (comment.tags !== null){
 							comment.tags=theTags.sort();

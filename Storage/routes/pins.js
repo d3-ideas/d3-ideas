@@ -214,7 +214,7 @@ exports.getTags = function (db, data, callback) {
                 tagQuery = {'pin': {$in: pinID}, 'application': application};
             }
                     
-             cTags.find(tagQuery, {sort:{createdOn:-1}}, function (err, pinTags) {
+             cTags.find(tagQuery, {sort:{createdOn:0}}, function (err, pinTags) {
                  if (!pinTags) {
                      callback({'status': 'error',
                                'reason': 'The pin was invalid.'}, []);
