@@ -1,7 +1,30 @@
 var http = require('http'),
 	findHashTags = require('find-hashtags'),
-	ourTags = [];
+	ourTags = [],
+	_ = require('underscore');
 
+function updateTags(newTags) {
+	ourTags = _.union(ourTags,newTags);
+	ourTags = ourTags.sort();
+	console.log("ourTags: " + ourTags);
+}
+
+function parseComment(storageTag) {
+	var thisComment = {
+		_id: storageTag._id,
+		pin: storageTag.pin,
+		createdOn: storageTag.createdOn,
+		username: null,
+		comment: storageTag.tag,
+		tags: findHashTags(storageTag.tag)
+	};
+
+	if (thisComment.tags !== null) {
+		thisComment.tags = thisComment.tags.sort();
+		updateTags(thisComment.tags);
+	}
+	return thisComment;
+}
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
@@ -13,8 +36,7 @@ exports.addComment = function (req, res) {
             'pinID': req.body.pinID,
             'userID': req.session.userID,
             'tags': [req.body.comment]
-        }),
-        
+        }),       
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -36,18 +58,22 @@ exports.addComment = function (req, res) {
                 });
             
                 postRes.on('end', function () {
-                    var data = JSON.parse(returnData);
+                    var data = JSON.parse(returnData),
+						comment;
 
                     if (data.status === 'success') {
-                        var comment = {_id:data.tags[0]._id,
-                                       pin:data.tags[0].pin,
-                                       createdOn:data.tags[0].tag.createdOn,
-                                       username:data.tags[0].username,
-                                       comment:data.tags[0].tag,
-                                       tags:findHashTags(data.tags[0].tag)};
+                        comment = {
+							_id: data.tags[0]._id,
+							pin: data.tags[0].pin,
+							createdOn: data.tags[0].tag.createdOn,
+							username: data.tags[0].username,
+							comment: data.tags[0].tag,
+							tags: findHashTags(data.tags[0].tag)
+						};
                         
-						if (comment.tags !== null){
-							comment.tags=theTags.sort();
+						if (comment.tags !== null) {
+							comment.tags = theTags.sort();
+							updateTags(comment.tags);
 						}
                         res.json(comment);
                     } else {
@@ -77,8 +103,8 @@ exports.getComments = function (req, res) {
         'userID': req.session.userID,
         'filter': ''
         }),
-		theTags,
         returnData,
+		comments,
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -99,20 +125,8 @@ exports.getComments = function (req, res) {
             });
 
             postRes.on('end', function () {
-				returnData=JSON.parse(returnData);
-                var comments = returnData.tags.map(function(tag){
-                    var comment = {_id:tag._id,
-                                   pin:tag.pin,
-                                   createdOn:tag.createdOn,
-                                   username:null,
-                                   comment:tag.tag,
-                                   tags:findHashTags(tag.tag)};
-                    
-					if (comment.tags !== null){
-						comment.tags=comment.tags.sort();
-					}
-                    return comment;
-				});
+				returnData = JSON.parse(returnData);
+                comments = returnData.tags.map(parseComment);
                 res.json(comments);
             });
         });
