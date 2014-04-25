@@ -1,9 +1,5 @@
 var http = require('http'),
 	findHashTags = require('find-hashtags'),
-<<<<<<< HEAD
-	ourTags = [];
-
-=======
 	ourTags = [],
 	_ = require('underscore');
 
@@ -29,7 +25,6 @@ function parseComment(storageTag) {
 	}
 	return thisComment;
 }
->>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
@@ -41,12 +36,7 @@ exports.addComment = function (req, res) {
             'pinID': req.body.pinID,
             'userID': req.session.userID,
             'tags': [req.body.comment]
-<<<<<<< HEAD
-        }),
-        
-=======
         }),       
->>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -68,20 +58,6 @@ exports.addComment = function (req, res) {
                 });
             
                 postRes.on('end', function () {
-<<<<<<< HEAD
-                    var data = JSON.parse(returnData);
-
-                    if (data.status === 'success') {
-                        var comment = {_id:data.tags[0]._id,
-                                       pin:data.tags[0].pin,
-                                       createdOn:data.tags[0].tag.createdOn,
-                                       username:data.tags[0].username,
-                                       comment:data.tags[0].tag,
-                                       tags:findHashTags(data.tags[0].tag.tag)};
-                        
-						if (comment.tags !== null){
-							comment.tags=theTags.sort();
-=======
                     var data = JSON.parse(returnData),
 						comment;
 
@@ -98,7 +74,6 @@ exports.addComment = function (req, res) {
 						if (comment.tags !== null) {
 							comment.tags = theTags.sort();
 							updateTags(comment.tags);
->>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
 						}
                         res.json(comment);
                     } else {
@@ -151,25 +126,8 @@ exports.getComments = function (req, res) {
             });
 
             postRes.on('end', function () {
-<<<<<<< HEAD
-				returnData=JSON.parse(returnData);
-                var comments = returnData.tags.map(function(tag){
-                    var comment = {_id:tag._id,
-                                   pin:tag.pin,
-                                   createdOn:tag.createdOn,
-                                   username:null,
-                                   comment:tag.tag,
-                                   tags:findHashTags(tag.tag)};
-                    
-					if (comment.tags !== null){
-						comment.tags=comment.tags.sort();
-					}
-                    return comment;
-				});
-=======
 				returnData = JSON.parse(returnData);
                 comments = returnData.tags.map(parseComment);
->>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
                 res.json(comments);
             });
         });
