@@ -1,7 +1,35 @@
 var http = require('http'),
 	findHashTags = require('find-hashtags'),
+<<<<<<< HEAD
 	ourTags = [];
 
+=======
+	ourTags = [],
+	_ = require('underscore');
+
+function updateTags(newTags) {
+	ourTags = _.union(ourTags,newTags);
+	ourTags = ourTags.sort();
+	console.log("ourTags: " + ourTags);
+}
+
+function parseComment(storageTag) {
+	var thisComment = {
+		_id: storageTag._id,
+		pin: storageTag.pin,
+		createdOn: storageTag.createdOn,
+		username: null,
+		comment: storageTag.tag,
+		tags: findHashTags(storageTag.tag)
+	};
+
+	if (thisComment.tags !== null) {
+		thisComment.tags = thisComment.tags.sort();
+		updateTags(thisComment.tags);
+	}
+	return thisComment;
+}
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
 
 //accept a post to update a pin
 exports.addComment = function (req, res) {
@@ -13,8 +41,12 @@ exports.addComment = function (req, res) {
             'pinID': req.body.pinID,
             'userID': req.session.userID,
             'tags': [req.body.comment]
+<<<<<<< HEAD
         }),
         
+=======
+        }),       
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -36,6 +68,7 @@ exports.addComment = function (req, res) {
                 });
             
                 postRes.on('end', function () {
+<<<<<<< HEAD
                     var data = JSON.parse(returnData);
 
                     if (data.status === 'success') {
@@ -48,6 +81,24 @@ exports.addComment = function (req, res) {
                         
 						if (comment.tags !== null){
 							comment.tags=theTags.sort();
+=======
+                    var data = JSON.parse(returnData),
+						comment;
+
+                    if (data.status === 'success') {
+                        comment = {
+							_id: data.tags[0]._id,
+							pin: data.tags[0].pin,
+							createdOn: data.tags[0].tag.createdOn,
+							username: data.tags[0].username,
+							comment: data.tags[0].tag,
+							tags: findHashTags(data.tags[0].tag)
+						};
+                        
+						if (comment.tags !== null) {
+							comment.tags = theTags.sort();
+							updateTags(comment.tags);
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
 						}
                         res.json(comment);
                     } else {
@@ -79,6 +130,7 @@ exports.getComments = function (req, res) {
         }),
 		theTags,
         returnData,
+		comments,
         options = {
             hostname: 'localhost',
             port: 3001,
@@ -99,6 +151,7 @@ exports.getComments = function (req, res) {
             });
 
             postRes.on('end', function () {
+<<<<<<< HEAD
 				returnData=JSON.parse(returnData);
                 var comments = returnData.tags.map(function(tag){
                     var comment = {_id:tag._id,
@@ -113,6 +166,10 @@ exports.getComments = function (req, res) {
 					}
                     return comment;
 				});
+=======
+				returnData = JSON.parse(returnData);
+                comments = returnData.tags.map(parseComment);
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
                 res.json(comments);
             });
         });

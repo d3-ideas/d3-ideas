@@ -2,7 +2,8 @@ var latlon,
     map,
     markers = new L.FeatureGroup(),
     selectedMarkerID = null,
-    viewPins;
+    viewPins,
+    filterTags = new Array();
 
 var addPinToggle = function () {
     $('#left-menu-pin').toggleClass('on');
@@ -17,11 +18,39 @@ var addPinOff = function () {
     return true;
 };
 
+<<<<<<< HEAD
 var getCommentHTML = function (comment) {
     return  '<div class="comment-item" data-commentid="' + comment._id + '" data-pinid="' + comment.pin + '">' +
                                 '<p>' + comment.comment + '</p>' +
                                 '<p>' + moment(comment.createdOn).fromNow() + '</p>' + 
                                 '<div class="comment-options"><span>Options here...</span></div></div>';
+=======
+var addComment = function (comment) {
+    console.log('start addComment');
+    var html;
+    if (comment.tags)
+        comment.tags.forEach(function(tag){
+            console.log(tag);
+            console.log(filterTags.length);
+            var existingTag = false;
+            filterTags.forEach(function(element, index){
+                if (element.tag === tag)
+                    existingTag = element;
+            });
+            console.log(existingTag);
+            if (existingTag)
+                existingTag.count++;
+            else
+                filterTags.push({'tag':tag,count:1});
+            
+            console.log(filterTags);
+        });
+    html =   '<div class="comment-item" data-commentid="' + comment._id + '" data-pinid="' + comment.pin + '">' +
+                                '<p>' + comment.comment + '</p>' +
+                                '<p>' + moment(comment.createdOn).fromNow() + '</p>' + 
+                                '<div class="comment-options"><span>Options here...</span></div></div>';
+    $('#comments-content').prepend(html);
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
 };
 
 var getComments = function () {
@@ -41,12 +70,18 @@ var getComments = function () {
                 var i;
                 if (Array.isArray(data)) {
                     console.log('getComments isArray');
+<<<<<<< HEAD
                     comments = data.map(function (comment) {
                         return getCommentHTML(comment);
                     });
                         
                     console.log(comments);
                     $('#comments-content').html(comments.join(''));
+=======
+                    data.forEach(function (comment) {
+                        addComment(comment);
+                    });
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
                 }
             })
             .fail(function (jqxhr, textStatus, error) {
@@ -68,7 +103,11 @@ var submitCommentClick = function () {
             //get latest pins?
             console.log('post /comment succedded');                
             console.log(data);
+<<<<<<< HEAD
             $('#comments-content').prepend(getCommentHTML(data));
+=======
+            addComment(data);
+>>>>>>> 0eb2b4cc4e58bb5d772d6dd7de4614b5ba6d47de
             $("#newComment").val('');
             console.log(selectedMarkerID);
         })
@@ -215,6 +254,7 @@ var getPins = function () {
         west = viewBondary.getWest();
 
     viewPins = null;
+    filterTags = new Array();
     $.getJSON('/pins', {viewBoundary: {'north': north, 'east': east, 'south': south, 'west': west}})
         .done(function (data) {
             console.log('getPins .done');
