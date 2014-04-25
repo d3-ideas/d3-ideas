@@ -18,9 +18,25 @@ var addPinOff = function () {
     return true;
 };
 
+var buildFilter = function() {
+    console.log('enter buildFilter');
+    filterTags = filterTags.sort(function(first,second){
+        if (first.count>second.count)
+            return -1;
+        if (first.count<second.count)
+            return 1;
+        else return 0;
+    });
+    var filters = filterTags.map(function (element){
+        return '<li>' + element.tag + ' (' + element.count + ')</li>';
+    });
+    console.log(filters);
+    $('#filter-list').html(filters);
+};
+
 var addComment = function (comment) {
     console.log('start addComment');
-    var html;
+
     if (comment.tags)
         comment.tags.forEach(function(tag){
             console.log(tag);
@@ -38,7 +54,8 @@ var addComment = function (comment) {
             
             console.log(filterTags);
         });
-    html =   '<div class="comment-item" data-commentid="' + comment._id + '" data-pinid="' + comment.pin + '">' +
+    
+    var html =   '<div class="comment-item" data-commentid="' + comment._id + '" data-pinid="' + comment.pin + '">' +
                                 '<p>' + comment.comment + '</p>' +
                                 '<p>' + moment(comment.createdOn).fromNow() + '</p>' + 
                                 '<div class="comment-options"><span>Options here...</span></div></div>';
@@ -65,6 +82,7 @@ var getComments = function () {
                     data.forEach(function (comment) {
                         addComment(comment);
                     });
+                    buildFilter();
                 }
             })
             .fail(function (jqxhr, textStatus, error) {
@@ -109,7 +127,6 @@ var lMenuToggle = function (menuTarget) {
     else {
         $('#left-menu-block').addClass('extended');
         $('#'+menuTarget+'-block').addClass('active');
-        bMenuHide();
         addPinOff();
     }
 };
