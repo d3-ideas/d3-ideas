@@ -78,6 +78,7 @@ var getComments = function () {
                 console.log(data);
                 var i;
                 if (Array.isArray(data)) {
+                    $('#comments-content').html('');
                     console.log('getComments isArray');
                     data.forEach(function (comment) {
                         addComment(comment);
