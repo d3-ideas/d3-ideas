@@ -160,6 +160,10 @@ var markerClick = function (name, source, args) {
 };
 
 $(document).ready(function () {
+    
+    /* DEV ONLY */
+    lMenuToggle('filter');
+    
     map = new mxn.Mapstraction('map', 'googlev3');
     map.click.addHandler(mapClick);
     map.addControls({
@@ -204,4 +208,51 @@ $(document).ready(function () {
                 });
         });
     }
+    
+    /* Filter Actions */
+
+    $('#filter-block li').on('click',function(){
+        $(this).toggleClass('active');
+    });
+    
+    $('#filter-control-toggle').on('click',function(){
+        if ($(this).hasClass('all-on')) {
+            $(this).removeClass('all-on').addClass('all-off').html('All Off');
+            $('.filter-item').each(function(){
+                $(this).parent().addClass('active');
+            });
+        }
+        else {
+            $(this).removeClass('all-off').addClass('all-on').html('All On');
+            $('.filter-item').each(function(){
+                $(this).parent().removeClass('active');
+            });
+        }
+        return false;
+    });
+    
+    $('#filter-control-alpha').on('click',function(){
+        if ($(this).hasClass('a-to-z')) {
+            $(this).removeClass('a-to-z').addClass('z-to-a').html('Z -> A');
+            $('#filter-list>li').tsort('a.filter-item',{order:'asc'}, {attr: 'data-count', order:'desc'});
+        }
+        else {
+            $(this).removeClass('z-to-a').addClass('a-to-z').html('A -> Z');
+            $('#filter-list>li').tsort('a.filter-item',{order:'desc'}, {attr: 'data-count', order:'desc'});
+        }
+        return false;
+    });
+
+    $('#filter-control-count').on('click',function(){
+        if ($(this).hasClass('count-asc')) {
+            $(this).removeClass('count-asc').addClass('count-desc').html('Desc #');
+            $('#filter-list>li').tsort('a.filter-item',{attr: 'data-count', order:'asc'},'a.filter-item',{order:'asc'});
+        }
+        else {
+            $(this).removeClass('count-desc').addClass('count-asc').html('Asc #');
+            $('#filter-list>li').tsort('a.filter-item',{attr: 'data-count', order:'desc'},'a.filter-item',{order:'asc'});
+        }
+        return false;
+    });
+    
 });

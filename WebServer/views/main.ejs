@@ -6,6 +6,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script src="http://mapstraction.com/mxn/build/latest/mxn.js?(googlev3,[geocoder])" type="text/javascript"></script>
+        <script src="/js/jquery.tinysort.min.js"></script>
         <script src="/js/main.js"></script>
         <link rel='stylesheet' href='/stylesheets/normalize.css' />
         <link rel='stylesheet' href='/stylesheets/d3.css' />
@@ -89,19 +90,22 @@
             <div id="left-menu-content">
                 <div id="filter-block" class="left-menu-item closed first">
                     <span class="left-menu-item-title">Filters</span>
-                    <ul class="left-menu-item-list">
-                        <li>Filter 1</li>
-                        <li>Filter 2</li>
-                        <li>Filter 3</li>
-                        <li>Filter 4</li>
-                        <li>Filter 5</li>
-                        <li>Filter 6</li>
-                        <li>Filter 7</li>
-                        <li>Filter 8</li>
-                        <li>Filter 9</li>
-                        <li>Filter 10</li>
-                        <li>Filter 11</li>
-                        <li>Filter 12</li>
+                    <div class='filter-controls'>
+                        <ul>
+                            <li><span class="filter-control-item all-on" id="filter-control-toggle">All On</span></li>
+                            <li><span class="filter-control-item a-to-z" id="filter-control-alpha">A -> Z</span></li>
+                            <li><span class="filter-control-item count-asc" id="filter-control-count">Asc #</span></li>
+                        </ul>
+                    </div>
+                    <ul id="filter-list" class="left-menu-item-list">
+                        <!-- Change the <li>'s to use the data & class info. -->
+                        <li><a href="#" class="filter-item" data-tag="Trees" data-count="10">#Trees</a></li>
+                        <li><a href="#" class="filter-item" data-tag="Shrubs" data-count="8">#Shrubs</a></li>
+                        <li><a href="#" class="filter-item" data-tag="Ents" data-count="3">#Ents</a></li>
+                        <li><a href="#" class="filter-item" data-tag="AshHoles" data-count="1">#AshHoles</a></li>
+                        <li><a href="#" class="filter-item" data-tag="Biohazard" data-count="1">#Biohazard</a></li>
+                        <li><a href="#" class="filter-item" data-tag="KnightsOfNi" data-count="1">#KnightsOfNi</a></li>
+                        <li><a href="#" class="filter-item" data-tag="Oaks" data-count="1">#Oaks</a></li>
                     </ul>
                 </div>
                 <div id="settings-block" class="left-menu-item closed last">
